@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.kobweb.application)
 }
 
-group = "xyz.malefic.dynamicsite"
+group = "xyz.malefic.guptarealty"
 version = "1.0.0"
 
 kobweb {
@@ -26,11 +26,11 @@ kobweb {
 }
 
 kotlin {
-    configAsKobwebApplication("dynamicsite")
+    configAsKobwebApplication("guptarealty")
 
     jvm {
         mainRun {
-            mainClass = "xyz.malefic.dynamicsite.server.MainKt"
+            mainClass = "xyz.malefic.guptarealty.server.MainKt"
         }
     }
 

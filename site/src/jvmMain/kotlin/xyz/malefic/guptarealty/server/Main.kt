@@ -1,4 +1,4 @@
-package xyz.malefic.dynamicsite.server
+package xyz.malefic.guptarealty.server
 
 import org.http4k.core.then
 import org.http4k.filter.ServerFilters

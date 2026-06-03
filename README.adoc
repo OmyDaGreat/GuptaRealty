@@ -1,57 +1,82 @@
-This is a https://github.com/varabyte/kobweb[Kobweb] project bootstrapped with the `app/empty` template.
+= Dynamic Site Template
 
-This template is useful if you already know what you're doing and just want a clean slate. By default, it
-just creates a blank home page (which prints to the console so you can confirm it's working)
+A unified Kotlin Multiplatform (KMP) project combining a Kobweb frontend with an http4k backend server.
 
-If you are still learning, consider instantiating the `app` template (or one of the examples) to see actual,
-working projects.
+== Architecture
 
-== Getting Started
+This is a *single-module KMP project* with two targets:
 
-First, run the development server by typing the following command in a terminal under the `site` folder:
+=== jsMain - Kobweb Frontend
 
-[source,bash]
-----
-$ cd site
-$ kobweb run
-----
+* *Location*: `site/src/jsMain`
+* Compose-based web UI built with Kobweb
+* Compiles to JavaScript/WebAssembly
+* Built artifacts: `site/build/dist/js/productionExecutable/public/`
 
-Open http://localhost:8080 with your browser to see the result.
+=== jvmMain - http4k Backend
 
-You can use any editor you want for the project, but we recommend using *IntelliJ IDEA Community Edition* downloaded
-using the https://www.jetbrains.com/toolbox-app/[Toolbox App].
+* *Location*: `site/src/jvmMain`
+* HTTP server built with http4k framework
+* Runs on Undertow server backend (port 8080)
+* Serves API endpoints and static frontend files
 
-Press `Q` in the terminal to gracefully stop the server.
+== Building
 
-=== Live Reload
-
-Feel free to edit / add / delete new components, pages, and API endpoints! When you make any changes, the site will
-indicate the status of the build and automatically reload when ready.
-
-== Exporting the Project
-
-When you are ready to ship, you should shutdown the development server and then export the project using:
+Build all targets:
 
 [source,bash]
 ----
-kobweb export
+./gradlew build
 ----
 
-When finished, you can run a Kobweb server in production mode:
+== Running
 
-[source,bash]
-----
-kobweb run --env prod
-----
+=== Start the Server
 
-If you want to run this command in the Cloud provider of your choice, consider disabling interactive mode since nobody
-is sitting around watching the console in that case anyway. To do that, use:
+Runs the jvmMain entry point:
 
 [source,bash]
 ----
-kobweb run --env prod --notty
+./gradlew jvmRun
 ----
 
-Kobweb also supports exporting to a static layout which is compatible with static hosting providers, such as GitHub
-Pages, Netlify, Firebase, any presumably all the others. You can read more about that approach here:
-https://bitspittle.dev/blog/2022/staticdeploy
+The server will start on `http://localhost:8080`
+
+== API Endpoints
+
+* *`GET /api/ping`* - Returns "pong"
+* *`GET /api/health`* - Returns "healthy"
+* *`GET /`* or *`GET /index.html`* - Serves the frontend (after it's built)
+
+== CORS
+
+All endpoints support CORS with the following headers:
+- `Access-Control-Allow-Origin: *`
+- `Access-Control-Allow-Headers: Content-Type`
+- `Access-Control-Allow-Methods: GET, POST, PUT, DELETE`
+
+== Project Structure
+
+----
+site/
+├── src/
+│   ├── jsMain/          # Kobweb frontend (compiles to JS)
+│   │   └── kotlin/
+│   └── jvmMain/         # http4k server (compiles to JVM bytecode)
+│       └── kotlin/xyz/malefic/dynamicsite/server/
+│           ├── Main.kt  # Entry point
+│           └── Http.kt  # Routes & handlers
+├── build.gradle.kts     # KMP configuration
+└── build/
+    └── dist/js/productionExecutable/public/  # Built frontend files
+----
+
+== Development
+
+The advantages of this unified KMP structure:
+
+. *Single build system* - One Gradle configuration for both targets
+. *Shared dependencies* - Common code can be placed in commonMain (if needed)
+. *Type-safe APIs* - Frontend and backend can share Kotlin data classes
+. *Simplified deployment* - Single module to version control and distribute
+. *Clean separation* - Platform-specific code stays in jsMain/jvmMain respectively

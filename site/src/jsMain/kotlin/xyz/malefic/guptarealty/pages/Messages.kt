@@ -1,4 +1,4 @@
-package xyz.malefic.dynamicsite.pages
+package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +18,7 @@ import kotlinx.coroutines.await
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.dynamicsite.model.Message
+import xyz.malefic.guptarealty.model.Message
 
 @Page
 @Composable

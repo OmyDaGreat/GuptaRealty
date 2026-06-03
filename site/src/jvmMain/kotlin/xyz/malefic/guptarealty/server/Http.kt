@@ -1,6 +1,5 @@
-package xyz.malefic.dynamicsite.server
+package xyz.malefic.guptarealty.server
 
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.http4k.core.ContentType.Companion.APPLICATION_JSON
 import org.http4k.core.HttpHandler
@@ -17,7 +16,7 @@ import org.http4k.filter.CorsPolicy
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
-import xyz.malefic.dynamicsite.model.Message
+import xyz.malefic.guptarealty.model.Message
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -82,7 +81,7 @@ val http: HttpHandler =
             try {
                 val response = apiRoutes(req)
                 if (response.status == NOT_FOUND) serveStaticFile(req) else response
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 serveStaticFile(req)
             }
     }

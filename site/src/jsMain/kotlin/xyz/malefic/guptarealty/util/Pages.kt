@@ -1,4 +1,4 @@
-package xyz.malefic.dynamicsite.util
+package xyz.malefic.guptarealty.util
 
 enum class Pages(
     val value: String,

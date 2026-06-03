@@ -1,4 +1,4 @@
-package xyz.malefic.dynamicsite.model
+package xyz.malefic.guptarealty.model
 
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package xyz.malefic.dynamicsite.pages
+package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.foundation.layout.Box

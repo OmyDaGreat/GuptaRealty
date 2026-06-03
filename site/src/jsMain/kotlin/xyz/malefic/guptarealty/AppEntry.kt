@@ -1,4 +1,4 @@
-package xyz.malefic.dynamicsite
+package xyz.malefic.guptarealty
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.ui.modifiers.minHeight
