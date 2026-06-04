@@ -41,6 +41,7 @@ import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.layout.Layout
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiMenu
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.LineStyle
@@ -51,6 +52,7 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.components.Footer
+import xyz.malefic.guptarealty.components.Logo
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.HeadlineSmStyle
@@ -70,7 +72,6 @@ fun NavBarLayout(content: @Composable () -> Unit) {
     var isMenuOpen by remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize().backgroundColor(AppColors.Background)) {
-        // TopAppBar
         Box(
             NavBarStyle.toModifier(),
             contentAlignment = Alignment.Center,
@@ -82,14 +83,9 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                     .height(80.px),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Brand
                 Link("/", Modifier.textDecorationLine(TextDecorationLine.None)) {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.gap(16.px)) {
-                        Image(
-                            "https://lh3.googleusercontent.com/aida-public/AB6AXuAwlPPNXG8b5fBKjijADk9kS1VC7TY6AaHEFkTieltaeV8AHMsBnnTrtlvTug_7JklquicNqorWjcp7mLTNEpoOkmrISu31D5AUSBOIUzUknKWtPT0gN1jtn3iQiqgg8TUD3z4i9Y_87CD8LZhj51-IJPsxoxzq__eHA9ArsqJISlDQj-LXNDKLBEm0brRSVvwKCszgOWicF858poQSCaq0kIydrFvzaF5MmMUTHOf9Cz2vEUQ1PMEx708EZ-vcldaEpdHh0-L4v6E",
-                            "Logo",
-                            Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.OutlineVariant),
-                        )
+                        Logo(Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.OutlineVariant))
                         Span(attrs = HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
                             Text("Gupta Realty")
                         }
@@ -98,7 +94,6 @@ fun NavBarLayout(content: @Composable () -> Unit) {
 
                 Box(Modifier.flexGrow(1))
 
-                // Desktop Nav
                 Row(
                     ShowOnMdStyle.toModifier().gap(32.px),
                     verticalAlignment = Alignment.CenterVertically,
@@ -114,7 +109,6 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                     }
                 }
 
-                // Mobile Menu Toggle
                 Button(
                     attrs =
                         HideOnMdStyle
@@ -127,14 +121,11 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                                 onClick { isMenuOpen = !isMenuOpen }
                             },
                 ) {
-                    Span(attrs = { classes("material-symbols-outlined") }) {
-                        Text("menu")
-                    }
+                    MdiMenu()
                 }
             }
         }
 
-        // Mobile Drawer
         if (isMenuOpen) {
             Box(
                 Modifier
@@ -152,7 +143,6 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                         .padding(24.px)
                         .onClick { it.stopPropagation() },
                 ) {
-                    // Drawer Header
                     Row(Modifier.margin(bottom = 32.px).gap(16.px), verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             "https://lh3.googleusercontent.com/aida-public/AB6AXuAwlPPNXG8b5fBKjijADk9kS1VC7TY6AaHEFkTieltaeV8AHMsBnnTrtlvTug_7JklquicNqorWjcp7mLTNEpoOkmrISu31D5AUSBOIUzUknKWtPT0gN1jtn3iQiqgg8TUD3z4i9Y_87CD8LZhj51-IJPsxoxzq__eHA9ArsqJISlDQj-LXNDKLBEm0brRSVvwKCszgOWicF858poQSCaq0kIydrFvzaF5MmMUTHOf9Cz2vEUQ1PMEx708EZ-vcldaEpdHh0-L4v6E",
@@ -166,7 +156,6 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                         }
                     }
 
-                    // Drawer Links
                     Pages.entries.forEach { page ->
                         val isActive = page.isCurrentPage(currentRoute)
                         Link(

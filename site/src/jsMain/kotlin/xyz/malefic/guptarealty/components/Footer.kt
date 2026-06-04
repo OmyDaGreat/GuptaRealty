@@ -15,6 +15,10 @@ import com.varabyte.kobweb.compose.ui.modifiers.gridColumn
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiBusiness
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiMail
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiPhone
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiVerified
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
@@ -39,10 +43,8 @@ fun Footer() =
     Box(
         SectionStyle
             .toModifier()
-            .padding(
-                top = 24.px,
-                bottom = 24.px,
-            ).backgroundColor(AppColors.SurfaceLow)
+            .padding(top = 24.px, bottom = 24.px)
+            .backgroundColor(AppColors.SurfaceLow)
             .borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
         contentAlignment = Alignment.Center,
     ) {
@@ -93,19 +95,18 @@ fun Footer() =
                             .toAttrs(),
                     ) { Text("GET IN TOUCH") }
                     SimpleGrid(numColumns(1, md = 2), Modifier.gap(24.px)) {
-                        ContactInfoItem("phone", "Direct", "714-767-5752")
-                        ContactInfoItem("mail", "Email", "ruchikagupta@firstteam.com")
-                        ContactInfoItem("business", "Brokerage", "First Team Real Estate")
-                        ContactInfoItem("verified", "License", "DRE# 02161384")
+                        ContactInfoItem("Direct", "714-767-5752") { MdiPhone(it) }
+                        ContactInfoItem("Email", "ruchikagupta@firstteam.com") { MdiMail(it) }
+                        ContactInfoItem("Brokerage", "First Team Real Estate") { MdiBusiness(it) }
+                        ContactInfoItem("License", "DRE# 02161384") { MdiVerified(it) }
                     }
                 }
             }
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .padding(
-                        top = 24.px,
-                    ).margin(top = 64.px)
+                    .padding(top = 24.px)
+                    .margin(top = 64.px)
                     .borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
             ) {
                 P(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {

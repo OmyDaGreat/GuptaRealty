@@ -2,9 +2,13 @@ package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.compose.css.Cursor
+import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.css.JustifyContent
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.TextTransform
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -96,7 +100,7 @@ fun HeroSection() {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
                 numColumns(1, md = 2),
-                Modifier.gap(AppSpacing.Gutter).alignItems(com.varabyte.kobweb.compose.css.AlignItems.Center),
+                Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
             ) {
                 Column(Modifier.padding(topBottom = AppSpacing.SectionGap)) {
                     H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
@@ -120,7 +124,7 @@ fun HeroSection() {
                         }
                     }
                 }
-                Box(ShowOnMdStyle.toModifier().justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center)) {
+                Box(ShowOnMdStyle.toModifier().justifyContent(JustifyContent.Center)) {
                     Box(
                         Modifier
                             .size(400.px)
@@ -140,7 +144,7 @@ fun AboutSection() {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
                 numColumns(1, md = 12),
-                Modifier.gap(AppSpacing.Gutter).alignItems(com.varabyte.kobweb.compose.css.AlignItems.Center),
+                Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
             ) {
                 Box(Modifier.gridColumn("span 5")) {
                     Image(
@@ -157,9 +161,8 @@ fun AboutSection() {
                     Span(
                         LabelMdStyle
                             .toModifier()
-                            .color(
-                                AppColors.Secondary,
-                            ).letterSpacing(0.2.em)
+                            .color(AppColors.Secondary)
+                            .letterSpacing(0.2.em)
                             .textTransform(TextTransform.Uppercase)
                             .margin(bottom = 16.px)
                             .toAttrs(),
@@ -232,18 +235,16 @@ fun BlogPreviewSection() {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .justifyContent(
-                        com.varabyte.kobweb.compose.css.JustifyContent.SpaceBetween,
-                    ).alignItems(com.varabyte.kobweb.compose.css.AlignItems.End)
+                    .justifyContent(JustifyContent.SpaceBetween)
+                    .alignItems(AlignItems.End)
                     .margin(bottom = 48.px),
             ) {
                 Column {
                     Span(
                         LabelMdStyle
                             .toModifier()
-                            .color(
-                                AppColors.Secondary,
-                            ).letterSpacing(0.2.em)
+                            .color(AppColors.Secondary)
+                            .letterSpacing(0.2.em)
                             .textTransform(TextTransform.Uppercase)
                             .margin(bottom = 16.px)
                             .toAttrs(),
@@ -258,9 +259,8 @@ fun BlogPreviewSection() {
                     "/blog",
                     ShowOnMdStyle
                         .toModifier()
-                        .color(
-                            AppColors.Primary,
-                        ).fontWeight(com.varabyte.kobweb.compose.css.FontWeight.Bold)
+                        .color(AppColors.Primary)
+                        .fontWeight(FontWeight.Bold)
                         .textDecorationLine(TextDecorationLine.None),
                 ) {
                     Text("View All Stories")
@@ -290,11 +290,9 @@ fun BlogCard(post: BlogPost) {
             Image(post.imageUrl, post.title, Modifier.fillMaxSize().objectFit(ObjectFit.Cover))
             Box(
                 Modifier
-                    .position(
-                        Position.Absolute,
-                    ).top(
-                        16.px,
-                    ).left(16.px)
+                    .position(Position.Absolute)
+                    .top(16.px)
+                    .left(16.px)
                     .backgroundColor(AppColors.PrimaryFixed)
                     .padding(topBottom = 4.px, leftRight = 12.px)
                     .borderRadius(50.px),
@@ -313,9 +311,8 @@ fun BlogCard(post: BlogPost) {
         Link(
             "#",
             Modifier
-                .color(
-                    AppColors.Secondary,
-                ).fontWeight(com.varabyte.kobweb.compose.css.FontWeight.Bold)
+                .color(AppColors.Secondary)
+                .fontWeight(FontWeight.Bold)
                 .textDecorationLine(TextDecorationLine.None),
         ) {
             Text("Read Story")
@@ -333,7 +330,7 @@ fun CTASection() {
                     .backgroundColor(AppColors.Primary)
                     .borderRadius(48.px)
                     .padding(AppSpacing.S10)
-                    .textAlign(com.varabyte.kobweb.compose.css.TextAlign.Center)
+                    .textAlign(TextAlign.Center)
                     .position(Position.Relative)
                     .overflow(Overflow.Hidden),
             ) {
@@ -358,7 +355,7 @@ fun CTASection() {
                 ) {
                     Text("Access our exclusive database of local listings and find your perfect home before it even hits the open market.")
                 }
-                Row(Modifier.gap(16.px).justifyContent(com.varabyte.kobweb.compose.css.JustifyContent.Center).flexWrap(FlexWrap.Wrap)) {
+                Row(Modifier.gap(16.px).justifyContent(JustifyContent.Center).flexWrap(FlexWrap.Wrap)) {
                     Link("/buy", PrimaryButtonStyle.toModifier()) {
                         Text("Search Now")
                     }
