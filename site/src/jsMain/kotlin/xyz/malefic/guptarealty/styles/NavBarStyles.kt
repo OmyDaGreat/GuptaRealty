@@ -34,7 +34,7 @@ import xyz.malefic.guptarealty.util.Pages
 import xyz.malefic.kutint.parseHex
 import xyz.malefic.kutint.rgba
 
-val NavBarStyle =
+val OldNavBarStyle =
     CssStyle.base {
         Modifier
             .fillMaxWidth()

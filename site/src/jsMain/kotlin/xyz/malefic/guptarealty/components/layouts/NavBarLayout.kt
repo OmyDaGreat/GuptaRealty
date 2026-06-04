@@ -20,7 +20,7 @@ import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.styles.ActiveNavItemStyle
-import xyz.malefic.guptarealty.styles.NavBarStyle
+import xyz.malefic.guptarealty.styles.OldNavBarStyle
 import xyz.malefic.guptarealty.styles.NavItemHoverStyle
 import xyz.malefic.guptarealty.styles.isCurrentPage
 import xyz.malefic.guptarealty.util.Pages
@@ -33,7 +33,7 @@ fun NavBarLayout(content: @Composable () -> Unit) {
 
     Column(Modifier.fillMaxWidth().height(100.vh)) {
         Box(
-            NavBarStyle.toModifier(),
+            OldNavBarStyle.toModifier(),
             contentAlignment = Alignment.Center,
         ) {
             Row(
