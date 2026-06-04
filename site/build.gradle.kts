@@ -23,7 +23,11 @@ kobweb {
         index {
             description.set("Powered by Kobweb")
             head.add {
-                link(rel = "stylesheet", href = "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap")
+                link(
+                    rel = "stylesheet",
+                    href = @Suppress("ktlint:standard:max-line-length")
+                    "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+                )
             }
         }
     }
@@ -51,7 +55,8 @@ kotlin {
         }
 
         jvmMain.dependencies {
-            implementation(libs.bundles.http4k)
+            implementation(libs.http4k.core)
+            implementation(libs.http4k.server.undertow)
             implementation(libs.http4k.format.kotlinx)
             compileOnly(libs.kobweb.api)
         }

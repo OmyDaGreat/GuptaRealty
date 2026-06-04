@@ -1,0 +1,17 @@
+package xyz.malefic.guptarealty.pages
+
+import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.foundation.layout.Box
+import com.varabyte.kobweb.compose.ui.Alignment
+import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
+import com.varabyte.kobweb.core.Page
+import org.jetbrains.compose.web.dom.Text
+
+@Page
+@Composable
+fun SellPage() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text("Sell Page - Coming Soon")
+    }
+}

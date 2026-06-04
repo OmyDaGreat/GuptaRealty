@@ -34,4 +34,3 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kobweb = ["kobweb-core", "kobweb-silk"]
 compose = ["compose-html-core", "compose-runtime"]
 silk-icons = ["silk-icons-fa", "silk-icons-mdi"]
-http4k = ["http4k-core", "http4k-server-undertow"]
