@@ -28,7 +28,7 @@ fun initSerenHearth(ctx: InitSilkContext) {
                 .fontSize(16.px)
                 .lineHeight(1.6)
                 .styleModifier {
-                    property("-webkit-font-smoothing",  "antialiased")
+                    property("-webkit-font-smoothing", "antialiased")
                     property("-moz-osx-font-smoothing", "grayscale")
                 }
         }

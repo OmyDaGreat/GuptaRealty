@@ -16,33 +16,33 @@ import com.varabyte.kobweb.silk.style.CssStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.px
 
-
 /** Horizontal rule using the Lavender outline-variant color. */
-val DividerStyle = CssStyle {
-    base {
-        Modifier
-            .fillMaxWidth()
-            .height(1.px)
-            .backgroundColor(AppColors.OutlineVariant)
-            .styleModifier { property("border", "none") }
+val DividerStyle =
+    CssStyle {
+        base {
+            Modifier
+                .fillMaxWidth()
+                .height(1.px)
+                .backgroundColor(AppColors.OutlineVariant)
+                .styleModifier { property("border", "none") }
+        }
     }
-}
 
 /**
  * Decorative "blob" accent shape.
  * Position absolutely behind hero text or images; keep z-index below content.
  * Color via backgroundColor(AppColors.PrimaryFixed) or SecondaryFixed.
  */
-val BlobAccentStyle = CssStyle {
-    base {
-        Modifier
-            .styleModifier {
-                property("border-radius",       "60% 40% 30% 70% / 60% 30% 70% 40%")
-            }
-            .filter(blur(40.px))
-            .opacity(0.45)
-            .position(Position.Absolute)
-            .pointerEvents(PointerEvents.None)
-            .zIndex(0)
+val BlobAccentStyle =
+    CssStyle {
+        base {
+            Modifier
+                .styleModifier {
+                    property("border-radius", "60% 40% 30% 70% / 60% 30% 70% 40%")
+                }.filter(blur(40.px))
+                .opacity(0.45)
+                .position(Position.Absolute)
+                .pointerEvents(PointerEvents.None)
+                .zIndex(0)
+        }
     }
-}

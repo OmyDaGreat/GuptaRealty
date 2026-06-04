@@ -13,22 +13,19 @@ import com.varabyte.kobweb.silk.style.CssStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.px
 
-/**
-       Glassmorphic bubble pinned bottom-right on mobile; lives in footer on
-       desktop. Shows agent contact info (phone + email).
-**/
-val FloatingContactStyle = CssStyle {
-    base {
-        Modifier
-            .then(AppModifiers.Glass)
-            .borderRadius(AppRadius.Xl)
-            .then(AppModifiers.CardBorder)
-            .padding(AppSpacing.S3)
-            .boxShadow(0.px, 8.px, 32.px, 0.px, AppColors.PrimaryContainer.withAlpha(0.12f))
-            .position(Position.Fixed)
-            .bottom(24.px)
-            .right(24.px)
-            .zIndex(90)
-            .minWidth(220.px)
+val FloatingContactStyle =
+    CssStyle {
+        base {
+            Modifier
+                .then(AppModifiers.Glass)
+                .borderRadius(AppRadius.Xl)
+                .then(AppModifiers.CardBorder)
+                .padding(AppSpacing.S3)
+                .boxShadow(0.px, 8.px, 32.px, 0.px, AppColors.PrimaryContainer.withAlpha(0.12f))
+                .position(Position.Fixed)
+                .bottom(24.px)
+                .right(24.px)
+                .zIndex(90)
+                .minWidth(220.px)
+        }
     }
-}

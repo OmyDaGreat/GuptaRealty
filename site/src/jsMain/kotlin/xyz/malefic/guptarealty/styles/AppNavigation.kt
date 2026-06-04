@@ -25,65 +25,68 @@ import org.jetbrains.compose.web.css.em
 import org.jetbrains.compose.web.css.px
 import xyz.malefic.kutint.parseHex
 
-
 /**
  * Sticky glassmorphic nav bar.
  * Floats over page content; uses subtle bottom border as visual anchor.
  */
-val NavBarStyle = CssStyle {
-    base {
-        Modifier
-            .fillMaxWidth()
-            .padding(topBottom = AppSpacing.S2, leftRight = AppSpacing.Gutter)
-            .then(AppModifiers.Glass)
-            .position(Position.Sticky)
-            .top(0.px)
-            .zIndex(100).borderBottom {
-                width(1.px)
-                style(LineStyle.Solid)
-                color(AppColors.OutlineVariant.withAlpha(0.5f))
-            }
+val NavBarStyle =
+    CssStyle {
+        base {
+            Modifier
+                .fillMaxWidth()
+                .padding(topBottom = AppSpacing.S2, leftRight = AppSpacing.Gutter)
+                .then(AppModifiers.Glass)
+                .position(Position.Sticky)
+                .top(0.px)
+                .zIndex(100)
+                .borderBottom {
+                    width(1.px)
+                    style(LineStyle.Solid)
+                    color(AppColors.OutlineVariant.withAlpha(0.5f))
+                }
+        }
     }
-}
 
 /** Default nav link — displays as label, highlights to Primary on hover. */
-val NavLinkStyle = CssStyle {
-    base {
-        Modifier
-            .color(AppColors.OnSurface)
-            .textDecorationLine(TextDecorationLine.None)
-            .padding(topBottom = AppSpacing.S1, leftRight = AppSpacing.S2)
-            .borderRadius(AppRadius.Default)
-            .then(AppModifiers.ColorTransition)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(14.px)
-            .fontWeight(600)
-            .letterSpacing(0.05.em)
+val NavLinkStyle =
+    CssStyle {
+        base {
+            Modifier
+                .color(AppColors.OnSurface)
+                .textDecorationLine(TextDecorationLine.None)
+                .padding(topBottom = AppSpacing.S1, leftRight = AppSpacing.S2)
+                .borderRadius(AppRadius.Default)
+                .then(AppModifiers.ColorTransition)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(14.px)
+                .fontWeight(600)
+                .letterSpacing(0.05.em)
+        }
+        hover {
+            Modifier.color(AppColors.Primary).backgroundColor(AppColors.PrimaryFixed)
+        }
+        focus {
+            Modifier.then(AppModifiers.FocusRing)
+        }
     }
-    hover {
-        Modifier.color(AppColors.Primary).backgroundColor(AppColors.PrimaryFixed)
-    }
-    focus {
-        Modifier.then(AppModifiers.FocusRing)
-    }
-}
 
 /** Active / current page nav link — Tangerine Dream underline indicator. */
-val NavLinkActiveStyle = CssStyle {
-    base {
-        Modifier
-            .color(AppColors.Secondary)
-            .textDecorationLine(TextDecorationLine.None)
-            .padding(topBottom = AppSpacing.S1, leftRight = AppSpacing.S2)
-            .borderRadius(AppRadius.Default)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(14.px)
-            .fontWeight(600)
-            .letterSpacing(0.05.em)
-            .borderBottom {
-                width(2.px)
-                style(LineStyle.Solid)
-                color(parseHex("#904c33"))
-            }
+val NavLinkActiveStyle =
+    CssStyle {
+        base {
+            Modifier
+                .color(AppColors.Secondary)
+                .textDecorationLine(TextDecorationLine.None)
+                .padding(topBottom = AppSpacing.S1, leftRight = AppSpacing.S2)
+                .borderRadius(AppRadius.Default)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(14.px)
+                .fontWeight(600)
+                .letterSpacing(0.05.em)
+                .borderBottom {
+                    width(2.px)
+                    style(LineStyle.Solid)
+                    color(parseHex("#904c33"))
+                }
+        }
     }
-}

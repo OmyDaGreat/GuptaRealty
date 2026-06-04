@@ -27,113 +27,117 @@ import org.jetbrains.compose.web.css.em
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
 
-
 /**
  * Standard text input / select / textarea.
  * Ivory Mist background, Lavender border → Blue Violet on focus.
  */
-val InputStyle = CssStyle {
-    base {
-        Modifier
-            .fillMaxWidth()
-            .backgroundColor(AppColors.Background)
-            .color(AppColors.OnSurface)
-            .padding(topBottom = 12.px, leftRight = AppSpacing.S2)
-            .borderRadius(AppRadius.Default)
-            .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(16.px)
-            .fontWeight(400)
-            .lineHeight(1.6)
-            .styleModifier {
-                property("outline",     "none")
-            }.transition {
-                property("border-color", "box-shadow")
-                duration(0.2.s)
-                timingFunction(AnimationTimingFunction.Ease)
-            }
+val InputStyle =
+    CssStyle {
+        base {
+            Modifier
+                .fillMaxWidth()
+                .backgroundColor(AppColors.Background)
+                .color(AppColors.OnSurface)
+                .padding(topBottom = 12.px, leftRight = AppSpacing.S2)
+                .borderRadius(AppRadius.Default)
+                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(16.px)
+                .fontWeight(400)
+                .lineHeight(1.6)
+                .styleModifier {
+                    property("outline", "none")
+                }.transition {
+                    property("border-color", "box-shadow")
+                    duration(0.2.s)
+                    timingFunction(AnimationTimingFunction.Ease)
+                }
+        }
+        focus {
+            Modifier
+                .border(1.px, LineStyle.Solid, AppColors.Primary)
+                .boxShadow(0.px, 0.px, 0.px, 3.px, AppColors.Primary.withAlpha(0.12f))
+        }
+        placeholder {
+            Modifier.color(AppColors.Outline)
+        }
     }
-    focus {
-        Modifier
-            .border(1.px, LineStyle.Solid, AppColors.Primary)
-            .boxShadow(0.px, 0.px, 0.px, 3.px, AppColors.Primary.withAlpha(0.12f))
-    }
-    placeholder {
-        Modifier.color(AppColors.Outline)
-    }
-}
 
 /**
  * Hero search bar — pill-shaped, 18 px text, primary action for property search.
  * Add a magnifier icon as a sibling; reserve 48 px left padding in your layout.
  */
-val SearchInputStyle = CssStyle {
-    base {
-        Modifier
-            .fillMaxWidth()
-            .backgroundColor(AppColors.SurfaceLowest)
-            .color(AppColors.OnSurface)
-            .padding(topBottom = AppSpacing.S2, leftRight = AppSpacing.S4)
-            .borderRadius(AppRadius.Full)
-            .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
-            .then(AppModifiers.SoftShadow)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(18.px)
-            .fontWeight(400)
-            .lineHeight(1.6)
-            .styleModifier {
-                property("outline",     "none")
-            }.transition {
-                property("border-color", "box-shadow")
-                duration(0.2.s)
-                timingFunction(AnimationTimingFunction.Ease)
-            }
+val SearchInputStyle =
+    CssStyle {
+        base {
+            Modifier
+                .fillMaxWidth()
+                .backgroundColor(AppColors.SurfaceLowest)
+                .color(AppColors.OnSurface)
+                .padding(topBottom = AppSpacing.S2, leftRight = AppSpacing.S4)
+                .borderRadius(AppRadius.Full)
+                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+                .then(AppModifiers.SoftShadow)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(18.px)
+                .fontWeight(400)
+                .lineHeight(1.6)
+                .styleModifier {
+                    property("outline", "none")
+                }.transition {
+                    property("border-color", "box-shadow")
+                    duration(0.2.s)
+                    timingFunction(AnimationTimingFunction.Ease)
+                }
+        }
+        focus {
+            Modifier
+                .border(1.px, LineStyle.Solid, AppColors.Primary)
+                .boxShadow(0.px, 0.px, 0.px, 4.px, AppColors.Primary.withAlpha(0.14f))
+        }
+        placeholder {
+            Modifier.color(AppColors.Outline)
+        }
     }
-    focus {
-        Modifier
-            .border(1.px, LineStyle.Solid, AppColors.Primary)
-            .boxShadow(0.px, 0.px, 0.px, 4.px, AppColors.Primary.withAlpha(0.14f))
-    }
-    placeholder {
-        Modifier.color(AppColors.Outline)
-    }
-}
 
 /** Label above an input field. */
-val InputLabelStyle = CssStyle {
-    base {
-        Modifier
-            .color(AppColors.OnSurfaceVariant)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(14.px)
-            .fontWeight(600)
-            .letterSpacing(0.05.em)
-            .display(DisplayStyle.Block)
-            .margin(bottom = 6.px)
+val InputLabelStyle =
+    CssStyle {
+        base {
+            Modifier
+                .color(AppColors.OnSurfaceVariant)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(14.px)
+                .fontWeight(600)
+                .letterSpacing(0.05.em)
+                .display(DisplayStyle.Block)
+                .margin(bottom = 6.px)
+        }
     }
-}
 
 /** Inline helper / error text beneath an input field. */
-val InputHelperStyle = CssStyle {
-    base {
-        Modifier
-            .color(AppColors.Outline)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(12.px)
-            .fontWeight(400)
-            .margin(top = 4.px)
-            .display(DisplayStyle.Block)
+val InputHelperStyle =
+    CssStyle {
+        base {
+            Modifier
+                .color(AppColors.Outline)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(12.px)
+                .fontWeight(400)
+                .margin(top = 4.px)
+                .display(DisplayStyle.Block)
+        }
     }
-}
 
-val InputErrorStyle = CssStyle {
-    base {
-        Modifier
-            .color(AppColors.Error)
-            .fontFamily(*AppFonts.BODY_STACK)
-            .fontSize(12.px)
-            .fontWeight(500)
-            .margin(top = 4.px)
-            .display(DisplayStyle.Block)
+val InputErrorStyle =
+    CssStyle {
+        base {
+            Modifier
+                .color(AppColors.Error)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(12.px)
+                .fontWeight(500)
+                .margin(top = 4.px)
+                .display(DisplayStyle.Block)
+        }
     }
-}

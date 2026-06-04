@@ -10,53 +10,57 @@ import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 
-
 /**
  * Full-bleed page section with 80 px vertical breathing room.
  * Wrap every logical page section (hero, listings, about, etc.) with this.
  */
-val SectionStyle = CssStyle {
-    base {
-        Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap)
+val SectionStyle =
+    CssStyle {
+        base {
+            Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap)
+        }
     }
-}
 
 /**
  * Centered max-width wrapper — 16 px horizontal margin on mobile,
  * 40 px on desktop. Apply inside SectionStyle.
  */
-val ContainerStyle = CssStyle {
-    base {
-        Modifier
-            .maxWidth(AppSpacing.ContainerMax)
-            .fillMaxWidth()
-            .styleModifier { property("margin-inline", "auto") }
-            .padding(leftRight = AppSpacing.MarginMobile)
+val ContainerStyle =
+    CssStyle {
+        base {
+            Modifier
+                .maxWidth(AppSpacing.ContainerMax)
+                .fillMaxWidth()
+                .styleModifier { property("margin-inline", "auto") }
+                .padding(leftRight = AppSpacing.MarginMobile)
+        }
+        Breakpoint.LG {
+            Modifier.padding(leftRight = AppSpacing.MarginDesktop)
+        }
     }
-    Breakpoint.LG {
-        Modifier.padding(leftRight = AppSpacing.MarginDesktop)
-    }
-}
 
 /** Alternating section wash — Lavender tint for variety between sections. */
-val SectionLavenderStyle = CssStyle {
-    base {
-        Modifier.backgroundColor(AppColors.PrimaryFixed)
+val SectionLavenderStyle =
+    CssStyle {
+        base {
+            Modifier.backgroundColor(AppColors.PrimaryFixed)
+        }
     }
-}
 
 /** Alternating section wash — warm Ivory Container tint. */
-val SectionWarmStyle = CssStyle {
-    base {
-        Modifier.backgroundColor(AppColors.SurfaceContainer)
+val SectionWarmStyle =
+    CssStyle {
+        base {
+            Modifier.backgroundColor(AppColors.SurfaceContainer)
+        }
     }
-}
 
 /** Dark footer / inverse surface section. */
-val SectionInverseStyle = CssStyle {
-    base {
-        Modifier
-            .backgroundColor(AppColors.InverseSurface)
-            .color(AppColors.InverseOnSurface)
+val SectionInverseStyle =
+    CssStyle {
+        base {
+            Modifier
+                .backgroundColor(AppColors.InverseSurface)
+                .color(AppColors.InverseOnSurface)
+        }
     }
-}
