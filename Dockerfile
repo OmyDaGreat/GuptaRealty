@@ -15,7 +15,7 @@ RUN chmod +x ./gradlew
 COPY . .
 
 # Build both jsMain and jvmMain
-RUN ./gradlew :site:jvmJar :site:compileProductionExecutableKotlinJs
+RUN ./gradlew :site:dockerRuntime
 
 # Runtime stage
 FROM eclipse-temurin:21-jre

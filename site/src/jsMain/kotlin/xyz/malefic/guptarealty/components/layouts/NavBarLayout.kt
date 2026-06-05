@@ -86,7 +86,7 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                 Link("/", Modifier.textDecorationLine(TextDecorationLine.None)) {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.gap(16.px)) {
                         Logo(Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.OutlineVariant))
-                        Span(attrs = HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
+                        Span(HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
                             Text("Gupta Realty")
                         }
                     }
@@ -110,16 +110,15 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                 }
 
                 Button(
-                    attrs =
-                        HideOnMdStyle
-                            .toModifier()
-                            .backgroundColor(Colors.Transparent)
-                            .border(0.px)
-                            .color(AppColors.Primary)
-                            .cursor(Cursor.Pointer)
-                            .toAttrs {
-                                onClick { isMenuOpen = !isMenuOpen }
-                            },
+                    HideOnMdStyle
+                        .toModifier()
+                        .backgroundColor(Colors.Transparent)
+                        .border(0.px)
+                        .color(AppColors.Primary)
+                        .cursor(Cursor.Pointer)
+                        .toAttrs {
+                            onClick { isMenuOpen = !isMenuOpen }
+                        },
                 ) {
                     MdiMenu()
                 }
@@ -150,9 +149,9 @@ fun NavBarLayout(content: @Composable () -> Unit) {
                             Modifier.size(64.px).borderRadius(50.percent),
                         )
                         Column {
-                            Span(attrs = HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) { Text("Ruchika Gupta") }
-                            Span(attrs = LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) { Text("DRE# 02047333") }
-                            Span(attrs = LabelSmStyle.toModifier().color(AppColors.Secondary).toAttrs()) { Text("714-767-5752") }
+                            Span(HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) { Text("Ruchika Gupta") }
+                            Span(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) { Text("DRE# 02047333") }
+                            Span(LabelSmStyle.toModifier().color(AppColors.Secondary).toAttrs()) { Text("714-767-5752") }
                         }
                     }
 

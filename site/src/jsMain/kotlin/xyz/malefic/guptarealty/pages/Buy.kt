@@ -175,17 +175,16 @@ fun SearchFilterBar() {
 @Composable
 fun FilterButton(label: String) {
     Button(
-        attrs =
-            Modifier
-                .backgroundColor(AppColors.SurfaceLow)
-                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
-                .borderRadius(8.px)
-                .padding(topBottom = 8.px, leftRight = 16.px)
-                .display(DisplayStyle.Flex)
-                .alignItems(AlignItems.Center)
-                .gap(8.px)
-                .cursor(Cursor.Pointer)
-                .toAttrs(),
+        Modifier
+            .backgroundColor(AppColors.SurfaceLow)
+            .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+            .borderRadius(8.px)
+            .padding(topBottom = 8.px, leftRight = 16.px)
+            .display(DisplayStyle.Flex)
+            .alignItems(AlignItems.Center)
+            .gap(8.px)
+            .cursor(Cursor.Pointer)
+            .toAttrs(),
     ) {
         Text(label)
         MdiExpandMore()
@@ -315,18 +314,17 @@ fun PropertyCard(property: Property) {
                 }
             }
             Button(
-                attrs =
-                    Modifier
-                        .position(Position.Absolute)
-                        .top(16.px)
-                        .right(16.px)
-                        .size(40.px)
-                        .borderRadius(50.percent)
-                        .backgroundColor(rgba(255, 255, 255, 0.8f))
-                        .backdropFilter(blur(12.px))
-                        .border(0.px)
-                        .cursor(Cursor.Pointer)
-                        .toAttrs(),
+                Modifier
+                    .position(Position.Absolute)
+                    .top(16.px)
+                    .right(16.px)
+                    .size(40.px)
+                    .borderRadius(50.percent)
+                    .backgroundColor(rgba(255, 255, 255, 0.8f))
+                    .backdropFilter(blur(12.px))
+                    .border(0.px)
+                    .cursor(Cursor.Pointer)
+                    .toAttrs(),
             ) {
                 Center {
                     MdiFavorite(Modifier.color(AppColors.Primary))

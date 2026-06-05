@@ -65,7 +65,7 @@ fun Footer() =
                             .margin(bottom = 24.px)
                             .toAttrs(),
                     ) {
-                        Text("A boutique real estate experience defined by sophistication, expertise, and personalized service.")
+                        Text("A real estate experience defined by sophistication, expertise, and personalized service.")
                     }
                 }
                 Column {

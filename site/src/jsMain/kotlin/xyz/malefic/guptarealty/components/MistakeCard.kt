@@ -55,7 +55,7 @@ fun MistakeCard(
                 .fontSize(32.px)
                 .color(AppColors.Primary),
         )
-        H4(attrs = HeadlineSmStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text(title) }
+        H4(HeadlineSmStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text(title) }
         P(BodyMdStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) { Text(description) }
     }
 }
