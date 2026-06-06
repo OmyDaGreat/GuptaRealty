@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.compose.css.Cursor
@@ -15,6 +16,7 @@ import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.functions.blur
+import com.varabyte.kobweb.compose.css.overflowY
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -39,14 +41,19 @@ import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.gridColumn
 import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.maxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
+import com.varabyte.kobweb.compose.ui.modifiers.onClick
+import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.scale
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
+import com.varabyte.kobweb.compose.ui.modifiers.transform
+import com.varabyte.kobweb.compose.ui.modifiers.transition
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
@@ -59,8 +66,11 @@ import com.varabyte.kobweb.silk.components.icons.mdi.MdiStar
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.style.toModifier
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.placeholder
+import org.jetbrains.compose.web.css.AnimationTimingFunction
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
@@ -75,6 +85,7 @@ import org.jetbrains.compose.web.css.padding
 import org.jetbrains.compose.web.css.paddingLeft
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.s
 import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.H1
@@ -85,11 +96,13 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.api.getWebinar
+import xyz.malefic.guptarealty.api.getWebinarReviews
 import xyz.malefic.guptarealty.api.getWebinarTips
 import xyz.malefic.guptarealty.components.Center
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MistakeCard
 import xyz.malefic.guptarealty.model.Webinar
+import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTipsSection
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
@@ -106,6 +119,7 @@ import xyz.malefic.guptarealty.styles.PrimaryButtonStyle
 import xyz.malefic.guptarealty.styles.SectionStyle
 import xyz.malefic.guptarealty.util.toDisplayString
 import xyz.malefic.kutint.rgba
+import kotlin.time.Duration.Companion.milliseconds
 
 @Page
 @Composable
@@ -313,11 +327,32 @@ fun TipsSection() {
 
 @Composable
 fun TestimonialsSection() {
+    var reviews by remember { mutableStateOf<List<WebinarReview>?>(null) }
+    var currentIndex by remember { mutableStateOf(0) }
+    var visible by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        reviews = getWebinarReviews()
+    }
+
+    fun navigate(delta: Int) {
+        val rs = reviews ?: return
+        coroutineScope.launch {
+            visible = false
+            delay(200.milliseconds)
+            currentIndex = (currentIndex + delta + rs.size) % rs.size
+            visible = true
+        }
+    }
+
     Box(SectionStyle.toModifier().backgroundColor(AppColors.Background), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(numColumns(1, md = 2), Modifier.gap(64.px).alignItems(AlignItems.Center)) {
                 Column {
-                    H2(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) { Text("What our attendees are saying") }
+                    H2(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
+                        Text("What our attendees are saying")
+                    }
                     P(
                         BodyLgStyle
                             .toModifier()
@@ -327,50 +362,80 @@ fun TestimonialsSection() {
                     ) {
                         Text("Join hundreds of successful home buyers who started their journey with one of Ruchika's webinars.")
                     }
-                    Row(Modifier.gap(16.px)) {
-                        TestimonialNavButton { MdiArrowBack(it) }
-                        TestimonialNavButton { MdiArrowForward(it) }
+                    reviews?.let { rs ->
+                        if (rs.size > 1) {
+                            Row(Modifier.gap(16.px)) {
+                                TestimonialNavButton(onClick = { navigate(-1) }) { MdiArrowBack(it) }
+                                TestimonialNavButton(onClick = { navigate(1) }) { MdiArrowForward(it) }
+                            }
+                        }
                     }
                 }
-                Box(
-                    Modifier
-                        .backgroundColor(AppColors.SurfaceContainer)
-                        .padding(40.px)
-                        .borderRadius(40.px)
-                        .border(1.px, LineStyle.Solid, AppColors.Secondary)
-                        .then(AppModifiers.SoftShadow),
+                Loading(
+                    reviews,
+                    Modifier.fillMaxWidth().padding(topBottom = 80.px),
+                ) { rs ->
+                    TestimonialCard(rs[currentIndex], visible)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TestimonialCard(
+    review: WebinarReview,
+    visible: Boolean,
+) {
+    Box(
+        Modifier
+            .backgroundColor(AppColors.SurfaceContainer)
+            .padding(40.px)
+            .borderRadius(40.px)
+            .border(1.px, LineStyle.Solid, AppColors.Secondary)
+            .then(AppModifiers.SoftShadow)
+            .transition {
+                property("opacity", "transform")
+                duration(0.2.s)
+                timingFunction(AnimationTimingFunction.Ease)
+            }.opacity(if (visible) 1f else 0f)
+            .transform {
+                if (visible) translateX(0.px) else translateX(16.px)
+            },
+    ) {
+        Column {
+            Row(Modifier.gap(4.px).margin(bottom = 24.px)) {
+                repeat(5) { MdiStar(Modifier.color(AppColors.Secondary)) }
+            }
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .margin(bottom = 32.px)
+                    .maxHeight(240.px)
+                    .styleModifier {
+                        overflowY(Overflow.Auto)
+                    },
+            ) {
+                P(
+                    HeadlineSmStyle
+                        .toModifier()
+                        .fontWeight(FontWeight.Normal)
+                        .fontStyle(FontStyle.Italic)
+                        .toAttrs(),
                 ) {
-                    Column {
-                        Row(Modifier.gap(4.px).margin(bottom = 24.px)) {
-                            repeat(5) {
-                                MdiStar(Modifier.color(AppColors.Secondary))
-                            }
-                        }
-                        P(
-                            HeadlineSmStyle
-                                .toModifier()
-                                .fontWeight(FontWeight.Normal)
-                                .fontStyle(FontStyle.Italic)
-                                .margin(bottom = 32.px)
-                                .toAttrs(),
-                        ) {
-                            Text(
-                                "\"Ruchika's webinar was the turning point for us. She simplified the escrow process and gave us the confidence to put in our first offer. We closed last month!\"",
-                            )
-                        }
-                        Row(Modifier.gap(16.px), verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                "https://lh3.googleusercontent.com/aida-public/AB6AXuDABXqZiK9yZKb-RRKmDrqGBFGreGt177dM_PlZcxT6ZuOHNlEbRD_RmtkCEUBpB3CWLb4JPdkNG4Kajom_60ccRqKUfMfkWndi0ZX_iRCqYTru7xuMJW7nn9gnIgnkEufgFEAqeADrQT1QDahHTkRtzVOTr5FnhUOLtA2pS0IN7G6r56Cb-LZhhvqgSjmcCmegKAdHUMIrcNZsYMteuRNNEC46OZH_gZeFvWYwFE7ne8efX6nBMDm2-LmQ3FAEdGctPB1w0BUuuGw",
-                                "Reviewer",
-                                Modifier.size(56.px).borderRadius(50.percent).objectFit(ObjectFit.Cover),
-                            )
-                            Column {
-                                Span(LabelMdStyle.toModifier().toAttrs()) { Text("Mark & Sarah Thompson") }
-                                Span(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {
-                                    Text("New Homeowners, Irvine")
-                                }
-                            }
-                        }
+                    Text("\"${review.review}\"")
+                }
+            }
+            Row(Modifier.gap(16.px), verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    review.reviewerImage,
+                    review.reviewer,
+                    Modifier.size(56.px).borderRadius(50.percent).objectFit(ObjectFit.Cover),
+                )
+                Column {
+                    Span(LabelMdStyle.toModifier().toAttrs()) { Text(review.reviewer) }
+                    Span(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {
+                        Text(review.reviewerDescription)
                     }
                 }
             }
@@ -379,7 +444,10 @@ fun TestimonialsSection() {
 }
 
 @Composable
-fun TestimonialNavButton(icon: @Composable (Modifier) -> Unit) {
+fun TestimonialNavButton(
+    onClick: () -> Unit,
+    icon: @Composable (Modifier) -> Unit,
+) {
     Button(
         Modifier
             .size(48.px)
@@ -387,6 +455,7 @@ fun TestimonialNavButton(icon: @Composable (Modifier) -> Unit) {
             .border(1.px, LineStyle.Solid, AppColors.Primary)
             .backgroundColor(Colors.Transparent)
             .cursor(Cursor.Pointer)
+            .onClick { onClick() }
             .toAttrs(),
     ) {
         Center {

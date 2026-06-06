@@ -24,3 +24,11 @@ data class WebinarTipsSection(
     val header: String,
     val mistakes: List<WebinarTip>,
 )
+
+@Serializable
+data class WebinarReview(
+    val reviewer: String,
+    val reviewerDescription: String,
+    val reviewerImage: String,
+    val review: String,
+)

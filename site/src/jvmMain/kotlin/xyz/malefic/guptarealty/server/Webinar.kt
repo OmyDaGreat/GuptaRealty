@@ -11,6 +11,7 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import xyz.malefic.guptarealty.model.Webinar
+import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTip
 import xyz.malefic.guptarealty.model.WebinarTipsSection
 
@@ -47,7 +48,7 @@ val webinar: Array<RoutingHttpHandler> =
                     ),
                 )
         },
-        "/api/webinar/tips" bind GET to { request ->
+        "/api/webinar/tips" bind GET to {
             Response(OK)
                 .header("Content-Type", APPLICATION_JSON.value)
                 .body(
@@ -70,6 +71,28 @@ val webinar: Array<RoutingHttpHandler> =
                                     "Emotional Over-Investing",
                                     "It's easy to fall for a aesthetic and ignore structural red flags. We keep you grounded in data and long-term value.",
                                 ),
+                            ),
+                        ),
+                    ),
+                )
+        },
+        "/api/webinar/reviews" bind GET to {
+            Response(OK)
+                .header("Content-Type", APPLICATION_JSON.value)
+                .body(
+                    json.encodeToString(
+                        listOf(
+                            WebinarReview(
+                                "Mark & Sarah Thompson",
+                                "New Homeowners, Irvine",
+                                "https://lh3.googleusercontent.com/aida-public/AB6AXuDABXqZiK9yZKb-RRKmDrqGBFGreGt177dM_PlZcxT6ZuOHNlEbRD_RmtkCEUBpB3CWLb4JPdkNG4Kajom_60ccRqKUfMfkWndi0ZX_iRCqYTru7xuMJW7nn9gnIgnkEufgFEAqeADrQT1QDahHTkRtzVOTr5FnhUOLtA2pS0IN7G6r56Cb-LZhhvqgSjmcCmegKAdHUMIrcNZsYMteuRNNEC46OZH_gZeFvWYwFE7ne8efX6nBMDm2-LmQ3FAEdGctPB1w0BUuuGw",
+                                "Ruchika's webinar was the turning point for us. She simplified the escrow process and gave us the confidence to put in our first offer. We closed last month!",
+                            ),
+                            WebinarReview(
+                                "idk some reviewer",
+                                "Retired, Anaheim",
+                                "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png",
+                                "Some rly rly long review ahhhgiweajifgjwalfjwal",
                             ),
                         ),
                     ),
