@@ -4,8 +4,15 @@ import com.varabyte.kobweb.browser.api
 import kotlinx.browser.window
 import xyz.malefic.guptarealty.api.json
 
-suspend inline fun <reified T> api(url: String) =
+suspend inline fun <reified T> getApi(url: String) =
     window.api
         .getBytes(url)
         .decodeToString()
         .let { json.decodeFromString<T>(it) }
+
+suspend fun postApi(url: String) = window.api.postBytes(url)
+
+suspend inline fun <reified T> postApi(
+    url: String,
+    body: T,
+) = window.api.postBytes(url, body = json.encodeToString(body).encodeToByteArray())

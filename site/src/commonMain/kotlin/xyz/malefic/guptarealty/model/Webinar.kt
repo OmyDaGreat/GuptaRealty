@@ -32,3 +32,10 @@ data class WebinarReview(
     val reviewerImage: String,
     val review: String,
 )
+
+@Serializable
+data class Registration(
+    val name: String,
+    val email: String,
+    val phone: String,
+)

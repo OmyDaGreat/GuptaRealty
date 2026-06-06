@@ -6,33 +6,36 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import org.http4k.core.ContentType.Companion.APPLICATION_JSON
 import org.http4k.core.Method.GET
+import org.http4k.core.Method.POST
 import org.http4k.core.Response
+import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
+import xyz.malefic.guptarealty.model.Registration
 import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTip
 import xyz.malefic.guptarealty.model.WebinarTipsSection
+import xyz.malefic.guptarealty.server.data.registrations
+
+private val log = Logger.withTag("Webinar")
 
 val webinar: Array<RoutingHttpHandler> =
     arrayOf(
         "/api/webinar" bind GET to { request ->
-            var error: String? = null
             val timeZone =
                 try {
                     request.query("tz")?.let { TimeZone.of(it) }
-                        ?: TimeZone.currentSystemDefault().also {
-                            error = "No time zone provided, defaulting to system time zone. "
+                        ?: run {
+                            log.e { "No time zone provided, defaulting to system time zone." }
+                            TimeZone.currentSystemDefault()
                         }
                 } catch (e: Exception) {
-                    TimeZone.currentSystemDefault().also {
-                        error = "Invalid time zone (${request.query("tz")}) provided, defaulting to system time zone. "
-                    }
+                    log.e { "Invalid time zone (${request.query("tz")}) provided, defaulting to system time zone." }
+                    TimeZone.currentSystemDefault()
                 }
             val instant = LocalDateTime(2026, 6, 23, 4, 0).toInstant(timeZone)
-
-            error?.let { Logger.e(tag = "Webinar") { it } }
 
             Response(OK)
                 .header("Content-Type", APPLICATION_JSON.value)
@@ -97,5 +100,21 @@ val webinar: Array<RoutingHttpHandler> =
                         ),
                     ),
                 )
+        },
+        "/api/webinar/register" bind POST to { request ->
+            val registration =
+                try {
+                    json.decodeFromString<Registration>(request.bodyString())
+                } catch (e: Exception) {
+                    log.e(e) { "Failed to decode registration" }
+                    null
+                }
+
+            registration?.let {
+                registrations += registration
+                log.i { "New registration: $registration" }
+                log.i { "Total registrations: ${registrations.size}" }
+                Response(OK)
+            } ?: Response(BAD_REQUEST).body("Failed to decode registration")
         },
     )

@@ -2,6 +2,7 @@ package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +67,7 @@ import com.varabyte.kobweb.silk.components.icons.mdi.MdiStar
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.style.toModifier
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
@@ -98,9 +100,11 @@ import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.api.getWebinar
 import xyz.malefic.guptarealty.api.getWebinarReviews
 import xyz.malefic.guptarealty.api.getWebinarTips
+import xyz.malefic.guptarealty.api.postWebinarRegistration
 import xyz.malefic.guptarealty.components.Center
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MistakeCard
+import xyz.malefic.guptarealty.model.Registration
 import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTipsSection
@@ -125,15 +129,17 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun WebinarPage() {
     Column(Modifier.fillMaxSize()) {
-        WebinarHeroSection()
+        val coroutineScope = rememberCoroutineScope()
+
+        WebinarHeroSection(coroutineScope)
         TipsSection()
-        TestimonialsSection()
+        TestimonialsSection(coroutineScope)
         FinalCTASection()
     }
 }
 
 @Composable
-fun WebinarHeroSection() =
+fun WebinarHeroSection(coroutineScope: CoroutineScope) =
     Box(
         SectionStyle.toModifier().padding(top = 40.px, bottom = AppSpacing.SectionGap),
         contentAlignment = Alignment.Center,
@@ -213,69 +219,94 @@ fun WebinarHeroSection() =
                             }
                         }
                     }
-                    RegistrationSection(w.date.toDisplayString())
+                    RegistrationSection(coroutineScope, w.date.toDisplayString())
                 }
             }
         }
     }
 
 @Composable
-fun RegistrationSection(sessionDate: String) =
-    Box(Modifier.gridColumn("span 5").padding(left = AppSpacing.S5)) {
-        Column(
-            Modifier
-                .backgroundColor(AppColors.Surface)
-                .padding(48.px)
-                .borderRadius(40.px)
-                .border(1.px, LineStyle.Solid, AppColors.Secondary)
-                .then(AppModifiers.SoftShadow),
-        ) {
-            H3(
-                HeadlineMdStyle
-                    .toModifier()
-                    .color(AppColors.Primary)
-                    .margin(bottom = 8.px)
-                    .toAttrs(),
-            ) { Text("Secure Your Spot") }
-            P(
-                BodyMdStyle
-                    .toModifier()
-                    .color(AppColors.OnSurfaceVariant)
-                    .margin(bottom = 32.px)
-                    .toAttrs(),
-            ) {
-                Text("Register now to receive the webinar link and a free Home Buyer's Toolkit PDF.")
-            }
+fun RegistrationSection(
+    coroutineScope: CoroutineScope,
+    sessionDate: String,
+) = Box(Modifier.gridColumn("span 5").padding(left = AppSpacing.S5)) {
+    Column(
+        Modifier
+            .backgroundColor(AppColors.Surface)
+            .padding(48.px)
+            .borderRadius(40.px)
+            .border(1.px, LineStyle.Solid, AppColors.Secondary)
+            .then(AppModifiers.SoftShadow),
+    ) {
+        val name = remember { mutableStateOf("") }
+        val email = remember { mutableStateOf("") }
+        val phone = remember { mutableStateOf("") }
 
-            RegistrationField("Full Name", "Enter your name")
-            RegistrationField("Email Address", "email@example.com", type = InputType.Email)
-            RegistrationField("Phone Number", "(555) 000-0000", type = InputType.Tel)
+        var registered by remember { mutableStateOf(false) }
 
-            Button(
-                PrimaryButtonStyle
-                    .toModifier()
-                    .fillMaxWidth()
-                    .margin(top = 24.px)
-                    .toAttrs(),
-            ) {
-                Text("Register for the Webinar")
-            }
-            P(
-                LabelSmStyle
-                    .toModifier()
-                    .color(AppColors.OnSurfaceVariant)
-                    .margin(top = 16.px)
-                    .textAlign(TextAlign.Center)
-                    .toAttrs(),
-            ) {
-                Text("Next Session: $sessionDate")
+        LaunchedEffect(registered) {
+            if (registered) {
+                coroutineScope.launch {
+                    delay(2000.milliseconds)
+                    registered = false
+                }
             }
         }
+
+        H3(
+            HeadlineMdStyle
+                .toModifier()
+                .color(AppColors.Primary)
+                .margin(bottom = 8.px)
+                .toAttrs(),
+        ) { Text("Secure Your Spot") }
+        P(
+            BodyMdStyle
+                .toModifier()
+                .color(AppColors.OnSurfaceVariant)
+                .margin(bottom = 32.px)
+                .toAttrs(),
+        ) {
+            Text("Register now to receive the webinar link and a free Home Buyer's Toolkit PDF.")
+        }
+
+        RegistrationField("Full Name", name, "Enter your name")
+        RegistrationField("Email Address", email, "email@example.com", type = InputType.Email)
+        RegistrationField("Phone Number", phone, "(555) 000-0000", type = InputType.Tel)
+
+        Button(
+            PrimaryButtonStyle
+                .toModifier()
+                .fillMaxWidth()
+                .margin(top = 24.px)
+                .toAttrs {
+                    onClick {
+                        coroutineScope.launch {
+                            postWebinarRegistration(Registration(name.value, email.value, phone.value))
+                            registered = true
+                        }
+                    }
+                },
+        ) {
+            Text("Register for the Webinar".takeUnless { registered } ?: "Registered!")
+        }
+        P(
+            LabelSmStyle
+                .toModifier()
+                .color(AppColors.OnSurfaceVariant)
+                .margin(top = 16.px)
+                .textAlign(TextAlign.Center)
+                .toAttrs(),
+        ) {
+            Text("Next Session: $sessionDate")
+        }
     }
+}
 
 @Composable
 fun RegistrationField(
     label: String,
+    value: MutableState<String>,
     placeholder: String,
     type: InputType<String> = InputType.Text,
 ) {
@@ -283,6 +314,8 @@ fun RegistrationField(
         Span(LabelMdStyle.toModifier().margin(bottom = 8.px).toAttrs()) { Text(label) }
         Input(type) {
             placeholder(placeholder)
+            value(value.value)
+            onInput { value.value = it.value }
             style {
                 width(100.percent)
                 backgroundColor(AppColors.SurfaceContainer)
@@ -326,11 +359,10 @@ fun TipsSection() {
 }
 
 @Composable
-fun TestimonialsSection() {
+fun TestimonialsSection(coroutineScope: CoroutineScope) {
     var reviews by remember { mutableStateOf<List<WebinarReview>?>(null) }
     var currentIndex by remember { mutableStateOf(0) }
     var visible by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         reviews = getWebinarReviews()
