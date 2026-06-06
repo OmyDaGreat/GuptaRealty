@@ -73,7 +73,7 @@ fun Footer() =
                         LabelMdStyle
                             .toModifier()
                             .color(AppColors.Primary)
-                            .margin(bottom = 24.px)
+                            .margin(top = 4.px, bottom = 24.px)
                             .toAttrs(),
                     ) { Text("EXPLORE") }
                     Link("#", Modifier.color(AppColors.OnSurfaceVariant).margin(bottom = 12.px)) { Text("Buying Guide") }

@@ -12,8 +12,8 @@ import org.jetbrains.compose.web.dom.Text
 
 @Page
 @Composable
-fun SellPage() {
+fun TestimonialsPage() {
     Box(Modifier.fillMaxSize().height(100.vh), contentAlignment = Alignment.Center) {
-        Text("Sell Page - Coming Soon")
+        Text("Testimonials Page - Coming Soon")
     }
 }

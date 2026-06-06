@@ -184,5 +184,4 @@ fun NavBarLayout(content: @Composable () -> Unit) {
     }
 }
 
-fun Pages.isCurrentPage(currentRoute: String): Boolean =
-    if (this == Pages.INDEX) currentRoute == "/" || currentRoute == "" else currentRoute == route
+fun Pages.isCurrentPage(currentRoute: String): Boolean = currentRoute.trimEnd('/') == route.trimEnd('/')

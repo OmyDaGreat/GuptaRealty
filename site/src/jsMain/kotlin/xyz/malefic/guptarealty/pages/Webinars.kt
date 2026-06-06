@@ -207,7 +207,7 @@ fun WebinarHeroSection() {
 
                         RegistrationField("Full Name", "Enter your name")
                         RegistrationField("Email Address", "email@example.com", type = InputType.Email)
-                        RegistrationField("Phone Number (optional)", "(555) 000-0000", type = InputType.Tel)
+                        RegistrationField("Phone Number", "(555) 000-0000", type = InputType.Tel)
 
                         Button(
                             PrimaryButtonStyle

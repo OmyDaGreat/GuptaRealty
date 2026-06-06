@@ -5,9 +5,8 @@ enum class Pages(
     val route: String,
 ) {
     INDEX("Home", "/"),
-    BUY("Buy", "/buy"),
-    SELL("Sell", "/sell"),
     WEBINARS("Webinars", "/webinars"),
     BLOG("Blog", "/blog"),
+    TESTIMONIALS("Testimonials", "/testimonials"),
     CONTACT("Contact", "/contact"),
 }
