@@ -51,12 +51,10 @@ import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiAccountBalanceWallet
+import com.varabyte.kobweb.silk.components.icons.mdi.MdIcon
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiArrowBack
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiArrowForward
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiHomeWork
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiPlayArrow
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiPsychology
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiStar
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
@@ -87,10 +85,12 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.api.getWebinar
+import xyz.malefic.guptarealty.api.getWebinarTips
 import xyz.malefic.guptarealty.components.Center
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MistakeCard
 import xyz.malefic.guptarealty.model.Webinar
+import xyz.malefic.guptarealty.model.WebinarTipsSection
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
 import xyz.malefic.guptarealty.styles.AppSpacing
@@ -112,7 +112,7 @@ import xyz.malefic.kutint.rgba
 fun WebinarPage() {
     Column(Modifier.fillMaxSize()) {
         WebinarHeroSection()
-        MistakesSection()
+        TipsSection()
         TestimonialsSection()
         FinalCTASection()
     }
@@ -282,31 +282,30 @@ fun RegistrationField(
 }
 
 @Composable
-fun MistakesSection() {
+fun TipsSection() {
     Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceContainer), contentAlignment = Alignment.Center) {
         Column(ContainerStyle.toModifier()) {
-            Column(Modifier.fillMaxWidth().textAlign(TextAlign.Center).margin(bottom = 64.px)) {
-                H2(HeadlineMdStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text("Common First Time Home Buyer Mistakes") }
-                Box(
-                    Modifier
-                        .size(width = 96.px, height = 6.px)
-                        .backgroundColor(AppColors.Secondary)
-                        .borderRadius(3.px),
-                )
+            var mistakes by remember { mutableStateOf<WebinarTipsSection?>(null) }
+
+            LaunchedEffect(Unit) {
+                mistakes = getWebinarTips()
             }
-            SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
-                MistakeCard(
-                    "Skipping Pre-Approval",
-                    "Don't start the hunt without knowing your budget. Pre-approval gives you leverage and clarity in a competitive market.",
-                ) { MdiAccountBalanceWallet(it) }
-                MistakeCard(
-                    "Ignoring Extra Costs",
-                    "Beyond the mortgage, consider closing costs, inspections, and insurance. We help you map out the full financial picture.",
-                ) { MdiHomeWork(it) }
-                MistakeCard(
-                    "Emotional Over-Investing",
-                    "It's easy to fall for a aesthetic and ignore structural red flags. We keep you grounded in data and long-term value.",
-                ) { MdiPsychology(it) }
+
+            Loading(mistakes, Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap)) { m ->
+                Column(Modifier.fillMaxWidth().textAlign(TextAlign.Center).margin(bottom = 64.px)) {
+                    H2(HeadlineMdStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text(m.header) }
+                    Box(
+                        Modifier
+                            .size(width = 96.px, height = 6.px)
+                            .backgroundColor(AppColors.Secondary)
+                            .borderRadius(3.px),
+                    )
+                }
+                SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
+                    m.mistakes.forEach { m ->
+                        MistakeCard(m.title, m.description) { MdIcon(m.icon, it) }
+                    }
+                }
             }
         }
     }

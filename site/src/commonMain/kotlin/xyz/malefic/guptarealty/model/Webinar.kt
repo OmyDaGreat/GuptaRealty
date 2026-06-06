@@ -11,3 +11,16 @@ data class Webinar(
     val date: Instant,
     val imageUrl: String,
 )
+
+@Serializable
+data class WebinarTip(
+    val icon: String,
+    val title: String,
+    val description: String,
+)
+
+@Serializable
+data class WebinarTipsSection(
+    val header: String,
+    val mistakes: List<WebinarTip>,
+)

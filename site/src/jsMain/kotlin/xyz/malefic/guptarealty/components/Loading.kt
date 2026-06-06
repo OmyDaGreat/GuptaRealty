@@ -31,11 +31,12 @@ import xyz.malefic.guptarealty.styles.AppColors
 fun <T> Loading(
     value: T?,
     modifier: Modifier = Modifier,
+    contentAlignment: Alignment = Alignment.Center,
     loadingContent: @Composable () -> Unit = { DefaultSpinner() },
     content: @Composable (T) -> Unit,
 ) {
     if (value == null) {
-        Box(modifier, contentAlignment = Alignment.Center) {
+        Box(modifier, contentAlignment) {
             loadingContent()
         }
     } else {
