@@ -6,6 +6,8 @@ kutint = "1.0.1"
 http4k = "6.52.0.0"
 kotlinx-serialization = "1.11.0"
 kurrency = "0.3.1"
+datetime = "0.8.0"
+kermit = "2.1.0"
 
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "jetbrains-compose" }
@@ -17,14 +19,20 @@ kobwebx-serialization-kotlinx = { module = "com.varabyte.kobwebx:kobwebx-seriali
 silk-foundation = { module = "com.varabyte.kobweb:silk-foundation", version.ref = "kobweb" }
 silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "kobweb" }
 silk-icons-mdi = { module = "com.varabyte.kobwebx:silk-icons-mdi", version.ref = "kobweb" }
+
 kutint = { group = "xyz.malefic", name = "kutint", version.ref = "kutint" }
-kurrency = { group = "org.kimplify", name = "kurrency-core", version.ref = "kurrency" }
 
 http4k-core = { group = "org.http4k", name = "http4k-core", version.ref = "http4k" }
 http4k-server-undertow = { group = "org.http4k", name = "http4k-server-undertow", version.ref = "http4k" }
 http4k-format-kotlinx = { group = "org.http4k", name = "http4k-format-kotlinx-serialization", version.ref = "http4k" }
 
+kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
+
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+kurrency = { group = "org.kimplify", name = "kurrency-core", version.ref = "kurrency" }
+
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

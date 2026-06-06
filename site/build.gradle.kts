@@ -45,6 +45,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kermit)
         }
 
         jsMain.dependencies {
@@ -53,6 +55,7 @@ kotlin {
             implementation(libs.bundles.silk.icons)
             implementation(libs.kutint)
             implementation(libs.kurrency)
+            implementation(npm("@js-joda/timezone", "2.25.1"))
         }
 
         jvmMain.dependencies {

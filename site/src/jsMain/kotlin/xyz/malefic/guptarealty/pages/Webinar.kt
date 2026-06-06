@@ -1,6 +1,11 @@
 package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontStyle
@@ -81,8 +86,11 @@ import org.jetbrains.compose.web.dom.Input
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
+import xyz.malefic.guptarealty.api.getWebinar
 import xyz.malefic.guptarealty.components.Center
+import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MistakeCard
+import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
 import xyz.malefic.guptarealty.styles.AppSpacing
@@ -96,11 +104,12 @@ import xyz.malefic.guptarealty.styles.LabelMdStyle
 import xyz.malefic.guptarealty.styles.LabelSmStyle
 import xyz.malefic.guptarealty.styles.PrimaryButtonStyle
 import xyz.malefic.guptarealty.styles.SectionStyle
+import xyz.malefic.guptarealty.util.toDisplayString
 import xyz.malefic.kutint.rgba
 
 @Page
 @Composable
-fun WebinarsPage() {
+fun WebinarPage() {
     Column(Modifier.fillMaxSize()) {
         WebinarHeroSection()
         MistakesSection()
@@ -110,130 +119,145 @@ fun WebinarsPage() {
 }
 
 @Composable
-fun WebinarHeroSection() {
-    Box(SectionStyle.toModifier().padding(top = 40.px, bottom = AppSpacing.SectionGap), contentAlignment = Alignment.Center) {
+fun WebinarHeroSection() =
+    Box(
+        SectionStyle.toModifier().padding(top = 40.px, bottom = AppSpacing.SectionGap),
+        contentAlignment = Alignment.Center,
+    ) {
         Box(ContainerStyle.toModifier()) {
-            SimpleGrid(
-                numColumns(1, lg = 12),
-                Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
-            ) {
-                Column(Modifier.gridColumn("span 7")) {
-                    Span(
-                        Modifier
-                            .backgroundColor(AppColors.Primary)
-                            .color(AppColors.OnPrimary)
-                            .padding(topBottom = 4.px, leftRight = 16.px)
-                            .borderRadius(50.px)
-                            .margin(bottom = 24.px)
-                            .toAttrs(),
-                    ) { Text("LIVE EDUCATIONAL SERIES") }
-                    H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
-                        Text("Mastering the Market: A Guide for First-Time Buyers")
-                    }
-                    P(
-                        BodyLgStyle
-                            .toModifier()
-                            .color(AppColors.OnSurfaceVariant)
-                            .margin(bottom = 40.px)
-                            .toAttrs(),
-                    ) {
-                        Text(
-                            "Join Ruchika Gupta for an exclusive deep dive into the 2024 real estate landscape. Learn how to navigate interest rates and find your dream home with confidence.",
-                        )
-                    }
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(16, 9)
-                            .borderRadius(24.px)
-                            .overflow(Overflow.Hidden)
-                            .then(AppModifiers.ElevatedShadow)
-                            .position(Position.Relative),
-                    ) {
-                        Image(
-                            "https://lh3.googleusercontent.com/aida-public/AB6AXuCM7sKezxKRo-EioXnRhIC_IiX-GdPFc7eJGkEWj4tKCl60ICSqdCPP35EQti9h7fRB4leoi2omg3ptiVBuVcxg8PALJfH_71PnmmxDcu8NUftKKF6pG4VBCQ8QqHpEELt4bQ7w_z8u_jMhn_0eSRxE-NiVhXHzTDIszoeKs_lIsbASO045cROxdCd64vQm-Mu3dwkTOJR225Mtw63B7WPBbI04mTSwLs792n6BuyBftL04Fl1z_hpwzwJi9uDEKj12VCtKrn8_dlY",
-                            "Video Thumbnail",
-                            Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
-                        )
+            var webinar by remember { mutableStateOf<Webinar?>(null) }
+
+            LaunchedEffect(Unit) {
+                webinar = getWebinar()
+            }
+
+            Loading(
+                value = webinar,
+                modifier = Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap),
+            ) { w ->
+                SimpleGrid(
+                    numColumns(1, lg = 12),
+                    Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
+                ) {
+                    Column(Modifier.gridColumn("span 7")) {
+                        Span(
+                            Modifier
+                                .backgroundColor(AppColors.Primary)
+                                .color(AppColors.OnPrimary)
+                                .padding(topBottom = 4.px, leftRight = 16.px)
+                                .borderRadius(50.px)
+                                .margin(bottom = 24.px)
+                                .toAttrs(),
+                        ) { Text(w.header) }
+                        H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
+                            Text(w.title)
+                        }
+                        P(
+                            BodyLgStyle
+                                .toModifier()
+                                .color(AppColors.OnSurfaceVariant)
+                                .margin(bottom = 40.px)
+                                .toAttrs(),
+                        ) {
+                            Text(w.description)
+                        }
                         Box(
                             Modifier
-                                .fillMaxSize()
-                                .backgroundColor(rgba(0, 0, 0, 0.2f))
-                                .display(DisplayStyle.Flex)
-                                .justifyContent(JustifyContent.Center)
-                                .alignItems(AlignItems.Center)
-                                .cursor(Cursor.Pointer),
+                                .fillMaxWidth()
+                                .aspectRatio(16, 9)
+                                .borderRadius(24.px)
+                                .overflow(Overflow.Hidden)
+                                .then(AppModifiers.ElevatedShadow)
+                                .position(Position.Relative),
                         ) {
+                            Image(
+                                w.imageUrl,
+                                w.title,
+                                Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
+                            )
                             Box(
                                 Modifier
-                                    .size(80.px)
-                                    .backgroundColor(AppColors.Secondary)
-                                    .borderRadius(50.percent)
+                                    .fillMaxSize()
+                                    .backgroundColor(rgba(0, 0, 0, 0.2f))
                                     .display(DisplayStyle.Flex)
-                                    .then(AppModifiers.SoftShadow),
+                                    .justifyContent(JustifyContent.Center)
+                                    .alignItems(AlignItems.Center)
+                                    .cursor(Cursor.Pointer),
                             ) {
-                                Center {
-                                    MdiPlayArrow(Modifier.scale(200.percent).color(Colors.White))
+                                Box(
+                                    Modifier
+                                        .size(80.px)
+                                        .backgroundColor(AppColors.Secondary)
+                                        .borderRadius(50.percent)
+                                        .display(DisplayStyle.Flex)
+                                        .then(AppModifiers.SoftShadow),
+                                ) {
+                                    Center {
+                                        MdiPlayArrow(Modifier.scale(200.percent).color(Colors.White))
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                Box(Modifier.gridColumn("span 5").padding(left = AppSpacing.S5)) {
-                    Column(
-                        Modifier
-                            .backgroundColor(AppColors.Surface)
-                            .padding(48.px)
-                            .borderRadius(40.px)
-                            .border(1.px, LineStyle.Solid, AppColors.Secondary)
-                            .then(AppModifiers.SoftShadow),
-                    ) {
-                        H3(
-                            HeadlineMdStyle
-                                .toModifier()
-                                .color(AppColors.Primary)
-                                .margin(bottom = 8.px)
-                                .toAttrs(),
-                        ) { Text("Secure Your Spot") }
-                        P(
-                            BodyMdStyle
-                                .toModifier()
-                                .color(AppColors.OnSurfaceVariant)
-                                .margin(bottom = 32.px)
-                                .toAttrs(),
-                        ) {
-                            Text("Register now to receive the webinar link and a free Home Buyer's Toolkit PDF.")
-                        }
-
-                        RegistrationField("Full Name", "Enter your name")
-                        RegistrationField("Email Address", "email@example.com", type = InputType.Email)
-                        RegistrationField("Phone Number", "(555) 000-0000", type = InputType.Tel)
-
-                        Button(
-                            PrimaryButtonStyle
-                                .toModifier()
-                                .fillMaxWidth()
-                                .margin(top = 24.px)
-                                .toAttrs(),
-                        ) {
-                            Text("Register for the Webinar")
-                        }
-                        P(
-                            LabelSmStyle
-                                .toModifier()
-                                .color(AppColors.OnSurfaceVariant)
-                                .margin(top = 16.px)
-                                .textAlign(TextAlign.Center)
-                                .toAttrs(),
-                        ) {
-                            Text("Next Session: Wednesday, June 21st at 6:00 PM PST")
-                        }
-                    }
+                    RegistrationSection(w.date.toDisplayString())
                 }
             }
         }
     }
-}
+
+@Composable
+fun RegistrationSection(sessionDate: String) =
+    Box(Modifier.gridColumn("span 5").padding(left = AppSpacing.S5)) {
+        Column(
+            Modifier
+                .backgroundColor(AppColors.Surface)
+                .padding(48.px)
+                .borderRadius(40.px)
+                .border(1.px, LineStyle.Solid, AppColors.Secondary)
+                .then(AppModifiers.SoftShadow),
+        ) {
+            H3(
+                HeadlineMdStyle
+                    .toModifier()
+                    .color(AppColors.Primary)
+                    .margin(bottom = 8.px)
+                    .toAttrs(),
+            ) { Text("Secure Your Spot") }
+            P(
+                BodyMdStyle
+                    .toModifier()
+                    .color(AppColors.OnSurfaceVariant)
+                    .margin(bottom = 32.px)
+                    .toAttrs(),
+            ) {
+                Text("Register now to receive the webinar link and a free Home Buyer's Toolkit PDF.")
+            }
+
+            RegistrationField("Full Name", "Enter your name")
+            RegistrationField("Email Address", "email@example.com", type = InputType.Email)
+            RegistrationField("Phone Number", "(555) 000-0000", type = InputType.Tel)
+
+            Button(
+                PrimaryButtonStyle
+                    .toModifier()
+                    .fillMaxWidth()
+                    .margin(top = 24.px)
+                    .toAttrs(),
+            ) {
+                Text("Register for the Webinar")
+            }
+            P(
+                LabelSmStyle
+                    .toModifier()
+                    .color(AppColors.OnSurfaceVariant)
+                    .margin(top = 16.px)
+                    .textAlign(TextAlign.Center)
+                    .toAttrs(),
+            ) {
+                Text("Next Session: $sessionDate")
+            }
+        }
+    }
 
 @Composable
 fun RegistrationField(

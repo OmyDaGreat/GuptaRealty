@@ -1,0 +1,66 @@
+package xyz.malefic.guptarealty.components
+
+import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.AnimationIterationCount.Companion.Infinite
+import com.varabyte.kobweb.compose.foundation.layout.Box
+import com.varabyte.kobweb.compose.ui.Alignment
+import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.graphics.Colors
+import com.varabyte.kobweb.compose.ui.modifiers.animation
+import com.varabyte.kobweb.compose.ui.modifiers.border
+import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
+import com.varabyte.kobweb.compose.ui.modifiers.borderTop
+import com.varabyte.kobweb.compose.ui.modifiers.size
+import com.varabyte.kobweb.compose.ui.modifiers.transform
+import com.varabyte.kobweb.silk.style.animation.Keyframes
+import com.varabyte.kobweb.silk.style.animation.toAnimation
+import org.jetbrains.compose.web.css.AnimationTimingFunction.Companion.Linear
+import org.jetbrains.compose.web.css.LineStyle
+import org.jetbrains.compose.web.css.deg
+import org.jetbrains.compose.web.css.percent
+import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.s
+import xyz.malefic.guptarealty.styles.AppColors
+
+/**
+ * Renders [loadingContent] while [value] is null, then calls [content] with the
+ * unwrapped value once it arrives. [modifier] is applied to the loading wrapper only,
+ * so it has no layout impact on the resolved content.
+ */
+@Composable
+fun <T> Loading(
+    value: T?,
+    modifier: Modifier = Modifier,
+    loadingContent: @Composable () -> Unit = { DefaultSpinner() },
+    content: @Composable (T) -> Unit,
+) {
+    if (value == null) {
+        Box(modifier, contentAlignment = Alignment.Center) {
+            loadingContent()
+        }
+    } else {
+        content(value)
+    }
+}
+
+val SpinKeyframes =
+    Keyframes {
+        to {
+            Modifier.transform { rotate(360.deg) }
+        }
+    }
+
+@Composable
+fun DefaultSpinner() {
+    Box(
+        Modifier
+            .size(48.px)
+            .borderRadius(50.percent)
+            .border(4.px, LineStyle.Solid, AppColors.Primary)
+            .borderTop {
+                color(Colors.Transparent)
+            }.animation(
+                SpinKeyframes.toAnimation(0.8.s, Linear, iterationCount = Infinite),
+            ),
+    )
+}
