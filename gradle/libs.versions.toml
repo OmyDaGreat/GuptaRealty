@@ -5,6 +5,7 @@ kotlin = "2.3.21"
 kutint = "1.0.1"
 http4k = "6.52.0.0"
 kotlinx-serialization = "1.11.0"
+kurrency = "0.3.1"
 
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "jetbrains-compose" }
@@ -17,6 +18,7 @@ silk-foundation = { module = "com.varabyte.kobweb:silk-foundation", version.ref 
 silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "kobweb" }
 silk-icons-mdi = { module = "com.varabyte.kobwebx:silk-icons-mdi", version.ref = "kobweb" }
 kutint = { group = "xyz.malefic", name = "kutint", version.ref = "kutint" }
+kurrency = { group = "org.kimplify", name = "kurrency-core", version.ref = "kurrency" }
 
 http4k-core = { group = "org.http4k", name = "http4k-core", version.ref = "http4k" }
 http4k-server-undertow = { group = "org.http4k", name = "http4k-server-undertow", version.ref = "http4k" }

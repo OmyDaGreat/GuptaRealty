@@ -1,7 +1,11 @@
 package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.JustifyContent
@@ -44,7 +48,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
 import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.modifiers.translateY
-import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.graphics.Image
@@ -60,7 +63,6 @@ import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
-import kotlinx.serialization.json.Json
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.css.AlignItems
@@ -86,6 +88,7 @@ import org.jetbrains.compose.web.dom.Input
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
+import xyz.malefic.guptarealty.api.getProperties
 import xyz.malefic.guptarealty.components.Center
 import xyz.malefic.guptarealty.model.Property
 import xyz.malefic.guptarealty.styles.AppColors
@@ -99,6 +102,7 @@ import xyz.malefic.guptarealty.styles.LabelMdStyle
 import xyz.malefic.guptarealty.styles.LabelSmStyle
 import xyz.malefic.guptarealty.styles.SectionStyle
 import xyz.malefic.guptarealty.styles.TertiaryButtonStyle
+import xyz.malefic.guptarealty.util.price
 import xyz.malefic.kutint.rgba
 
 @Page
@@ -118,11 +122,7 @@ fun SearchFilterBar() {
             .fillMaxWidth()
             .backgroundColor(AppColors.Surface.withAlpha(0.8f))
             .backdropFilter(blur(12.px))
-            .position(Position.Sticky)
-            .top(80.px)
-            .zIndex(90)
-            .borderBottom(1.px, LineStyle.Solid, AppColors.OutlineVariant.withAlpha(0.3f))
-            .padding(topBottom = 24.px),
+            .borderBottom(1.px, LineStyle.Solid, AppColors.OutlineVariant.withAlpha(0.3f)),
         contentAlignment = Alignment.Center,
     ) {
         Box(ContainerStyle.toModifier()) {
@@ -200,6 +200,7 @@ fun AlertBanner() {
         Row(
             ContainerStyle
                 .toModifier()
+                .padding(top = 12.px)
                 .justifyContent(JustifyContent.SpaceBetween)
                 .alignItems(AlignItems.Center),
         ) {
@@ -216,45 +217,11 @@ fun AlertBanner() {
 
 @Composable
 fun PropertyResultsSection() {
-    val mockPropertiesJson =
-        """
-        [
-            {
-                "id": "1",
-                "price": 2450000.0,
-                "address": "1245 Serene Vista Way, Irvine, CA",
-                "beds": 4,
-                "baths": 3.0,
-                "sqft": 3100,
-                "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCNO9a3Wt73r7849fkQ0dVFYkS9HOTFWKJkt-l92NZLzjEi5RXsGoLkz7MnFZBq3SZnDrHuW7uPYC_AEIswWuB6TMxgK9c02FoE0-9P2JAWoJBKTdnYhAIMKCSYmfVlg091XbXsVkyT2vTeQSKc7ugwxUAe3StTJJOboqFHEOVABdta7dvS_JFN9ocw9mg3uuiu5XhsaxUVfI7Wh46b-MBnsxpDuoS4X36Bj1UWj_skCeMrjQvGjucjDyVFV_i4jtjEXkH18ite5NE",
-                "tags": ["Just Listed"],
-                "isFeatured": false
-            },
-            {
-                "id": "2",
-                "price": 1890000.0,
-                "address": "882 Lavender Lane, Newport Beach, CA",
-                "beds": 3,
-                "baths": 2.5,
-                "sqft": 2450,
-                "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCqbK8Z-oOczW3GYNVvF-qb3BFGWt40kjzhI2agdr2CAcc0ICdVKoU-ggrXOKP0KvuNk8RiRPHMS7h-tK-GMRi8nXbbeDQiRLfBDXKInlPZKrK8vfbXINf6ZXxSxN-WO-L5C7rPCCy2wxDEVf3w0037cfZeM24x5fzK5tg3KCi5NVZNkrOpTv7tloklqYdjoBK_IQuc_0vrdfx2flASEzJ-4fugclrw1CuElcLqAofVvqTXDss26-hc47la85zBx45yzinxsePbjUE",
-                "tags": ["Open House: Sun"],
-                "isFeatured": false
-            },
-            {
-                "id": "3",
-                "price": 3125000.0,
-                "address": "402 Pacific View Ct, Laguna Beach, CA",
-                "beds": 5,
-                "baths": 5.0,
-                "sqft": 4200,
-                "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuB7AS53h9Y4YjTFOgiVNJm1GTTsuImynexRFV1f43FLPtBtMXqR-s-X51xwI-cZ8hsCdB3YrSBRauMVepzBPNkonzH4NlIMQw4lvbowy6UzCbvtr_5jqB--PIks3EhYpe3xpDn4zrhJ7r7ILzLl7afbBtU-QsMkb6ZUfh_s1KQdyz2xTz8kFRNcD8r-FucWZQT_j6MEx444KF4d8SFIANRF8PMY2OYB857dn6sPUIX53MjrcM7VikHnQ1QXwkPgMz0wgO0957pa10c",
-                "tags": ["New Construction"],
-                "isFeatured": false
-            }
-        ]
-        """.trimIndent()
-    val properties = remember { Json.decodeFromString<List<Property>>(mockPropertiesJson) }
+    var properties by remember { mutableStateOf<List<Property>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        properties = getProperties()
+    }
 
     Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
@@ -272,11 +239,8 @@ fun PropertyResultsSection() {
                     }
                 }
             }
-
             SimpleGrid(numColumns(1, md = 2, lg = 3), Modifier.gap(AppSpacing.Gutter)) {
-                properties.forEach { property ->
-                    PropertyCard(property)
-                }
+                properties.forEach { PropertyCard(it) }
             }
         }
     }
@@ -333,7 +297,7 @@ fun PropertyCard(property: Property) {
         }
         Column(Modifier.padding(24.px)) {
             H3(HeadlineSmStyle.toModifier().margin(bottom = 8.px).toAttrs()) {
-                Text("$" + property.price.toInt().toString())
+                Text(property.price.toInt().price)
             }
             P(
                 BodyMdStyle

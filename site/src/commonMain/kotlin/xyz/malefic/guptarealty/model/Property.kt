@@ -1,10 +1,11 @@
 package xyz.malefic.guptarealty.model
 
 import kotlinx.serialization.Serializable
+import kotlin.uuid.Uuid
 
 @Serializable
 data class Property(
-    val id: String,
+    val id: Uuid,
     val price: Double,
     val address: String,
     val beds: Int,

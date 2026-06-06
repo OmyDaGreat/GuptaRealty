@@ -52,6 +52,7 @@ kotlin {
             implementation(libs.bundles.kobweb)
             implementation(libs.bundles.silk.icons)
             implementation(libs.kutint)
+            implementation(libs.kurrency)
         }
 
         jvmMain.dependencies {
@@ -61,6 +62,8 @@ kotlin {
             compileOnly(libs.kobweb.api)
         }
     }
+
+    compilerOptions.optIn.add("kotlin.uuid.ExperimentalUuidApi")
 }
 
 tasks.withType<KotlinJvmCompile>().configureEach {
@@ -95,4 +98,12 @@ val dockerRuntime =
 
 tasks.named("build") {
     dependsOn(dockerRuntime)
+}
+
+afterEvaluate {
+    afterEvaluate {
+        tasks.named("jvmRun") {
+            dependsOn(dockerRuntime)
+        }
+    }
 }
