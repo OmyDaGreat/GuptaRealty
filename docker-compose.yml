@@ -6,6 +6,7 @@ services:
     environment:
       - JAVA_OPTS=-Xmx512m
       - PORT=8080
+      - FUB_API_KEY=${FUB_API_KEY}
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/health"]
       interval: 30s

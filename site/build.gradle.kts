@@ -7,6 +7,7 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -17,6 +18,12 @@ plugins {
 
 group = "xyz.malefic.guptarealty"
 version = "1.0.0"
+
+val localProperties =
+    Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) file.inputStream().use(::load)
+    }
 
 kobweb {
     app {
@@ -59,9 +66,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
-            implementation(libs.http4k.core)
-            implementation(libs.http4k.server.undertow)
-            implementation(libs.http4k.format.kotlinx)
+            implementation(libs.bundles.http4k)
             compileOnly(libs.kobweb.api)
         }
     }
@@ -105,8 +110,12 @@ tasks.named("build") {
 
 afterEvaluate {
     afterEvaluate {
-        tasks.named("jvmRun") {
+        tasks.named<JavaExec>("jvmRun") {
             dependsOn(dockerRuntime)
+            systemProperty(
+                "FUB_API_KEY",
+                localProperties["FUB_API_KEY"] ?: System.getenv("FUB_API_KEY") ?: "",
+            )
         }
     }
 }

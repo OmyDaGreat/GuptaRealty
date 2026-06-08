@@ -1,6 +1,5 @@
 package xyz.malefic.guptarealty.server
 
-import kotlinx.serialization.json.Json
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Method.GET
@@ -13,6 +12,7 @@ import org.http4k.filter.CorsPolicy
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import xyz.malefic.guptarealty.server.api.webinar
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -23,8 +23,6 @@ val corsPolicy =
         methods = Method.entries,
         originPolicy = AllowAllOriginPolicy,
     )
-
-val json = Json { ignoreUnknownKeys = true }
 
 private val mimeTypes =
     mapOf(
@@ -76,6 +74,7 @@ val apiRoutes: RoutingHttpHandler =
         "/api/ping" bind GET to { Response(OK).body("pong") },
         "/api/health" bind GET to { Response(OK).body("healthy") },
         *webinar,
+        *fub,
     )
 
 val http: HttpHandler =

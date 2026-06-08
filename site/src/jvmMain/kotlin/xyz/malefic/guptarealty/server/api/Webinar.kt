@@ -1,4 +1,4 @@
-package xyz.malefic.guptarealty.server
+package xyz.malefic.guptarealty.server.api
 
 import co.touchlab.kermit.Logger
 import kotlinx.datetime.LocalDateTime
@@ -17,7 +17,9 @@ import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTip
 import xyz.malefic.guptarealty.model.WebinarTipsSection
+import xyz.malefic.guptarealty.model.json
 import xyz.malefic.guptarealty.server.data.registrations
+import xyz.malefic.guptarealty.server.data.webinarName
 
 private val log = Logger.withTag("Webinar")
 
@@ -43,7 +45,7 @@ val webinar: Array<RoutingHttpHandler> =
                     json.encodeToString(
                         Webinar(
                             "FREE LIVE EDUCATIONAL SERIES",
-                            "Mastering the Market: A Guide for First-Time Buyers",
+                            webinarName,
                             "Join Ruchika Gupta for an exclusive deep dive into the 2026 real estate landscape. Learn how to navigate interest rates and find your dream home with confidence.",
                             instant,
                             "https://lh3.googleusercontent.com/aida-public/AB6AXuCM7sKezxKRo-EioXnRhIC_IiX-GdPFc7eJGkEWj4tKCl60ICSqdCPP35EQti9h7fRB4leoi2omg3ptiVBuVcxg8PALJfH_71PnmmxDcu8NUftKKF6pG4VBCQ8QqHpEELt4bQ7w_z8u_jMhn_0eSRxE-NiVhXHzTDIszoeKs_lIsbASO045cROxdCd64vQm-Mu3dwkTOJR225Mtw63B7WPBbI04mTSwLs792n6BuyBftL04Fl1z_hpwzwJi9uDEKj12VCtKrn8_dlY",

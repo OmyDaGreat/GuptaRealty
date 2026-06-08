@@ -1,5 +1,6 @@
 package xyz.malefic.guptarealty.server
 
+import co.touchlab.kermit.Logger
 import org.http4k.core.then
 import org.http4k.filter.ServerFilters
 import org.http4k.server.Undertow
@@ -14,5 +15,5 @@ fun main() {
             .asServer(Undertow(port))
             .start()
 
-    println("Server started on port ${server.port()}!")
+    Logger.i { "Server started on port ${server.port()}!" }
 }

@@ -2,7 +2,7 @@ package xyz.malefic.guptarealty.util
 
 import com.varabyte.kobweb.browser.api
 import kotlinx.browser.window
-import xyz.malefic.guptarealty.api.json
+import xyz.malefic.guptarealty.model.json
 
 suspend inline fun <reified T> getApi(url: String) =
     window.api

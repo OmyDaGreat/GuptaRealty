@@ -1,4 +1,4 @@
-package xyz.malefic.guptarealty.api
+package xyz.malefic.guptarealty.model
 
 import kotlinx.serialization.json.Json
 
