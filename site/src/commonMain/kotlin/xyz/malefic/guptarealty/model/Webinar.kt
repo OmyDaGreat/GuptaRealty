@@ -4,6 +4,14 @@ import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 
 @Serializable
+data class Registration(
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val phone: String,
+)
+
+@Serializable
 data class Webinar(
     val header: String,
     val title: String,
@@ -31,11 +39,4 @@ data class WebinarReview(
     val reviewerDescription: String,
     val reviewerImage: String,
     val review: String,
-)
-
-@Serializable
-data class Registration(
-    val name: String,
-    val email: String,
-    val phone: String,
 )

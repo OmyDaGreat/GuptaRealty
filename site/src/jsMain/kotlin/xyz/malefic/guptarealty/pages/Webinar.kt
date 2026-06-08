@@ -104,7 +104,6 @@ import xyz.malefic.guptarealty.api.postWebinarRegistration
 import xyz.malefic.guptarealty.components.Center
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MistakeCard
-import xyz.malefic.guptarealty.model.Registration
 import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTipsSection
@@ -225,6 +224,13 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
         }
     }
 
+enum class WebinarRegistrationStatus {
+    Idle,
+    Registering,
+    Success,
+    Error,
+}
+
 @Composable
 fun RegistrationSection(
     coroutineScope: CoroutineScope,
@@ -242,13 +248,13 @@ fun RegistrationSection(
         val email = remember { mutableStateOf("") }
         val phone = remember { mutableStateOf("") }
 
-        var registered by remember { mutableStateOf(false) }
+        var registered by remember { mutableStateOf(WebinarRegistrationStatus.Idle) }
 
         LaunchedEffect(registered) {
-            if (registered) {
+            if (registered == WebinarRegistrationStatus.Success) {
                 coroutineScope.launch {
                     delay(2000.milliseconds)
-                    registered = false
+                    registered = WebinarRegistrationStatus.Idle
                 }
             }
         }
@@ -282,13 +288,39 @@ fun RegistrationSection(
                 .toAttrs {
                     onClick {
                         coroutineScope.launch {
-                            postWebinarRegistration(Registration(name.value, email.value, phone.value))
-                            registered = true
+                            registered = WebinarRegistrationStatus.Registering
+                            if (name.value.isBlank() || email.value.isBlank() || phone.value.isBlank()) {
+                                registered = WebinarRegistrationStatus.Error
+                                return@launch
+                            }
+                            val nameSplit = name.value.split(" ")
+                            when (nameSplit.size) {
+                                1 -> {
+                                    postWebinarRegistration(name.value, "", email.value, phone.value)
+                                }
+
+                                else -> {
+                                    postWebinarRegistration(
+                                        nameSplit.dropLast(1).joinToString(" "),
+                                        nameSplit.last(),
+                                        email.value,
+                                        phone.value,
+                                    )
+                                }
+                            }
+                            registered = WebinarRegistrationStatus.Success
                         }
                     }
                 },
         ) {
-            Text("Register for the Webinar".takeUnless { registered } ?: "Registered!")
+            Text(
+                when (registered) {
+                    WebinarRegistrationStatus.Idle -> "Register"
+                    WebinarRegistrationStatus.Registering -> "Registering..."
+                    WebinarRegistrationStatus.Success -> "Success!"
+                    WebinarRegistrationStatus.Error -> "Please Fill Fields"
+                },
+            )
         }
         P(
             LabelSmStyle

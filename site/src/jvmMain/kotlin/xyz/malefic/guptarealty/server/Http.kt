@@ -74,7 +74,6 @@ val apiRoutes: RoutingHttpHandler =
         "/api/ping" bind GET to { Response(OK).body("pong") },
         "/api/health" bind GET to { Response(OK).body("healthy") },
         *webinar,
-        *fub,
     )
 
 val http: HttpHandler =

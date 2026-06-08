@@ -4,14 +4,25 @@ import co.touchlab.kermit.Logger
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import org.http4k.client.OkHttp
+import org.http4k.core.Body
 import org.http4k.core.ContentType.Companion.APPLICATION_JSON
+import org.http4k.core.Credentials
 import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
+import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
+import org.http4k.lens.accept
+import org.http4k.lens.basicAuthentication
+import org.http4k.lens.contentType
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
+import xyz.malefic.guptarealty.model.EmailEntry
+import xyz.malefic.guptarealty.model.EventPerson
+import xyz.malefic.guptarealty.model.FollowUpBossEvent
+import xyz.malefic.guptarealty.model.PhoneEntry
 import xyz.malefic.guptarealty.model.Registration
 import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
@@ -22,6 +33,11 @@ import xyz.malefic.guptarealty.server.data.registrations
 import xyz.malefic.guptarealty.server.data.webinarName
 
 private val log = Logger.withTag("Webinar")
+
+private val apiKey: String? =
+    System.getProperty("FUB_API_KEY")
+        ?: System.getenv("FUB_API_KEY")
+private val client = OkHttp()
 
 val webinar: Array<RoutingHttpHandler> =
     arrayOf(
@@ -103,7 +119,7 @@ val webinar: Array<RoutingHttpHandler> =
                     ),
                 )
         },
-        "/api/webinar/register" bind POST to { request ->
+        "/api/webinar/register" bind POST to request@{ request ->
             val registration =
                 try {
                     json.decodeFromString<Registration>(request.bodyString())
@@ -114,9 +130,35 @@ val webinar: Array<RoutingHttpHandler> =
 
             registration?.let {
                 registrations += registration
-                log.i { "New registration: $registration" }
-                log.i { "Total registrations: ${registrations.size}" }
-                Response(OK)
+                log.d { "New registration: $registration" }
+                log.d { "Total registrations: ${registrations.size}" }
+                if (apiKey == null) {
+                    log.e { "Missing FUB_API_KEY environment variable" }
+                    return@request Response(BAD_REQUEST).body("Missing CRM api key")
+                }
+
+                val payload =
+                    FollowUpBossEvent(
+                        person =
+                            EventPerson(
+                                registration.firstName,
+                                registration.lastName,
+                                listOf(EmailEntry(registration.email)),
+                                listOf(PhoneEntry(registration.phone)),
+                                source = "guptarealty.com/webinar",
+                                tags = listOf("Webinar"),
+                            ),
+                        description = "Signed up for webinar \"$webinarName\"",
+                    )
+
+                val request =
+                    Request(POST, "https://api.followupboss.com/v1/events")
+                        .accept(APPLICATION_JSON)
+                        .basicAuthentication(Credentials(apiKey, ""))
+                        .contentType(APPLICATION_JSON)
+                        .body(Body(json.encodeToString(payload)))
+
+                client(request)
             } ?: Response(BAD_REQUEST).body("Failed to decode registration")
         },
     )

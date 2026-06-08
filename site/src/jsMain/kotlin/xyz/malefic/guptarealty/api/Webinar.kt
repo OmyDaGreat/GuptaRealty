@@ -14,4 +14,9 @@ suspend fun getWebinarTips() = getApi<WebinarTipsSection>("webinar/tips")
 
 suspend fun getWebinarReviews() = getApi<List<WebinarReview>>("webinar/reviews")
 
-suspend fun postWebinarRegistration(registration: Registration) = postApi("webinar/register", registration)
+suspend fun postWebinarRegistration(
+    firstName: String,
+    lastName: String,
+    email: String,
+    phone: String,
+) = postApi("webinar/register", Registration(firstName, lastName, email, phone))
