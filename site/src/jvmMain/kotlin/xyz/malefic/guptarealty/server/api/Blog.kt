@@ -9,8 +9,10 @@ import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.path
 import xyz.malefic.guptarealty.model.BlogPost
+import xyz.malefic.guptarealty.model.error
 import xyz.malefic.guptarealty.model.json
 import xyz.malefic.guptarealty.server.data.blogs
+import xyz.malefic.guptarealty.server.util.json
 import kotlin.uuid.Uuid
 
 val blog: Array<RoutingHttpHandler> =
@@ -20,16 +22,16 @@ val blog: Array<RoutingHttpHandler> =
                 try {
                     Uuid.parse(request.path("id") ?: return@request Response(BAD_REQUEST).body("Missing blog post ID"))
                 } catch (e: Exception) {
-                    return@request Response(BAD_REQUEST).body("Invalid blog post ID")
+                    return@request Response(BAD_REQUEST).json("Invalid blog post ID".error)
                 }
-            Response(OK).body(json.encodeToString(blogs.first { it.id == id }))
+            Response(OK).json(blogs.first { it.id == id })
         },
         "/api/blog/post" bind POST to request@{ request ->
             val post =
                 try {
                     json.decodeFromString<BlogPost>(request.bodyString())
                 } catch (e: Exception) {
-                    return@request Response(BAD_REQUEST).body("Invalid blog post")
+                    return@request Response(BAD_REQUEST).json("Invalid blog post".error)
                 }
             blogs += post
             Response(OK)

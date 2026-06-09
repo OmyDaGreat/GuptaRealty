@@ -5,6 +5,7 @@ import org.http4k.core.then
 import org.http4k.filter.ServerFilters
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
+import xyz.malefic.guptarealty.server.util.corsPolicy
 
 fun main() {
     val port = System.getenv("PORT")?.toIntOrNull() ?: 8080
