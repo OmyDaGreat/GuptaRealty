@@ -1,0 +1,26 @@
+package xyz.malefic.guptarealty.server.api
+
+import org.http4k.core.Method.GET
+import org.http4k.core.Response
+import org.http4k.core.Status.Companion.BAD_REQUEST
+import org.http4k.core.Status.Companion.OK
+import org.http4k.routing.RoutingHttpHandler
+import org.http4k.routing.bind
+import org.http4k.routing.path
+import xyz.malefic.guptarealty.model.json
+import xyz.malefic.guptarealty.server.data.blogs
+import kotlin.uuid.Uuid
+
+val blog: Array<RoutingHttpHandler> =
+    arrayOf(
+        "/api/blog/{id}" bind GET to request@{ request ->
+            val id =
+                try {
+                    Uuid.parse(request.path("id") ?: return@request Response(BAD_REQUEST).body("Missing blog post ID"))
+                } catch (e: Exception) {
+                    return@request Response(BAD_REQUEST).body("Invalid blog post ID")
+                }
+            Response(OK).body(json.encodeToString(blogs.first { it.id == id }))
+        },
+        // TODO: Search feature, new blog creation, etc.
+    )

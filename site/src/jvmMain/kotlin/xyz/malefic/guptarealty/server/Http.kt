@@ -12,6 +12,7 @@ import org.http4k.filter.CorsPolicy
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
+import xyz.malefic.guptarealty.server.api.blog
 import xyz.malefic.guptarealty.server.api.webinar
 import java.nio.file.Files
 import java.nio.file.Path
@@ -74,6 +75,7 @@ val apiRoutes: RoutingHttpHandler =
         "/api/ping" bind GET to { Response(OK).body("pong") },
         "/api/health" bind GET to { Response(OK).body("healthy") },
         *webinar,
+        *blog,
     )
 
 val http: HttpHandler =
