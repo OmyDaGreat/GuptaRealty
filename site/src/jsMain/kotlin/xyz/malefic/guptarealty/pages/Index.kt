@@ -67,7 +67,7 @@ import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.guptarealty.model.BlogPost
+import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
 import xyz.malefic.guptarealty.styles.AppSpacing
@@ -225,7 +225,7 @@ fun BlogPreviewSection() {
             }
         ]
         """.trimIndent()
-    val posts = remember { Json.decodeFromString<List<BlogPost>>(mockBlogJson) }
+    val posts = remember { Json.decodeFromString<List<BlogPostResponse>>(mockBlogJson) }
 
     Box(
         SectionStyle.toModifier().backgroundColor(AppColors.SurfaceLowest).borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
@@ -277,7 +277,7 @@ fun BlogPreviewSection() {
 }
 
 @Composable
-fun BlogCard(post: BlogPost) {
+fun BlogCard(post: BlogPostResponse) {
     Column(Modifier.fillMaxWidth().cursor(Cursor.Pointer)) {
         Box(
             Modifier
@@ -287,8 +287,12 @@ fun BlogCard(post: BlogPost) {
                 .overflow(Overflow.Hidden)
                 .margin(bottom = 16.px),
         ) {
-            Image(post.imageUrl, post.title, Modifier.fillMaxSize().objectFit(ObjectFit.Cover))
-            Box(
+            Image(
+                post.imageUrl ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png", // TODO: Better default image
+                post.title,
+                Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
+            )
+            Row(
                 Modifier
                     .position(Position.Absolute)
                     .top(16.px)
@@ -297,7 +301,15 @@ fun BlogCard(post: BlogPost) {
                     .padding(topBottom = 4.px, leftRight = 12.px)
                     .borderRadius(50.px),
             ) {
-                Span(LabelSmStyle.toModifier().color(AppColors.Primary).toAttrs()) { Text(post.category) }
+                post.tags.forEach {
+                    Span(
+                        LabelSmStyle
+                            .toModifier()
+                            .color(AppColors.OnPrimary)
+                            .padding(2.px)
+                            .toAttrs(),
+                    ) { Text(it) }
+                }
             }
         }
         H3(HeadlineSmStyle.toModifier().margin(bottom = 8.px).toAttrs()) { Text(post.title) }

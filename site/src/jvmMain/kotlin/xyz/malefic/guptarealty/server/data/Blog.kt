@@ -1,5 +1,5 @@
 package xyz.malefic.guptarealty.server.data
 
-import xyz.malefic.guptarealty.model.BlogPost
+import xyz.malefic.guptarealty.model.BlogPostResponse
 
-var blogs: List<BlogPost> = emptyList()
+val blogs: MutableList<BlogPostResponse> = mutableListOf()
