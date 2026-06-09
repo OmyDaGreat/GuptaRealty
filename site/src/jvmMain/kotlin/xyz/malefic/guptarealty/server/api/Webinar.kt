@@ -1,9 +1,6 @@
 package xyz.malefic.guptarealty.server.api
 
 import co.touchlab.kermit.Logger
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import org.http4k.client.OkHttp
 import org.http4k.core.Body
 import org.http4k.core.ContentType.Companion.APPLICATION_JSON
@@ -24,13 +21,12 @@ import xyz.malefic.guptarealty.model.EventPerson
 import xyz.malefic.guptarealty.model.FollowUpBossEvent
 import xyz.malefic.guptarealty.model.PhoneEntry
 import xyz.malefic.guptarealty.model.Registration
-import xyz.malefic.guptarealty.model.Webinar
-import xyz.malefic.guptarealty.model.WebinarReview
-import xyz.malefic.guptarealty.model.WebinarTip
-import xyz.malefic.guptarealty.model.WebinarTipsSection
 import xyz.malefic.guptarealty.model.json
+import xyz.malefic.guptarealty.server.data.currentWebinar
 import xyz.malefic.guptarealty.server.data.registrations
 import xyz.malefic.guptarealty.server.data.webinarName
+import xyz.malefic.guptarealty.server.data.webinarReviews
+import xyz.malefic.guptarealty.server.data.webinarTips
 
 private val log = Logger.withTag("Webinar")
 
@@ -42,82 +38,54 @@ private val client = OkHttp()
 val webinar: Array<RoutingHttpHandler> =
     arrayOf(
         "/api/webinar" bind GET to { request ->
-            val timeZone =
+            Response(OK)
+                .contentType(APPLICATION_JSON)
+                .body(json.encodeToString(currentWebinar))
+        },
+        "/api/webinar" bind GET to request@{ request ->
+            currentWebinar =
                 try {
-                    request.query("tz")?.let { TimeZone.of(it) }
-                        ?: run {
-                            log.e { "No time zone provided, defaulting to system time zone." }
-                            TimeZone.currentSystemDefault()
-                        }
+                    json.decodeFromString(request.bodyString())
                 } catch (e: Exception) {
-                    log.e { "Invalid time zone (${request.query("tz")}) provided, defaulting to system time zone." }
-                    TimeZone.currentSystemDefault()
+                    return@request Response(BAD_REQUEST).body("Invalid webinar")
                 }
-            val instant = LocalDateTime(2026, 6, 23, 4, 0).toInstant(timeZone)
 
             Response(OK)
-                .header("Content-Type", APPLICATION_JSON.value)
-                .body(
-                    json.encodeToString(
-                        Webinar(
-                            "FREE LIVE EDUCATIONAL SERIES",
-                            webinarName,
-                            "Join Ruchika Gupta for an exclusive deep dive into the 2026 real estate landscape. Learn how to navigate interest rates and find your dream home with confidence.",
-                            instant,
-                            "https://lh3.googleusercontent.com/aida-public/AB6AXuCM7sKezxKRo-EioXnRhIC_IiX-GdPFc7eJGkEWj4tKCl60ICSqdCPP35EQti9h7fRB4leoi2omg3ptiVBuVcxg8PALJfH_71PnmmxDcu8NUftKKF6pG4VBCQ8QqHpEELt4bQ7w_z8u_jMhn_0eSRxE-NiVhXHzTDIszoeKs_lIsbASO045cROxdCd64vQm-Mu3dwkTOJR225Mtw63B7WPBbI04mTSwLs792n6BuyBftL04Fl1z_hpwzwJi9uDEKj12VCtKrn8_dlY",
-                        ),
-                    ),
-                )
         },
         "/api/webinar/tips" bind GET to {
             Response(OK)
-                .header("Content-Type", APPLICATION_JSON.value)
-                .body(
-                    json.encodeToString(
-                        WebinarTipsSection(
-                            "Common First Time Home Buyer Mistakes",
-                            listOf(
-                                WebinarTip(
-                                    "account_balance_wallet",
-                                    "Skipping Pre-Approval",
-                                    "Don't start the hunt without knowing your budget. Pre-approval gives you leverage and clarity in a competitive market.",
-                                ),
-                                WebinarTip(
-                                    "home_work",
-                                    "Ignoring Extra Costs",
-                                    "Beyond the mortgage, consider closing costs, inspections, and insurance. We help you map out the full financial picture.",
-                                ),
-                                WebinarTip(
-                                    "psychology",
-                                    "Emotional Over-Investing",
-                                    "It's easy to fall for a aesthetic and ignore structural red flags. We keep you grounded in data and long-term value.",
-                                ),
-                            ),
-                        ),
-                    ),
-                )
+                .contentType(APPLICATION_JSON)
+                .body(json.encodeToString(webinarTips))
+        },
+        "/api/webinar/tips" bind POST to request@{ request ->
+            webinarTips =
+                try {
+                    json.decodeFromString(request.bodyString())
+                } catch (e: Exception) {
+                    return@request Response(BAD_REQUEST).body("Invalid webinar tips")
+                }
+
+            Response(OK)
         },
         "/api/webinar/reviews" bind GET to {
             Response(OK)
-                .header("Content-Type", APPLICATION_JSON.value)
-                .body(
-                    json.encodeToString(
-                        listOf(
-                            WebinarReview(
-                                "Mark & Sarah Thompson",
-                                "New Homeowners, Irvine",
-                                "https://lh3.googleusercontent.com/aida-public/AB6AXuDABXqZiK9yZKb-RRKmDrqGBFGreGt177dM_PlZcxT6ZuOHNlEbRD_RmtkCEUBpB3CWLb4JPdkNG4Kajom_60ccRqKUfMfkWndi0ZX_iRCqYTru7xuMJW7nn9gnIgnkEufgFEAqeADrQT1QDahHTkRtzVOTr5FnhUOLtA2pS0IN7G6r56Cb-LZhhvqgSjmcCmegKAdHUMIrcNZsYMteuRNNEC46OZH_gZeFvWYwFE7ne8efX6nBMDm2-LmQ3FAEdGctPB1w0BUuuGw",
-                                "Ruchika's webinar was the turning point for us. She simplified the escrow process and gave us the confidence to put in our first offer. We closed last month!",
-                            ),
-                            WebinarReview(
-                                "idk some reviewer",
-                                "Retired, Anaheim",
-                                "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png",
-                                "Some rly rly long review ahhhgiweajifgjwalfjwal",
-                            ),
-                        ),
-                    ),
-                )
+                .contentType(APPLICATION_JSON)
+                .body(json.encodeToString(webinarReviews))
+        },
+        "/api/webinar/reviews" bind POST to request@{ request ->
+            webinarReviews =
+                try {
+                    json.decodeFromString(request.bodyString())
+                } catch (e: Exception) {
+                    return@request Response(BAD_REQUEST).body("Invalid webinar reviews")
+                }
+
+            Response(OK)
+        },
+        "/api/webinar/registrations" bind GET to request@{ request ->
+            Response(OK)
+                .contentType(APPLICATION_JSON)
+                .body(json.encodeToString(registrations))
         },
         "/api/webinar/register" bind POST to request@{ request ->
             val registration =
