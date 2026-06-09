@@ -19,20 +19,17 @@ import kotlin.uuid.Uuid
 
 val blog: Array<RoutingHttpHandler> =
     arrayOf(
-        "/api/blog/posts" bind GET to {
-            Response(OK).json(blogs)
-        },
-        "/api/blog/post/{id}" bind GET to request@{ request ->
+        "/api/blog" bind GET to request@{ request ->
             val id =
                 try {
-                    Uuid.parse(request.path("id") ?: return@request Response(BAD_REQUEST).json("Missing blog post ID".error))
+                    Uuid.parse(request.query("id") ?: return@request Response(OK).json(blogs))
                 } catch (e: Exception) {
                     return@request Response(BAD_REQUEST).json("Invalid blog post ID".error)
                 }
 
             Response(OK).json(blogs.first { it.id == id })
         },
-        "/api/blog/post" bind POST to request@{ request ->
+        "/api/blog" bind POST to request@{ request ->
             val post =
                 try {
                     json.decodeFromString<BlogPostRequest>(request.bodyString())
@@ -43,7 +40,7 @@ val blog: Array<RoutingHttpHandler> =
             blogs += post.toResponse(Uuid.random())
             Response(OK)
         },
-        "/api/blog/post/{id}" bind PUT to request@{ request ->
+        "/api/blog/{id}" bind PUT to request@{ request ->
             val id = request.path("id")?.let { Uuid.parse(it) } ?: return@request Response(BAD_REQUEST).json("Missing blog post ID".error)
             val post =
                 try {
@@ -57,12 +54,11 @@ val blog: Array<RoutingHttpHandler> =
             blogs[index] = post
             Response(OK)
         },
-        "/api/blog/post/{id}" bind DELETE to request@{ request ->
+        "/api/blog/{id}" bind DELETE to request@{ request ->
             val id = request.path("id")?.let { Uuid.parse(it) } ?: return@request Response(BAD_REQUEST).json("Missing blog post ID".error)
             val index = blogs.indexOfFirst { it.id == id }
             if (index == -1) return@request Response(BAD_REQUEST).json("Blog post not found".error)
             blogs.removeAt(index)
             Response(OK)
         },
-        // TODO: Search feature, new blog creation, etc.
     )
