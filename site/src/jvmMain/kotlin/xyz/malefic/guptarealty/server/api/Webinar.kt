@@ -94,6 +94,8 @@ val webinar: Array<RoutingHttpHandler> =
                     return@request error("Invalid registration")
                 }
 
+            val drip = request.query("drip").toBoolean()
+
             registrations += registration
             registrations = registrations.distinct()
             log.d { "New registration: $registration" }
@@ -108,7 +110,7 @@ val webinar: Array<RoutingHttpHandler> =
                             listOf(EmailEntry(registration.email)),
                             listOf(PhoneEntry(registration.phone)),
                             source = "guptarealty.com/webinar",
-                            tags = listOf("Webinar"),
+                            tags = listOf("Webinar") + if (drip) listOf("Drip") else emptyList(),
                         ),
                     description = "Signed up for webinar \"$webinarName\"",
                 )

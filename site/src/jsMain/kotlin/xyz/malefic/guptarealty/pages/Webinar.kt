@@ -17,7 +17,9 @@ import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.functions.blur
+import com.varabyte.kobweb.compose.css.margin
 import com.varabyte.kobweb.compose.css.overflowY
+import com.varabyte.kobweb.compose.css.scale
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -90,6 +92,7 @@ import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
 import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.Button
+import org.jetbrains.compose.web.dom.CheckboxInput
 import org.jetbrains.compose.web.dom.H1
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
@@ -228,6 +231,16 @@ enum class WebinarRegistrationStatus {
     Error,
 }
 
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+    return emailRegex.matches(email)
+}
+
+private fun isValidPhone(phone: String): Boolean {
+    val cleaned = phone.replace(Regex("[^0-9]"), "")
+    return cleaned.length == 10 && cleaned.all { it.isDigit() }
+}
+
 @Composable
 fun RegistrationSection(
     coroutineScope: CoroutineScope,
@@ -246,9 +259,10 @@ fun RegistrationSection(
         val phone = remember { mutableStateOf("") }
 
         var registered by remember { mutableStateOf(WebinarRegistrationStatus.Idle) }
+        var drip by remember { mutableStateOf(false) }
 
         LaunchedEffect(registered) {
-            if (registered == WebinarRegistrationStatus.Success) {
+            if (registered == WebinarRegistrationStatus.Success || registered == WebinarRegistrationStatus.Error) {
                 coroutineScope.launch {
                     delay(2000.milliseconds)
                     registered = WebinarRegistrationStatus.Idle
@@ -275,7 +289,7 @@ fun RegistrationSection(
 
         RegistrationField("Full Name", name, "Enter your name")
         RegistrationField("Email Address", email, "email@example.com", type = InputType.Email)
-        RegistrationField("Phone Number", phone, "(555) 000-0000", type = InputType.Tel)
+        RegistrationField("Phone Number", phone, "5550000000", type = InputType.Tel)
 
         Button(
             PrimaryButtonStyle
@@ -287,6 +301,14 @@ fun RegistrationSection(
                         coroutineScope.launch {
                             registered = WebinarRegistrationStatus.Registering
                             if (name.value.isBlank() || email.value.isBlank() || phone.value.isBlank()) {
+                                registered = WebinarRegistrationStatus.Error
+                                return@launch
+                            }
+                            if (!isValidEmail(email.value)) {
+                                registered = WebinarRegistrationStatus.Error
+                                return@launch
+                            }
+                            if (!isValidPhone(phone.value)) {
                                 registered = WebinarRegistrationStatus.Error
                                 return@launch
                             }
@@ -318,6 +340,30 @@ fun RegistrationSection(
                     WebinarRegistrationStatus.Error -> "Please Fill Fields"
                 },
             )
+        }
+        Row(Modifier.margin(top = 12.px), verticalAlignment = Alignment.CenterVertically) {
+            CheckboxInput(drip) {
+                onInput {
+                    drip = it.value
+                }
+                style {
+                    scale(18.0 / 14.0)
+                    backgroundColor(AppColors.SurfaceContainer)
+                    border(1.px, LineStyle.Solid, AppColors.Primary)
+                    borderRadius(12.px)
+                    margin(48.px)
+                    outline("none")
+                }
+            }
+            P(
+                LabelSmStyle
+                    .toModifier()
+                    .color(AppColors.OnSurfaceVariant)
+                    .textAlign(TextAlign.Center)
+                    .toAttrs(),
+            ) {
+                Text("I consent to receive promotional emails from Ruchika Gupta, with or without the use of automation.")
+            }
         }
         P(
             LabelSmStyle

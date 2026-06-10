@@ -19,4 +19,5 @@ suspend fun postWebinarRegistration(
     lastName: String,
     email: String,
     phone: String,
-) = postApi("webinar/register", Registration(firstName, lastName, email, phone))
+    drip: Boolean = false,
+) = postApi("webinar/register?drip=$drip", Registration(firstName, lastName, email, phone))
