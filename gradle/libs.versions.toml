@@ -8,6 +8,7 @@ kotlinx-serialization = "1.11.0"
 kurrency = "0.3.1"
 datetime = "0.8.0"
 kermit = "2.1.0"
+markdown = "0.7.5"
 
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "jetbrains-compose" }
@@ -21,6 +22,8 @@ silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "
 silk-icons-mdi = { module = "com.varabyte.kobwebx:silk-icons-mdi", version.ref = "kobweb" }
 
 kutint = { group = "xyz.malefic", name = "kutint", version.ref = "kutint" }
+
+markdown = { group = "org.jetbrains", name = "markdown", version.ref = "markdown" }
 
 http4k-core = { group = "org.http4k", name = "http4k-core", version.ref = "http4k" }
 http4k-server-undertow = { group = "org.http4k", name = "http4k-server-undertow", version.ref = "http4k" }

@@ -16,3 +16,10 @@ suspend inline fun <reified T> postApi(
     url: String,
     body: T,
 ) = window.api.postBytes(url, body = json.encodeToString(body).encodeToByteArray())
+
+suspend inline fun <reified T> putApi(
+    url: String,
+    body: T,
+) = window.api.putBytes(url, body = json.encodeToString(body).encodeToByteArray())
+
+suspend fun deleteApi(url: String) = window.api.deleteBytes(url)

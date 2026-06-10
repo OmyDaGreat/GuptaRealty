@@ -1,7 +1,11 @@
 package xyz.malefic.guptarealty.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
@@ -54,7 +58,6 @@ import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
-import kotlinx.serialization.json.Json
 import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
@@ -67,6 +70,8 @@ import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
+import xyz.malefic.guptarealty.api.getBlogPosts
+import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
@@ -196,80 +201,60 @@ fun AboutSection() {
 
 @Composable
 fun BlogPreviewSection() {
-    val mockBlogJson =
-        """
-        [
-            {
-                "id": "1",
-                "title": "Market Trends 2024",
-                "summary": "Navigating the shifting landscape of Cheshire real estate this coming year...",
-                "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCPQZL2d06Aa7tXDLhenIb7TMP3AlZsEgxvn6BmxXa4p8CtEwaidUKayGU9xEwH9DNifWfz76cqSg3eEZx3ACe5L_aESgI_5CrB58aCYrdz-AcUD1x3JBhNJ4UpA0kl1RreUGJ4mMwgSu0MvKiqsc_fLmAf_FIVlyC_1aoDZZPR9zDzQTXQNR8luWCnNXDlkAZhOQb8sjoVsZlpE6XwnmKj5Yis3rSucsMp1EIwL6HFctIC9ZMk_cUiYYCeiJweUgEFlFl5F-JItmY",
-                "category": "Market Update",
-                "date": "2024-01-01"
-            },
-            {
-                "id": "2",
-                "title": "Home Staging Tips",
-                "summary": "How to maximize your home's appeal and sale price with minimal investment.",
-                "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCtr9pJ0DNY8UIV7gtfBfxpuxgPe9OSLDMPmSEDEQAf2PtKbx9-PUUrzXgdT--9Ks1AHMiKSvH3GjzinqrPPZPpdMhZE2v47cutqbMzo4Y7wISrUUe1fjtevMCY_K0MZx0C5PM6UVqY49XWO48bY14PTzDpX8UtCL4ST6sk6q1an7ZiYPsvh_srX6ORzu82zJkC9oF-nWnmhoRs73s-BIzV3qhvjZjCfAEXeMth6yU114HTF31WvNqDEKo27mFv6_jaWh9gDHFYw74",
-                "category": "Staging",
-                "date": "2024-01-05"
-            },
-            {
-                "id": "3",
-                "title": "Buying vs Renting",
-                "summary": "Making the right financial decision for your family's future in today's economy.",
-                "imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuApF3zCv4r3yPfgXw5wgSnGKWm63gO0maISD20iFb-nq_z6A-tzk8KSSKf9slb15DvKCxkXDV2xTmG9xp-lFikYsklaMfCHe4Ptw-XSbOz8wtGAnq4vLQihVym2CkYvaFvT-X4Nx6d6U8sXS8AqpXb4Q2Aog_5_dkJvBzHCnuoFLgyC8Jq-0_5rljMAA2PpXclHbJZxiG81XRVM40HJh--uJp6yLunjybeWbuSicXLGGj24N5XlJnrkVhfR495WNpjz9vzzKdsGBgo",
-                "category": "Guides",
-                "date": "2024-01-10"
-            }
-        ]
-        """.trimIndent()
-    val posts = remember { Json.decodeFromString<List<BlogPostResponse>>(mockBlogJson) }
+    var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
 
-    Box(
-        SectionStyle.toModifier().backgroundColor(AppColors.SurfaceLowest).borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
-        contentAlignment = Alignment.Center,
-    ) {
-        Box(ContainerStyle.toModifier()) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .justifyContent(JustifyContent.SpaceBetween)
-                    .alignItems(AlignItems.End)
-                    .margin(bottom = 48.px),
-            ) {
-                Column {
-                    Span(
-                        LabelMdStyle
-                            .toModifier()
-                            .color(AppColors.Secondary)
-                            .letterSpacing(0.2.em)
-                            .textTransform(TextTransform.Uppercase)
-                            .margin(bottom = 16.px)
-                            .toAttrs(),
-                    ) {
-                        Text("Insights")
-                    }
-                    H2(DisplayLgStyle.toModifier().fontSize(32.px).toAttrs()) {
-                        Text("The Realty Blog")
-                    }
-                }
-                Link(
-                    "/blog",
-                    ShowOnMdStyle
-                        .toModifier()
-                        .color(AppColors.Primary)
-                        .fontWeight(FontWeight.Bold)
-                        .textDecorationLine(TextDecorationLine.None),
+    LaunchedEffect(null) {
+        posts = getBlogPosts().sortedByDescending { it.date }.subList(0, 3)
+    }
+
+    Loading(posts) { posts ->
+        Box(
+            SectionStyle
+                .toModifier()
+                .backgroundColor(AppColors.SurfaceLowest)
+                .borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(ContainerStyle.toModifier()) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .justifyContent(JustifyContent.SpaceBetween)
+                        .alignItems(AlignItems.End)
+                        .margin(bottom = 48.px),
                 ) {
-                    Text("View All Stories")
+                    Column {
+                        Span(
+                            LabelMdStyle
+                                .toModifier()
+                                .color(AppColors.Secondary)
+                                .letterSpacing(0.2.em)
+                                .textTransform(TextTransform.Uppercase)
+                                .margin(bottom = 16.px)
+                                .toAttrs(),
+                        ) {
+                            Text("Insights")
+                        }
+                        H2(DisplayLgStyle.toModifier().fontSize(32.px).toAttrs()) {
+                            Text("The Realty Blog")
+                        }
+                    }
+                    Link(
+                        "/blog/",
+                        ShowOnMdStyle
+                            .toModifier()
+                            .color(AppColors.Primary)
+                            .fontWeight(FontWeight.Bold)
+                            .textDecorationLine(TextDecorationLine.None),
+                    ) {
+                        Text("View All Stories")
+                    }
                 }
-            }
 
-            SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
-                posts.forEach { post ->
-                    BlogCard(post)
+                SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
+                    posts.forEach { post ->
+                        BlogCard(post)
+                    }
                 }
             }
         }

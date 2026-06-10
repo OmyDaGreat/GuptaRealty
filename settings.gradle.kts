@@ -12,6 +12,13 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
     }
+
+    versionCatalogs {
+        create("wrappers") {
+            val wrappersVersion = "2026.6.1"
+            from("org.jetbrains.kotlin-wrappers:kotlin-wrappers-catalog:$wrappersVersion")
+        }
+    }
 }
 
 rootProject.name = "guptarealty"

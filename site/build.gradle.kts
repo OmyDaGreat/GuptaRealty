@@ -32,8 +32,12 @@ kobweb {
             head.add {
                 link(
                     rel = "stylesheet",
-                    href = @Suppress("ktlint:standard:max-line-length")
-                    "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+                    href =
+                        "https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap",
+                )
+                link(
+                    rel = "stylesheet",
+                    href = "https://uicdn.toast.com/editor/latest/toastui-editor.min.css",
                 )
             }
         }
@@ -57,12 +61,15 @@ kotlin {
         }
 
         jsMain.dependencies {
+            implementation(npm("@js-joda/timezone", "2.25.1"))
+            implementation(npm("@toast-ui/editor", "3.2.2"))
+            implementation(libs.bundles.silk.icons)
             implementation(libs.bundles.compose)
             implementation(libs.bundles.kobweb)
-            implementation(libs.bundles.silk.icons)
-            implementation(libs.kutint)
+            implementation(wrappers.js)
             implementation(libs.kurrency)
-            implementation(npm("@js-joda/timezone", "2.25.1"))
+            implementation(libs.markdown)
+            implementation(libs.kutint)
         }
 
         jvmMain.dependencies {

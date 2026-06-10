@@ -27,6 +27,7 @@ import xyz.malefic.guptarealty.server.data.registrations
 import xyz.malefic.guptarealty.server.data.webinarName
 import xyz.malefic.guptarealty.server.data.webinarReviews
 import xyz.malefic.guptarealty.server.data.webinarTips
+import xyz.malefic.guptarealty.server.util.error
 import xyz.malefic.guptarealty.server.util.json
 
 private val log = Logger.withTag("Webinar")
@@ -37,24 +38,20 @@ private val client = OkHttp()
 val webinar: Array<RoutingHttpHandler> =
     arrayOf(
         "/api/webinar" bind GET to { request ->
-            Response(OK)
-                .contentType(APPLICATION_JSON)
-                .json(currentWebinar)
+            json(currentWebinar)
         },
         "/api/webinar" bind GET to request@{ request ->
             currentWebinar =
                 try {
                     json.decodeFromString(request.bodyString())
                 } catch (e: Exception) {
-                    return@request Response(BAD_REQUEST).json("Invalid webinar".error)
+                    return@request error("Invalid webinar")
                 }
 
             Response(OK)
         },
         "/api/webinar/tips" bind GET to {
-            Response(OK)
-                .contentType(APPLICATION_JSON)
-                .json(webinarTips)
+            json(webinarTips)
         },
         "/api/webinar/tips" bind POST to request@{ request ->
             webinarTips =
@@ -67,24 +64,20 @@ val webinar: Array<RoutingHttpHandler> =
             Response(OK)
         },
         "/api/webinar/reviews" bind GET to {
-            Response(OK)
-                .contentType(APPLICATION_JSON)
-                .json(webinarReviews)
+            json(webinarReviews)
         },
         "/api/webinar/reviews" bind POST to request@{ request ->
             webinarReviews =
                 try {
                     json.decodeFromString(request.bodyString())
                 } catch (e: Exception) {
-                    return@request Response(BAD_REQUEST).json("Invalid webinar reviews".error)
+                    return@request error("Invalid webinar reviews")
                 }
 
             Response(OK)
         },
         "/api/webinar/registrations" bind GET to request@{ request ->
-            Response(OK)
-                .contentType(APPLICATION_JSON)
-                .json(registrations)
+            json(registrations)
         },
         "/api/webinar/register" bind POST to request@{ request ->
             if (fubApiKey == null) {
@@ -96,7 +89,7 @@ val webinar: Array<RoutingHttpHandler> =
                 try {
                     json.decodeFromString<Registration>(request.bodyString())
                 } catch (e: Exception) {
-                    return@request Response(BAD_REQUEST).json("Invalid registration".error)
+                    return@request error("Invalid registration")
                 }
 
             registrations += registration

@@ -10,6 +10,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.animation
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.borderTop
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.transform
 import com.varabyte.kobweb.silk.style.animation.Keyframes
@@ -21,6 +23,7 @@ import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.s
 import xyz.malefic.guptarealty.styles.AppColors
+import xyz.malefic.guptarealty.styles.AppSpacing
 
 /**
  * Renders [loadingContent] while [value] is null, then calls [content] with the
@@ -30,10 +33,10 @@ import xyz.malefic.guptarealty.styles.AppColors
 @Composable
 fun <T> Loading(
     value: T?,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap),
     contentAlignment: Alignment = Alignment.Center,
     loadingContent: @Composable () -> Unit = { DefaultSpinner() },
-    content: @Composable (T) -> Unit,
+    content: @Composable (T) -> Unit = {},
 ) {
     if (value == null) {
         Box(modifier, contentAlignment) {

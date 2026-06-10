@@ -150,10 +150,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                 webinar = getWebinar()
             }
 
-            Loading(
-                value = webinar,
-                modifier = Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap),
-            ) { w ->
+            Loading(webinar) { w ->
                 SimpleGrid(
                     numColumns(1, lg = 12),
                     Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
@@ -370,7 +367,7 @@ fun TipsSection() {
                 mistakes = getWebinarTips()
             }
 
-            Loading(mistakes, Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap)) { m ->
+            Loading(mistakes) { m ->
                 Column(Modifier.fillMaxWidth().textAlign(TextAlign.Center).margin(bottom = 64.px)) {
                     H2(HeadlineMdStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text(m.header) }
                     Box(
@@ -435,10 +432,7 @@ fun TestimonialsSection(coroutineScope: CoroutineScope) {
                         }
                     }
                 }
-                Loading(
-                    reviews,
-                    Modifier.fillMaxWidth().padding(topBottom = 80.px),
-                ) { rs ->
+                Loading(reviews) { rs ->
                     TestimonialCard(rs[currentIndex], visible)
                 }
             }

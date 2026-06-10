@@ -1,4 +1,4 @@
-package xyz.malefic.guptarealty.pages
+package xyz.malefic.guptarealty.pages.blog
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -12,7 +12,7 @@ import org.jetbrains.compose.web.dom.Text
 
 @Page
 @Composable
-fun BlogPage() {
+fun BlogMainPage() {
     Box(Modifier.fillMaxSize().height(100.vh), contentAlignment = Alignment.Center) {
         Text("Blog Page - Coming Soon")
     }
