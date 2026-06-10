@@ -1,5 +1,6 @@
 package xyz.malefic.guptarealty.server
 
+import co.touchlab.kermit.Logger
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
@@ -44,12 +45,10 @@ val apiRoutes: RoutingHttpHandler =
     )
 
 val http: HttpHandler =
-    object : HttpHandler {
-        override fun invoke(req: Request): Response =
-            try {
-                val response = apiRoutes(req)
-                if (response.status == NOT_FOUND) serveStaticFile(req) else response
-            } catch (_: Exception) {
-                serveStaticFile(req)
-            }
+    { request ->
+        if (request.uri.path.startsWith("/api/")) {
+            apiRoutes(request).also { Logger.d { "Serving API: ${request.uri.path}" } }
+        } else {
+            serveStaticFile(request).also { Logger.d { "Serving static file: ${request.uri.path}" } }
+        }
     }

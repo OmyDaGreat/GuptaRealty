@@ -8,6 +8,7 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Method.POST
 import org.http4k.core.Request
 import org.http4k.core.Response
+import org.http4k.core.Status
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
 import org.http4k.lens.accept
@@ -27,6 +28,7 @@ import xyz.malefic.guptarealty.server.data.registrations
 import xyz.malefic.guptarealty.server.data.webinarName
 import xyz.malefic.guptarealty.server.data.webinarReviews
 import xyz.malefic.guptarealty.server.data.webinarTips
+import xyz.malefic.guptarealty.server.util.contains
 import xyz.malefic.guptarealty.server.util.error
 import xyz.malefic.guptarealty.server.util.json
 
@@ -82,7 +84,7 @@ val webinar: Array<RoutingHttpHandler> =
         "/api/webinar/register" bind POST to request@{ request ->
             if (fubApiKey == null) {
                 log.e { "Missing FUB_API_KEY environment variable" }
-                return@request Response(BAD_REQUEST).json("Missing CRM api key".error)
+                return@request error("Missing CRM api key")
             }
 
             val registration =
@@ -93,6 +95,7 @@ val webinar: Array<RoutingHttpHandler> =
                 }
 
             registrations += registration
+            registrations = registrations.distinct()
             log.d { "New registration: $registration" }
             log.d { "Total registrations: ${registrations.size}" }
 
@@ -117,6 +120,13 @@ val webinar: Array<RoutingHttpHandler> =
                     .contentType(APPLICATION_JSON)
                     .body(json.encodeToString(payload))
 
-            client(request)
+            val response = client(request)
+
+            if (response.status !in Status.SUCCESSFUL) {
+                log.e { "Failed to send registration to FollowUpBoss; returned\n${response.toMessage()}" }
+                return@request error("Failed to send registration to FollowUpBoss")
+            } else {
+                Response(OK)
+            }
         },
     )

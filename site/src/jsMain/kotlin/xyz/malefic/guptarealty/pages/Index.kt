@@ -70,7 +70,7 @@ import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.guptarealty.api.getBlogPosts
+import xyz.malefic.guptarealty.api.getBlog
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
@@ -204,7 +204,7 @@ fun BlogPreviewSection() {
     var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
 
     LaunchedEffect(null) {
-        posts = getBlogPosts().sortedByDescending { it.date }.subList(0, 3)
+        posts = getBlog().sortedByDescending { it.date }.subList(0, 3)
     }
 
     Loading(posts) { posts ->

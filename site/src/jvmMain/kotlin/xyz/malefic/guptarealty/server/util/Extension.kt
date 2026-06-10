@@ -12,3 +12,5 @@ inline fun <reified T> Response.json(obj: T) = body(json.encodeToString(obj))
 inline fun <reified T> json(obj: T) = Response(OK).contentType(ContentType.APPLICATION_JSON).json<T>(obj)
 
 fun error(error: String) = Response(Status.BAD_REQUEST).contentType(ContentType.APPLICATION_JSON).json(error)
+
+operator fun IntRange.contains(status: Status) = this.contains(status.code)
