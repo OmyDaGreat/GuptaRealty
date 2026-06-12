@@ -231,16 +231,6 @@ enum class WebinarRegistrationStatus {
     Error,
 }
 
-private fun isValidEmail(email: String): Boolean {
-    val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
-    return emailRegex.matches(email)
-}
-
-private fun isValidPhone(phone: String): Boolean {
-    val cleaned = phone.replace(Regex("[^0-9]"), "")
-    return cleaned.length == 10 && cleaned.all { it.isDigit() }
-}
-
 @Composable
 fun RegistrationSection(
     coroutineScope: CoroutineScope,
@@ -289,7 +279,7 @@ fun RegistrationSection(
 
         RegistrationField("Full Name", name, "Enter your name")
         RegistrationField("Email Address", email, "email@example.com", type = InputType.Email)
-        RegistrationField("Phone Number", phone, "5550000000", type = InputType.Tel)
+        RegistrationField("Phone Number", phone, "(555) 000-0000", type = InputType.Tel)
 
         Button(
             PrimaryButtonStyle
@@ -300,15 +290,39 @@ fun RegistrationSection(
                     onClick {
                         coroutineScope.launch {
                             registered = WebinarRegistrationStatus.Registering
+
+                            fun validate(
+                                name: String,
+                                email: String,
+                                phone: String,
+                            ): Boolean =
+                                name.isNotBlank() && email.isNotBlank() && phone.isNotBlank() &&
+                                    Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$").matches(email) &&
+                                    phone
+                                        .filter { it.isDigit() }
+                                        .let { d ->
+                                            if (d.length == 11 && d.startsWith("1")) d.substring(1) else d
+                                        }.length == 10
+
+                            val error = validate(name.value, email.value, phone.value)
+                            if (!error) {
+                                registered = WebinarRegistrationStatus.Error
+                                return@launch
+                            }
                             if (name.value.isBlank() || email.value.isBlank() || phone.value.isBlank()) {
                                 registered = WebinarRegistrationStatus.Error
                                 return@launch
                             }
-                            if (!isValidEmail(email.value)) {
+                            if (!Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$").matches(email.value)) {
                                 registered = WebinarRegistrationStatus.Error
                                 return@launch
                             }
-                            if (!isValidPhone(phone.value)) {
+                            if (phone.value
+                                    .filter { it.isDigit() }
+                                    .let { d ->
+                                        if (d.length == 11 && d.startsWith("1")) d.substring(1) else d
+                                    }.length != 10
+                            ) {
                                 registered = WebinarRegistrationStatus.Error
                                 return@launch
                             }
@@ -337,7 +351,7 @@ fun RegistrationSection(
                     WebinarRegistrationStatus.Idle -> "Register"
                     WebinarRegistrationStatus.Registering -> "Registering..."
                     WebinarRegistrationStatus.Success -> "Success!"
-                    WebinarRegistrationStatus.Error -> "Please Fill Fields"
+                    WebinarRegistrationStatus.Error -> "Please Fill All Fields Correctly"
                 },
             )
         }
