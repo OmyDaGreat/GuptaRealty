@@ -28,13 +28,13 @@ import xyz.malefic.guptarealty.server.data.registrations
 import xyz.malefic.guptarealty.server.data.webinarName
 import xyz.malefic.guptarealty.server.data.webinarReviews
 import xyz.malefic.guptarealty.server.data.webinarTips
+import xyz.malefic.guptarealty.server.util.auth
 import xyz.malefic.guptarealty.server.util.contains
 import xyz.malefic.guptarealty.server.util.error
+import xyz.malefic.guptarealty.server.util.fubApiKey
 import xyz.malefic.guptarealty.server.util.json
 
 private val log = Logger.withTag("Webinar")
-
-private val fubApiKey: String? = System.getProperty("FUB_API_KEY") ?: System.getenv("FUB_API_KEY")
 private val client = OkHttp()
 
 val webinar: Array<RoutingHttpHandler> =
@@ -42,7 +42,7 @@ val webinar: Array<RoutingHttpHandler> =
         "/api/webinar" bind GET to { request ->
             json(currentWebinar)
         },
-        "/api/webinar" bind GET to request@{ request ->
+        "/api/webinar" bind POST to request@{ request ->
             currentWebinar =
                 try {
                     json.decodeFromString(request.bodyString())
@@ -55,32 +55,35 @@ val webinar: Array<RoutingHttpHandler> =
         "/api/webinar/tips" bind GET to {
             json(webinarTips)
         },
-        "/api/webinar/tips" bind POST to request@{ request ->
-            webinarTips =
-                try {
-                    json.decodeFromString(request.bodyString())
-                } catch (e: Exception) {
-                    return@request Response(BAD_REQUEST).json("Invalid webinar tips".error)
-                }
+        "/api/webinar/tips" bind POST to
+            auth {
+                webinarTips =
+                    try {
+                        json.decodeFromString(bodyString())
+                    } catch (e: Exception) {
+                        return@auth Response(BAD_REQUEST).json("Invalid webinar tips".error)
+                    }
 
-            Response(OK)
-        },
+                Response(OK)
+            },
         "/api/webinar/reviews" bind GET to {
             json(webinarReviews)
         },
-        "/api/webinar/reviews" bind POST to request@{ request ->
-            webinarReviews =
-                try {
-                    json.decodeFromString(request.bodyString())
-                } catch (e: Exception) {
-                    return@request error("Invalid webinar reviews")
-                }
+        "/api/webinar/reviews" bind POST to
+            auth {
+                webinarReviews =
+                    try {
+                        json.decodeFromString(bodyString())
+                    } catch (e: Exception) {
+                        return@auth error("Invalid webinar reviews")
+                    }
 
-            Response(OK)
-        },
-        "/api/webinar/registrations" bind GET to request@{ request ->
-            json(registrations)
-        },
+                Response(OK)
+            },
+        "/api/webinar/registrations" bind GET to
+            auth {
+                json(registrations)
+            },
         "/api/webinar/register" bind POST to request@{ request ->
             if (fubApiKey == null) {
                 log.e { "Missing FUB_API_KEY environment variable" }

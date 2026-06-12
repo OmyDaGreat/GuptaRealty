@@ -12,6 +12,7 @@ import org.http4k.routing.path
 import xyz.malefic.guptarealty.model.BlogPostRequest
 import xyz.malefic.guptarealty.model.json
 import xyz.malefic.guptarealty.server.data.blogs
+import xyz.malefic.guptarealty.server.util.auth
 import xyz.malefic.guptarealty.server.util.error
 import xyz.malefic.guptarealty.server.util.json
 import kotlin.uuid.Uuid
@@ -28,36 +29,39 @@ val blog: Array<RoutingHttpHandler> =
 
             json(blogs.first { it.id == id })
         },
-        "/api/blog" bind POST to request@{ request ->
-            val post =
-                try {
-                    json.decodeFromString<BlogPostRequest>(request.bodyString())
-                } catch (e: Exception) {
-                    return@request error("Invalid blog post")
-                }
+        "/api/blog" bind POST to
+            auth {
+                val post =
+                    try {
+                        json.decodeFromString<BlogPostRequest>(bodyString())
+                    } catch (e: Exception) {
+                        return@auth error("Invalid blog post")
+                    }
 
-            blogs += post.toResponse(Uuid.random())
-            Response(OK)
-        },
-        "/api/blog/{id}" bind PUT to request@{ request ->
-            val id = request.path("id")?.let { Uuid.parse(it) } ?: return@request error("Missing blog post ID")
-            val post =
-                try {
-                    json.decodeFromString<BlogPostRequest>(request.bodyString()).toResponse(id)
-                } catch (e: Exception) {
-                    return@request error("Invalid blog post")
-                }
+                blogs += post.toResponse(Uuid.random())
+                Response(OK)
+            },
+        "/api/blog/{id}" bind PUT to
+            auth {
+                val id = path("id")?.let { Uuid.parse(it) } ?: return@auth error("Missing blog post ID")
+                val post =
+                    try {
+                        json.decodeFromString<BlogPostRequest>(bodyString()).toResponse(id)
+                    } catch (e: Exception) {
+                        return@auth error("Invalid blog post")
+                    }
 
-            val index = blogs.indexOfFirst { it.id == id }
-            if (index == -1) return@request error("Blog post not found")
-            blogs[index] = post
-            Response(OK)
-        },
-        "/api/blog/{id}" bind DELETE to request@{ request ->
-            val id = request.path("id")?.let { Uuid.parse(it) } ?: return@request error("Missing blog post ID")
-            val index = blogs.indexOfFirst { it.id == id }
-            if (index == -1) return@request error("Blog post not found")
-            blogs.removeAt(index)
-            Response(OK)
-        },
+                val index = blogs.indexOfFirst { it.id == id }
+                if (index == -1) return@auth error("Blog post not found")
+                blogs[index] = post
+                Response(OK)
+            },
+        "/api/blog/{id}" bind DELETE to
+            auth {
+                val id = path("id")?.let { Uuid.parse(it) } ?: return@auth error("Missing blog post ID")
+                val index = blogs.indexOfFirst { it.id == id }
+                if (index == -1) return@auth error("Blog post not found")
+                blogs.removeAt(index)
+                Response(OK)
+            },
     )

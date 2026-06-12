@@ -6,6 +6,8 @@ import org.http4k.filter.CorsPolicy
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.encoding.Base64
+import kotlin.uuid.Uuid
 
 val corsPolicy =
     CorsPolicy(
@@ -38,3 +40,11 @@ val staticRoots: List<Path> by lazy {
         Paths.get("/app", "site", "build", "dist", "js", "productionExecutable", "public"),
     ).filter { Files.isDirectory(it) }
 }
+
+val userId = Uuid.random()
+val bearerToken =
+    Base64.encodeToByteArray(
+        (System.getProperty("BEARER_TOKEN") ?: System.getenv("BEARER_TOKEN") ?: "before-universe-bagel").encodeToByteArray(),
+    )
+
+val fubApiKey: String? = System.getProperty("FUB_API_KEY") ?: System.getenv("FUB_API_KEY")
