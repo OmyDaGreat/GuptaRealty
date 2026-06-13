@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.Cursor
-import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -29,8 +28,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.minHeight
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
-import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.size
@@ -48,6 +47,7 @@ import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
@@ -71,7 +71,7 @@ fun NavBarLayout(content: @Composable () -> Unit) {
     val currentRoute = ctx.route.path
     var isMenuOpen by remember { mutableStateOf(false) }
 
-    Column(Modifier.fillMaxSize().backgroundColor(AppColors.Background)) {
+    Column(Modifier.fillMaxWidth().minHeight(100.vh).backgroundColor(AppColors.Background)) {
         Box(
             NavBarStyle.toModifier(),
             contentAlignment = Alignment.Center,
@@ -176,11 +176,10 @@ fun NavBarLayout(content: @Composable () -> Unit) {
             }
         }
 
-        Box(Modifier.fillMaxSize().overflow(Overflow.Auto)) {
+        Column(Modifier.fillMaxWidth()) {
             content()
+            Footer()
         }
-
-        Footer()
     }
 }
 

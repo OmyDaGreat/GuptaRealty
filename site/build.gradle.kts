@@ -78,7 +78,10 @@ kotlin {
         }
     }
 
-    compilerOptions.optIn.add("kotlin.uuid.ExperimentalUuidApi")
+    compilerOptions {
+        this.freeCompilerArgs.add("-Xcontext-parameters")
+        optIn.add("kotlin.uuid.ExperimentalUuidApi")
+    }
 }
 
 tasks.withType<KotlinJvmCompile>().configureEach {
@@ -122,6 +125,10 @@ afterEvaluate {
             systemProperty(
                 "FUB_API_KEY",
                 localProperties["FUB_API_KEY"] ?: System.getenv("FUB_API_KEY") ?: "",
+            )
+            systemProperty(
+                "BEARER_TOKEN",
+                localProperties["BEARER_TOKEN"] ?: System.getenv("BEARER_TOKEN") ?: "",
             )
         }
     }

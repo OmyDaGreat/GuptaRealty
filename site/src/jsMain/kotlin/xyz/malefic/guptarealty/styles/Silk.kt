@@ -8,7 +8,9 @@ import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fontFamily
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
+import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.lineHeight
+import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.init.InitSilk
@@ -19,6 +21,10 @@ import org.jetbrains.compose.web.css.px
 
 @InitSilk
 fun initSerenHearth(ctx: InitSilkContext) {
+    ctx.stylesheet.registerStyle("html, body") {
+        base { Modifier.height(100.percent).margin(0.px) }
+    }
+
     ctx.stylesheet.registerStyle("body") {
         base {
             Modifier

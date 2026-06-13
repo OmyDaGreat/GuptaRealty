@@ -12,11 +12,18 @@ suspend fun getBlog() = getApi<List<BlogPostResponse>>("blog")
 
 suspend fun getBlog(id: Uuid) = getApi<BlogPostResponse>("blog?id=$id")
 
-suspend fun postBlog(post: BlogPostRequest) = postApi("blog", post)
+suspend fun postBlog(
+    post: BlogPostRequest,
+    token: String,
+) = postApi("blog", post, token)
 
 suspend fun putBlog(
     id: Uuid,
     post: BlogPostRequest,
-) = putApi("blog/$id", post)
+    token: String,
+) = putApi("blog/$id", post, token)
 
-suspend fun deleteBlog(id: Uuid) = deleteApi("blog/$id")
+suspend fun deleteBlog(
+    id: Uuid,
+    token: String,
+) = deleteApi("blog/$id", token)

@@ -42,16 +42,17 @@ val webinar: Array<RoutingHttpHandler> =
         "/api/webinar" bind GET to { request ->
             json(currentWebinar)
         },
-        "/api/webinar" bind POST to request@{ request ->
-            currentWebinar =
-                try {
-                    json.decodeFromString(request.bodyString())
-                } catch (e: Exception) {
-                    return@request error("Invalid webinar")
-                }
+        "/api/webinar" bind POST to
+            auth {
+                currentWebinar =
+                    try {
+                        json.decodeFromString(bodyString())
+                    } catch (e: Exception) {
+                        return@auth error("Invalid webinar")
+                    }
 
-            Response(OK)
-        },
+                Response(OK)
+            },
         "/api/webinar/tips" bind GET to {
             json(webinarTips)
         },

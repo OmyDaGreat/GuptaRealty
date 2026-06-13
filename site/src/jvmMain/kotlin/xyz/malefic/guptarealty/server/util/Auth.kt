@@ -25,15 +25,14 @@ val auth: Filter =
             if (token.isNullOrBlank()) {
                 return@request Response(UNAUTHORIZED).json("Missing bearer token".error)
             }
-            if (Base64.encodeToByteArray(token.encodeToByteArray()).contentEquals(bearerToken)) {
+            if (!Base64.encode(token.encodeToByteArray()).contentEquals(bearerToken)) {
                 return@request Response(UNAUTHORIZED).json("Invalid or expired token".error)
             }
             next(request.with(authenticatedUserId of userId))
         }
     }
 
-context(request: Request)
-val id: Uuid
-    get() = authenticatedUserId(request)
+val Request.id: Uuid
+    get() = authenticatedUserId(this)
 
-fun auth(next: Request.(Uuid) -> Response) = auth.then { request -> request.next(id) }
+fun auth(next: Request.(Uuid) -> Response) = auth.then { request -> request.next(request.id) }

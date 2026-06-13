@@ -15,6 +15,7 @@ import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.TextTransform
+import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -50,6 +51,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
 import com.varabyte.kobweb.compose.ui.modifiers.textTransform
 import com.varabyte.kobweb.compose.ui.modifiers.top
+import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
@@ -71,6 +73,7 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.api.getBlog
+import xyz.malefic.guptarealty.api.getDescription
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
@@ -183,15 +186,17 @@ fun AboutSection() {
                     ) {
                         Text("Broker Associate & Realtor®")
                     }
-                    P(BodyLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
-                        Text(
-                            "I'm Ruchika, Broker Associate and Realtor® with a passion for helping families find their perfect home. My approach is built on trust, transparency, and a deep understanding of the emotional and financial significance of every transaction.",
-                        )
+
+                    var description by remember { mutableStateOf<String?>(null) }
+
+                    LaunchedEffect(null) {
+                        description = getDescription()
                     }
-                    P(BodyLgStyle.toModifier().toAttrs()) {
-                        Text(
-                            "Whether you're a first-time buyer or looking to sell your family estate, I provide the editorial-level marketing and boutique care your property deserves.",
-                        )
+
+                    Loading(description) { description ->
+                        P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
+                            Text(description)
+                        }
                     }
                 }
             }

@@ -11,7 +11,7 @@ import kotlin.uuid.Uuid
 
 val corsPolicy =
     CorsPolicy(
-        headers = listOf("Content-Type"),
+        headers = listOf("Content-Type", "Authorization"),
         methods = Method.entries,
         originPolicy = AllowAllOriginPolicy,
     )
@@ -43,8 +43,6 @@ val staticRoots: List<Path> by lazy {
 
 val userId = Uuid.random()
 val bearerToken =
-    Base64.encodeToByteArray(
-        (System.getProperty("BEARER_TOKEN") ?: System.getenv("BEARER_TOKEN") ?: "before-universe-bagel").encodeToByteArray(),
-    )
+    Base64.encode((System.getProperty("BEARER_TOKEN") ?: System.getenv("BEARER_TOKEN") ?: "before-universe-bagel").encodeToByteArray())
 
 val fubApiKey: String? = System.getProperty("FUB_API_KEY") ?: System.getenv("FUB_API_KEY")

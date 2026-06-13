@@ -1,5 +1,8 @@
 package xyz.malefic.guptarealty.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Error(
     val error: String,
 )
