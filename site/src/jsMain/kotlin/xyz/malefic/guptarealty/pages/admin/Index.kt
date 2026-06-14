@@ -37,7 +37,7 @@ import xyz.malefic.guptarealty.api.getHomeSettings
 import xyz.malefic.guptarealty.api.postHomeSettings
 import xyz.malefic.guptarealty.components.AdminField
 import xyz.malefic.guptarealty.components.AdminTextArea
-import xyz.malefic.guptarealty.components.ImageLibrary
+import xyz.malefic.guptarealty.components.AssetLibrary
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.layouts.AdminLayoutData
 import xyz.malefic.guptarealty.components.layouts.AdminLayoutScope
@@ -165,7 +165,7 @@ fun AdminLayoutScope.HomePage() {
             }
         }
 
-        ImageLibrary(token) { url ->
+        AssetLibrary(token) { url ->
             when (selectingImageFor) {
                 "aboutImage" -> settings = settings?.copy(aboutImage = url)
                 "heroImage" -> settings = settings?.copy(heroImage = url)

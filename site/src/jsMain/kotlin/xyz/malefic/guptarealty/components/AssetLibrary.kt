@@ -49,15 +49,15 @@ import xyz.malefic.guptarealty.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.styles.LabelSmStyle
 
 @Composable
-fun ImageLibrary(
+fun AssetLibrary(
     token: String,
     onSelect: (String) -> Unit,
 ) {
-    var images by remember { mutableStateOf<List<String>?>(null) }
+    var assets by remember { mutableStateOf<List<String>?>(null) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        images = getAssetList(token)
+        assets = getAssetList(token)
     }
 
     Column(AppModifiers.Card.padding(AppSpacing.S4).fillMaxWidth()) {
@@ -75,7 +75,7 @@ fun ImageLibrary(
                             if (file != null) {
                                 scope.launch {
                                     uploadAsset(file, token)
-                                    images = getAssetList(token)
+                                    assets = getAssetList(token)
                                 }
                             }
                         }
@@ -84,7 +84,7 @@ fun ImageLibrary(
             ) { Text("Upload New") }
         }
 
-        Loading(images) {
+        Loading(assets) {
             if (this.isEmpty()) {
                 P { Text("No images uploaded yet.") }
             } else {

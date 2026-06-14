@@ -26,7 +26,7 @@ import xyz.malefic.guptarealty.styles.InputLabelStyle
 import kotlin.time.Instant
 
 @Composable
-fun AdminDateTimeSelector(
+fun DateTimeSelector(
     label: String,
     instant: Instant,
     onValueChange: (Instant) -> Unit,

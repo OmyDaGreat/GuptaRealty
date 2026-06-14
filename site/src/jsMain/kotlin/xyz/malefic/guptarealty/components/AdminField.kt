@@ -6,6 +6,7 @@ import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.dom.Input
@@ -19,13 +20,14 @@ import xyz.malefic.guptarealty.styles.LabelMdStyle
 fun AdminField(
     label: String,
     value: String,
+    link: String? = null,
     onValueChange: (String) -> Unit,
 ) {
     Column(Modifier.fillMaxWidth().margin(bottom = AppSpacing.S2)) {
         Label(attrs = LabelMdStyle.toModifier().margin(bottom = AppSpacing.S1).toAttrs()) {
-            Text(
-                label,
-            )
+            link?.let {
+                Link(it, label)
+            } ?: Text(label)
         }
         Input(
             InputType.Text,

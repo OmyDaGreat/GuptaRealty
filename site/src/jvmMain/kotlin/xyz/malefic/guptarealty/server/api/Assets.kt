@@ -14,7 +14,7 @@ import java.nio.file.Files
 
 private val assetsDir = File(assetsPath).apply { if (!exists()) mkdirs() }
 
-val images: Array<RoutingHttpHandler> =
+val assets: Array<RoutingHttpHandler> =
     arrayOf(
         "/api/assets" bind GET to
             auth {

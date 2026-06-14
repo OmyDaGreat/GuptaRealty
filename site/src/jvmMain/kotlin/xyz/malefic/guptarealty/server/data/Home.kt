@@ -1,8 +1,10 @@
 package xyz.malefic.guptarealty.server.data
 
 import xyz.malefic.guptarealty.model.HomeInfo
+import xyz.malefic.guptarealty.server.util.file
 
-var homeInfo =
+var homeInfo by file(
+    "home-info.json",
     HomeInfo(
         heroTitle = "Helping you find your way home in Orange County and beyond.",
         heroSubtitle = "Expert guidance, local insight, and a personalized approach to your real estate journey.",
@@ -24,4 +26,5 @@ var homeInfo =
         contactPhone = "(714) 767-5752",
         contactAddress = "Orange County, CA",
         dreNumber = "02047333",
-    )
+    ),
+)

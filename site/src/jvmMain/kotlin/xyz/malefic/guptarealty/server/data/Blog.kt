@@ -2,9 +2,11 @@ package xyz.malefic.guptarealty.server.data
 
 import kotlinx.datetime.LocalDate
 import xyz.malefic.guptarealty.model.BlogPostResponse
+import xyz.malefic.guptarealty.server.util.file
 import kotlin.uuid.Uuid
 
-val blogs: MutableList<BlogPostResponse> =
+val blogs by file(
+    "blog.json",
     mutableListOf(
         BlogPostResponse(
             Uuid.random(),
@@ -42,17 +44,5 @@ val blogs: MutableList<BlogPostResponse> =
             listOf("Financial Advice", "Buying"),
             LocalDate(2026, 1, 10),
         ),
-        BlogPostResponse(
-            Uuid.random(),
-            "Interest? What interest?",
-            "How to get the best rates 101",
-            """# I have no idea what i'm doing lol
-                |This is definitely some content you haven't seen tho
-                |## This might even be some more content (as a header 2)
-                |And this????
-            """.trimMargin(),
-            "/Logo.jpg",
-            listOf("Financial Advice", "Interest", "Buying"),
-            LocalDate(2025, 12, 20),
-        ),
-    )
+    ),
+)

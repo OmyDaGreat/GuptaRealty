@@ -11,9 +11,9 @@ import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import xyz.malefic.guptarealty.server.api.admin
+import xyz.malefic.guptarealty.server.api.assets
 import xyz.malefic.guptarealty.server.api.blog
 import xyz.malefic.guptarealty.server.api.home
-import xyz.malefic.guptarealty.server.api.images
 import xyz.malefic.guptarealty.server.api.webinar
 import xyz.malefic.guptarealty.server.util.assetsPath
 import xyz.malefic.guptarealty.server.util.mimeTypes
@@ -61,7 +61,7 @@ val apiRoutes: RoutingHttpHandler =
         "/api/ping" bind GET to { Response(OK).body("pong") },
         "/api/health" bind GET to { Response(OK).body("healthy") },
         *admin,
-        *images,
+        *assets,
         *home,
         *blog,
         *webinar,

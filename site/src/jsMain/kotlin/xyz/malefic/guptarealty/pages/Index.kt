@@ -133,13 +133,13 @@ fun HeroSection(settings: HomeInfo?) {
                         ) {
                             Text(heroSubtitle)
                         }
-                    }
-                    Row(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap)) {
-                        Link("https://example.com", PrimaryButtonStyle.toModifier()) {
-                            Text("Search Homes")
-                        }
-                        Link("/contact", SecondaryButtonStyle.toModifier()) {
-                            Text("Schedule Consultation")
+                        Row(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap)) {
+                            Link(ctaSearchLink, PrimaryButtonStyle.toModifier()) {
+                                Text("Search Homes")
+                            }
+                            Link("/contact", SecondaryButtonStyle.toModifier()) {
+                                Text("Schedule Consultation")
+                            }
                         }
                     }
                 }

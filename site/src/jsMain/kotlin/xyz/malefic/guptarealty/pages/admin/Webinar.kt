@@ -47,9 +47,9 @@ import xyz.malefic.guptarealty.api.getWebinarTips
 import xyz.malefic.guptarealty.api.postWebinar
 import xyz.malefic.guptarealty.api.postWebinarReviews
 import xyz.malefic.guptarealty.api.postWebinarTips
-import xyz.malefic.guptarealty.components.AdminDateTimeSelector
 import xyz.malefic.guptarealty.components.AdminField
 import xyz.malefic.guptarealty.components.AdminTextArea
+import xyz.malefic.guptarealty.components.DateTimeSelector
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MistakeCard
 import xyz.malefic.guptarealty.components.layouts.AdminLayoutData
@@ -129,7 +129,7 @@ fun AdminLayoutScope.WebinarPage() {
                 AdminField("Image URL", imageUrl) {
                     webinar = webinar?.copy(imageUrl = it)
                 }
-                AdminDateTimeSelector("Date & Time", instant) {
+                DateTimeSelector("Date & Time", instant) {
                     webinar = webinar?.copy(instant = it)
                 }
 
@@ -212,16 +212,10 @@ fun AdminLayoutScope.WebinarPage() {
                                 .borderRadius(AppRadius.Md),
                         ) {
                             H2(LabelMdStyle.toModifier().margin(bottom = AppSpacing.S2).toAttrs()) { Text("Tip #${index + 1}") }
-                            AdminField("Icon", tip.icon) {
+                            AdminField("Icon", tip.icon, "https://fonts.google.com/icons") {
                                 val newList = tips.toMutableList()
                                 while (newList.size <= index) {
-                                    newList.add(
-                                        WebinarTip(
-                                            "help",
-                                            "",
-                                            "",
-                                        ),
-                                    )
+                                    newList.add(WebinarTip("help", "", ""))
                                 }
                                 newList[index] = tip.copy(icon = it)
                                 tipsSection = tipsSection?.copy(tips = newList)
@@ -229,13 +223,7 @@ fun AdminLayoutScope.WebinarPage() {
                             AdminField("Title", tip.title) {
                                 val newList = tips.toMutableList()
                                 while (newList.size <= index) {
-                                    newList.add(
-                                        WebinarTip(
-                                            "help",
-                                            "",
-                                            "",
-                                        ),
-                                    )
+                                    newList.add(WebinarTip("help", "", ""))
                                 }
                                 newList[index] = tip.copy(title = it)
                                 tipsSection = tipsSection?.copy(tips = newList)
@@ -243,13 +231,7 @@ fun AdminLayoutScope.WebinarPage() {
                             AdminTextArea("Description", tip.description) {
                                 val newList = tips.toMutableList()
                                 while (newList.size <= index) {
-                                    newList.add(
-                                        WebinarTip(
-                                            "help",
-                                            "",
-                                            "",
-                                        ),
-                                    )
+                                    newList.add(WebinarTip("help", "", ""))
                                 }
                                 newList[index] = tip.copy(description = it)
                                 tipsSection = tipsSection?.copy(tips = newList)

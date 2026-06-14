@@ -8,10 +8,11 @@ import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTip
 import xyz.malefic.guptarealty.model.WebinarTipsSection
+import xyz.malefic.guptarealty.server.util.file
 
-var registrations = HashMap<String, ArrayList<Registration>>()
-var webinarName: String = "Mastering the Market: A Guide for First-Time Buyers"
-var webinarTips =
+var registrations by file("registrations.json", HashMap<String, ArrayList<Registration>>())
+var webinarTips by file(
+    "webinar-tips.json",
     WebinarTipsSection(
         "Common First Time Home Buyer Mistakes",
         listOf(
@@ -31,8 +32,10 @@ var webinarTips =
                 "It's easy to fall for a aesthetic and ignore structural red flags. We keep you grounded in data and long-term value.",
             ),
         ),
-    )
-var webinarReviews =
+    ),
+)
+var webinarReviews by file(
+    "webinar-reviews.json",
     listOf(
         WebinarReview(
             "Mark & Sarah Thompson",
@@ -46,12 +49,15 @@ var webinarReviews =
             "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png",
             "Some rly rly long review ahhhgiweajifgjwalfjwal",
         ),
-    )
-var currentWebinar =
+    ),
+)
+var currentWebinar by file(
+    "current-webinar.json",
     Webinar(
         "FREE LIVE EDUCATIONAL SERIES",
         "Mastering the Market: A Guide for First-Time Buyers",
         "Join Ruchika Gupta for an exclusive deep dive into the 2026 real estate landscape. Learn how to navigate interest rates and find your dream home with confidence.",
         LocalDateTime(2026, 6, 23, 4, 0).toInstant(TimeZone.currentSystemDefault()),
         "https://lh3.googleusercontent.com/aida-public/AB6AXuCM7sKezxKRo-EioXnRhIC_IiX-GdPFc7eJGkEWj4tKCl60ICSqdCPP35EQti9h7fRB4leoi2omg3ptiVBuVcxg8PALJfH_71PnmmxDcu8NUftKKF6pG4VBCQ8QqHpEELt4bQ7w_z8u_jMhn_0eSRxE-NiVhXHzTDIszoeKs_lIsbASO045cROxdCd64vQm-Mu3dwkTOJR225Mtw63B7WPBbI04mTSwLs792n6BuyBftL04Fl1z_hpwzwJi9uDEKj12VCtKrn8_dlY",
-    )
+    ),
+)
