@@ -25,7 +25,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.toAttrs
@@ -33,22 +32,28 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.data.add
 import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
-import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.style.toModifier
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.H2
+import org.jetbrains.compose.web.dom.Label
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.guptarealty.api.getWebinarReviews
-import xyz.malefic.guptarealty.api.postWebinarReviews
+import xyz.malefic.guptarealty.api.deleteBlog
+import xyz.malefic.guptarealty.api.getBlog
+import xyz.malefic.guptarealty.api.postBlog
+import xyz.malefic.guptarealty.api.putBlog
+import xyz.malefic.guptarealty.components.AdminField
+import xyz.malefic.guptarealty.components.AdminTextArea
 import xyz.malefic.guptarealty.components.Loading
+import xyz.malefic.guptarealty.components.MarkdownEditor
 import xyz.malefic.guptarealty.components.layouts.AdminLayoutData
 import xyz.malefic.guptarealty.components.layouts.AdminLayoutScope
 import xyz.malefic.guptarealty.components.layouts.AdminPage
-import xyz.malefic.guptarealty.model.WebinarReview
+import xyz.malefic.guptarealty.model.BlogPostRequest
+import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
 import xyz.malefic.guptarealty.styles.AppSpacing
@@ -57,46 +62,44 @@ import xyz.malefic.guptarealty.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.styles.LabelMdStyle
 
 @InitRoute
-fun initReviewsPage(ctx: InitRouteContext) {
-    ctx.data.add(AdminLayoutData(AdminPage.REVIEWS))
+fun initBlogsPage(ctx: InitRouteContext) {
+    ctx.data.add(AdminLayoutData(AdminPage.BLOG))
 }
 
 @Page
 @Composable
-fun AdminLayoutScope.ReviewsPage() {
-    var reviews by remember { mutableStateOf<List<WebinarReview>?>(null) }
-    var editingReviewIndex by remember { mutableStateOf<Int?>(null) }
+fun AdminLayoutScope.BlogPage() {
+    var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
+    var editingPost by remember { mutableStateOf<BlogPostResponse?>(null) }
     var isCreating by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        reviews = getWebinarReviews()
+        posts = getBlog().sortedByDescending { it.date }
     }
 
     Column(Modifier.fillMaxSize().overflow(Overflow.Auto).padding(AppSpacing.S4)) {
         H2(HeadlineMdStyle.toModifier().margin(bottom = AppSpacing.S4).toAttrs()) {
-            Text("Review Management")
+            Text("Blog Management")
         }
 
-        if (editingReviewIndex != null || isCreating) {
-            ReviewEditor(
-                review = if (isCreating) null else reviews!![editingReviewIndex!!],
-                onSave = { newReview ->
+        if (editingPost != null || isCreating) {
+            BlogEditor(
+                post = editingPost,
+                onSave = { request ->
                     scope.launch {
-                        val newList = reviews!!.toMutableList()
                         if (isCreating) {
-                            newList.add(newReview)
+                            postBlog(request, token)
                         } else {
-                            newList[editingReviewIndex!!] = newReview
+                            putBlog(editingPost!!.id, request, token)
                         }
-                        postWebinarReviews(newList, token)
-                        reviews = newList
-                        editingReviewIndex = null
+                        editingPost = null
                         isCreating = false
+                        posts = getBlog().sortedByDescending { it.date }
                     }
                 },
                 onCancel = {
-                    editingReviewIndex = null
+                    editingPost = null
                     isCreating = false
                 },
             )
@@ -113,28 +116,19 @@ fun AdminLayoutScope.ReviewsPage() {
                     .toAttrs {
                         onClick { isCreating = true }
                     },
-            ) { Text("Add New Review") }
+            ) { Text("Create New Post") }
 
-            Loading(reviews) { allReviews ->
+            Loading(posts) { allPosts ->
                 Column(Modifier.fillMaxWidth().gap(AppSpacing.S2)) {
-                    allReviews.forEachIndexed { index, review ->
+                    allPosts.forEach { post ->
                         Row(
                             AppModifiers.Card.padding(AppSpacing.S3).fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Image(
-                                review.reviewerImage,
-                                "Reviewer",
-                                Modifier
-                                    .padding(right = AppSpacing.S2)
-                                    .borderRadius(50.px)
-                                    .fillMaxWidth()
-                                    .maxWidth(64.px),
-                            )
                             Column(Modifier.weight(1f)) {
-                                H2(HeadlineSmStyle.toModifier().toAttrs()) { Text(review.reviewer) }
+                                H2(HeadlineSmStyle.toModifier().toAttrs()) { Text(post.title) }
                                 P(LabelMdStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {
-                                    Text(review.reviewerDescription)
+                                    Text("${post.date} | ${post.tags.joinToString(", ")}")
                                 }
                             }
                             Row(Modifier.gap(AppSpacing.S2)) {
@@ -146,7 +140,7 @@ fun AdminLayoutScope.ReviewsPage() {
                                         .borderRadius(4.px)
                                         .border(0.px)
                                         .cursor(Cursor.Pointer)
-                                        .toAttrs { onClick { editingReviewIndex = index } },
+                                        .toAttrs { onClick { editingPost = post } },
                                 ) { Text("Edit") }
                                 Button(
                                     Modifier
@@ -159,10 +153,8 @@ fun AdminLayoutScope.ReviewsPage() {
                                         .toAttrs {
                                             onClick {
                                                 scope.launch {
-                                                    val newList = reviews!!.toMutableList()
-                                                    newList.removeAt(index)
-                                                    postWebinarReviews(newList, token)
-                                                    reviews = newList
+                                                    deleteBlog(post.id, token)
+                                                    posts = getBlog().sortedByDescending { it.date }
                                                 }
                                             }
                                         },
@@ -177,27 +169,35 @@ fun AdminLayoutScope.ReviewsPage() {
 }
 
 @Composable
-fun ReviewEditor(
-    review: WebinarReview?,
-    onSave: (WebinarReview) -> Unit,
+fun BlogEditor(
+    post: BlogPostResponse?,
+    onSave: (BlogPostRequest) -> Unit,
     onCancel: () -> Unit,
 ) {
-    var reviewer by remember { mutableStateOf(review?.reviewer ?: "") }
-    var description by remember { mutableStateOf(review?.reviewerDescription ?: "") }
-    var image by remember { mutableStateOf(review?.reviewerImage ?: "") }
-    var quote by remember { mutableStateOf(review?.review ?: "") }
+    var title by remember { mutableStateOf(post?.title ?: "") }
+    var summary by remember { mutableStateOf(post?.summary ?: "") }
+    var content by remember { mutableStateOf(post?.content ?: "") }
+    var imageUrl by remember { mutableStateOf(post?.imageUrl ?: "") }
+    var tagsString by remember { mutableStateOf(post?.tags?.joinToString(", ") ?: "") }
 
     Column(AppModifiers.Card.padding(AppSpacing.S4).fillMaxWidth()) {
         H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) {
-            Text(if (review == null) "New Review" else "Edit Review")
+            Text(if (post == null) "New Blog Post" else "Edit Blog Post")
         }
 
-        AdminField("Reviewer Name", reviewer) { reviewer = it }
-        AdminField("Reviewer Description", description) { description = it }
-        AdminField("Reviewer Image URL", image) { image = it }
-        AdminTextArea("Review Quote", quote) { quote = it }
+        AdminField("Title", title) { title = it }
+        AdminTextArea("Summary", summary) { summary = it }
+        AdminField("Image URL", imageUrl) { imageUrl = it }
+        AdminField("Tags (comma separated)", tagsString) { tagsString = it }
 
-        Row(Modifier.gap(AppSpacing.S2).margin(top = AppSpacing.S3)) {
+        Label(attrs = LabelMdStyle.toModifier().margin(bottom = AppSpacing.S1).toAttrs()) { Text("Content") }
+        MarkdownEditor(
+            initialValue = content,
+            onChanged = { content = it },
+            modifier = Modifier.fillMaxWidth().margin(bottom = AppSpacing.S3),
+        )
+
+        Row(Modifier.gap(AppSpacing.S2)) {
             Button(
                 Modifier
                     .backgroundColor(AppColors.Primary)
@@ -210,16 +210,17 @@ fun ReviewEditor(
                     .toAttrs {
                         onClick {
                             onSave(
-                                WebinarReview(
-                                    reviewer = reviewer,
-                                    reviewerDescription = description,
-                                    reviewerImage = image,
-                                    review = quote,
+                                BlogPostRequest(
+                                    title = title,
+                                    content = content,
+                                    summary = summary,
+                                    imageUrl = imageUrl,
+                                    tags = tagsString.split(",").map { it.trim() }.filter { it.isNotEmpty() },
                                 ),
                             )
                         }
                     },
-            ) { Text("Save Review") }
+            ) { Text("Save Post") }
 
             Button(
                 Modifier

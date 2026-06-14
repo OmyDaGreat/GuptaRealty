@@ -73,9 +73,10 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.api.getBlog
-import xyz.malefic.guptarealty.api.getDescription
+import xyz.malefic.guptarealty.api.getHomeSettings
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.model.BlogPostResponse
+import xyz.malefic.guptarealty.model.HomeInfo
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
 import xyz.malefic.guptarealty.styles.AppSpacing
@@ -94,16 +95,26 @@ import xyz.malefic.guptarealty.styles.ShowOnMdStyle
 @Page
 @Composable
 fun HomePage() {
-    Column(Modifier.fillMaxSize()) {
-        HeroSection()
-        AboutSection()
-        BlogPreviewSection()
-        CTASection()
+    var settings by remember { mutableStateOf<HomeInfo?>(null) }
+    var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
+
+    LaunchedEffect(Unit) {
+        settings = getHomeSettings()
+        posts = getBlog().sortedByDescending { it.date }.take(3)
+    }
+
+    Loading(settings) { s ->
+        Column(Modifier.fillMaxSize()) {
+            HeroSection(s)
+            AboutSection(s)
+            BlogPreviewSection(posts)
+            CTASection(s)
+        }
     }
 }
 
 @Composable
-fun HeroSection() {
+fun HeroSection(s: HomeInfo) {
     Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceLow), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
@@ -112,7 +123,7 @@ fun HeroSection() {
             ) {
                 Column(Modifier.padding(topBottom = AppSpacing.SectionGap)) {
                     H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
-                        Text("Helping you find your way home in Orange County and beyond.")
+                        Text(s.heroTitle)
                     }
                     P(
                         BodyLgStyle
@@ -121,10 +132,10 @@ fun HeroSection() {
                             .margin(bottom = 32.px)
                             .toAttrs(),
                     ) {
-                        Text("Expert guidance, local insight, and a personalized approach to your real estate journey.")
+                        Text(s.heroSubtitle)
                     }
                     Row(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap)) {
-                        Link("/buy", PrimaryButtonStyle.toModifier()) {
+                        Link("https://example.com", PrimaryButtonStyle.toModifier()) {
                             Text("Search Homes")
                         }
                         Link("/contact", SecondaryButtonStyle.toModifier()) {
@@ -138,8 +149,15 @@ fun HeroSection() {
                             .size(400.px)
                             .borderRadius(48.px)
                             .backgroundColor(AppColors.PrimaryFixed)
-                            .rotate(3.deg),
-                    )
+                            .rotate(3.deg)
+                            .overflow(Overflow.Hidden),
+                    ) {
+                        Image(
+                            s.heroImage,
+                            "Hero Image",
+                            Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
+                        )
+                    }
                 }
             }
         }
@@ -147,7 +165,7 @@ fun HeroSection() {
 }
 
 @Composable
-fun AboutSection() {
+fun AboutSection(s: HomeInfo) {
     Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
@@ -156,7 +174,7 @@ fun AboutSection() {
             ) {
                 Box(Modifier.gridColumn("span 5")) {
                     Image(
-                        "https://lh3.googleusercontent.com/aida-public/AB6AXuCuwNDb-CwDlopOQd4M9z3qBsg47Jva-z3IKYTWAqKhXGqgBv2NtxGRCt-jSRpohSDwMsX40mGSIGNOz1apgYvVFiwjYWU-Hr9gDe9tl3LB2AtgcF9HBpYMqEc4hgpCT-QjcjVm9ziJAGwY14iXUG09Izkj-tWX-_1ms4BS2xhq1Lf7ZXLMJL9tpGfKAdYRfbEQb9HgLYxMpq20gtvpZPknpotYaCYkfxyGkojJSeOyL2LaDJEqrdnx7qKd-slF0Ub2NRLljwbqyEc",
+                        s.aboutImage,
                         "Interior",
                         Modifier
                             .fillMaxWidth()
@@ -175,7 +193,7 @@ fun AboutSection() {
                             .margin(bottom = 16.px)
                             .toAttrs(),
                     ) {
-                        Text("Meet Ruchika")
+                        Text(s.aboutLabel)
                     }
                     H2(
                         DisplayLgStyle
@@ -184,19 +202,11 @@ fun AboutSection() {
                             .margin(bottom = 24.px)
                             .toAttrs(),
                     ) {
-                        Text("Broker Associate & Realtor®")
+                        Text(s.aboutTitle)
                     }
 
-                    var description by remember { mutableStateOf<String?>(null) }
-
-                    LaunchedEffect(null) {
-                        description = getDescription()
-                    }
-
-                    Loading(description) { description ->
-                        P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
-                            Text(description)
-                        }
+                    P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
+                        Text(s.aboutDescription)
                     }
                 }
             }
@@ -205,14 +215,8 @@ fun AboutSection() {
 }
 
 @Composable
-fun BlogPreviewSection() {
-    var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
-
-    LaunchedEffect(null) {
-        posts = getBlog().sortedByDescending { it.date }.subList(0, 3)
-    }
-
-    Loading(posts) { posts ->
+fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
+    Loading(posts) { allPosts ->
         Box(
             SectionStyle
                 .toModifier()
@@ -257,7 +261,7 @@ fun BlogPreviewSection() {
                 }
 
                 SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
-                    posts.forEach { post ->
+                    allPosts.forEach { post ->
                         BlogCard(post)
                     }
                 }
@@ -311,7 +315,7 @@ fun BlogCard(post: BlogPostResponse) {
                 .toAttrs(),
         ) { Text(post.summary) }
         Link(
-            "#",
+            "/blog/${post.id}",
             Modifier
                 .color(AppColors.Secondary)
                 .fontWeight(FontWeight.Bold)
@@ -323,13 +327,13 @@ fun BlogCard(post: BlogPostResponse) {
 }
 
 @Composable
-fun CTASection() {
+fun CTASection(s: HomeInfo) {
     Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .backgroundColor(AppColors.Primary)
+                    .backgroundColor(AppColors.PrimaryFixedDim.dim(0.2f))
                     .borderRadius(48.px)
                     .padding(AppSpacing.S10)
                     .textAlign(TextAlign.Center)
@@ -343,7 +347,7 @@ fun CTASection() {
                         .margin(bottom = 24.px)
                         .toAttrs(),
                 ) {
-                    Text("Looking for properties?")
+                    Text(s.ctaTitle)
                 }
                 P(
                     BodyLgStyle
@@ -355,13 +359,16 @@ fun CTASection() {
                             property("margin-inline", "auto")
                         }.toAttrs(),
                 ) {
-                    Text("Access our exclusive database of local listings and find your perfect home before it even hits the open market.")
+                    Text(s.ctaDescription)
                 }
                 Row(Modifier.gap(16.px).justifyContent(JustifyContent.Center).flexWrap(FlexWrap.Wrap)) {
-                    Link("/buy", PrimaryButtonStyle.toModifier()) {
+                    Link(s.ctaSearchLink, PrimaryButtonStyle.toModifier()) {
                         Text("Search Now")
                     }
-                    Link("/contact", SecondaryButtonStyle.toModifier().color(AppColors.OnPrimary).border(color = AppColors.OnPrimary)) {
+                    Link(
+                        s.ctaDownloadLink,
+                        SecondaryButtonStyle.toModifier().color(AppColors.OnPrimary).border(color = AppColors.OnPrimary),
+                    ) {
                         Text("Download Homebuyer Guide")
                     }
                 }

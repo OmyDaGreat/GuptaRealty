@@ -1,8 +1,7 @@
-@file:JsModule("@toast-ui/editor")
-@file:JsNonModule
-
 package xyz.malefic.guptarealty.util
 
+@JsModule("@toast-ui/editor")
+@JsNonModule
 external class Editor(
     options: dynamic,
 ) {
@@ -11,4 +10,8 @@ external class Editor(
     fun setMarkdown(markdown: String)
 
     fun destroy()
+
+    companion object {
+        fun factory(options: dynamic): dynamic
+    }
 }

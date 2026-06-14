@@ -41,6 +41,8 @@ val staticRoots: List<Path> by lazy {
     ).filter { Files.isDirectory(it) }
 }
 
+val assetsPath: String = System.getProperty("ASSETS_PATH") ?: System.getenv("ASSETS_PATH") ?: "assets"
+
 val userId = Uuid.random()
 val bearerToken =
     Base64.encode((System.getProperty("BEARER_TOKEN") ?: System.getenv("BEARER_TOKEN") ?: "before-universe-bagel").encodeToByteArray())

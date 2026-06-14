@@ -6,28 +6,34 @@ import xyz.malefic.guptarealty.model.Webinar
 import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTipsSection
 import xyz.malefic.guptarealty.util.getApi
+import xyz.malefic.guptarealty.util.getApiList
 import xyz.malefic.guptarealty.util.postApi
 
 suspend fun getWebinar() = getApi<Webinar>("webinar?tz=${TimeZone.currentSystemDefault().id}")
 
 suspend fun postWebinar(
-    webinar: Webinar,
     token: String,
+    webinar: Webinar,
 ) = postApi("webinar", webinar, token)
 
 suspend fun getWebinarTips() = getApi<WebinarTipsSection>("webinar/tips")
 
 suspend fun postWebinarTips(
-    tips: WebinarTipsSection,
     token: String,
+    tips: WebinarTipsSection,
 ) = postApi("webinar/tips", tips, token)
 
-suspend fun getWebinarReviews() = getApi<List<WebinarReview>>("webinar/reviews")
+suspend fun getWebinarReviews() = getApiList<WebinarReview>("webinar/reviews")
 
 suspend fun postWebinarReviews(
-    reviews: List<WebinarReview>,
     token: String,
+    reviews: List<WebinarReview>,
 ) = postApi("webinar/reviews", reviews, token)
+
+suspend fun getWebinarRegistrations(
+    token: String,
+    title: String? = null,
+) = getApiList<Registration>("webinar/registrations${title?.let { "?title=$title" } ?: ""}", token)
 
 suspend fun postWebinarRegistration(
     firstName: String,

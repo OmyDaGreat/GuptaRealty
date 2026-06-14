@@ -23,7 +23,6 @@ import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.em
 import org.jetbrains.compose.web.css.px
-import xyz.malefic.kutint.parseHex
 
 /**
  * Sticky glassmorphic nav bar.
@@ -86,7 +85,7 @@ val NavLinkActiveStyle =
                 .borderBottom {
                     width(2.px)
                     style(LineStyle.Solid)
-                    color(parseHex("#904c33"))
+                    color(AppColors.Secondary)
                 }
         }
     }

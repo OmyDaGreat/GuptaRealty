@@ -1,6 +1,6 @@
 ARG TARGETARCH
 
-# Multi-stage build
+# Build Stage
 FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /app
@@ -14,15 +14,13 @@ RUN chmod +x ./gradlew
 
 COPY . .
 
-# Build both jsMain and jvmMain
 RUN ./gradlew :site:dockerRuntime
 
-# Runtime stage
+# Runtime Stage
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-# Copy prebuilt runtime artifacts only; no Gradle required in the container.
 COPY --from=builder /app/site/build/docker /app
 
 EXPOSE 8080
@@ -30,6 +28,11 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD wget -qO- http://localhost:8080/api/health || exit 1
 
+# Environment Variables
 ENV PORT=8080
+ENV ASSETS_PATH=/app/assets
+
+# Create assets directory
+RUN mkdir -p /app/assets
 
 ENTRYPOINT ["sh", "-c", "exec java ${JAVA_OPTS:-} -cp /app/lib/*:/app/app.jar xyz.malefic.guptarealty.server.MainKt"]

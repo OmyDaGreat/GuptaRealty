@@ -6,24 +6,25 @@ import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
+import xyz.malefic.guptarealty.model.HomeInfo
 import xyz.malefic.guptarealty.model.json
-import xyz.malefic.guptarealty.server.data.description
+import xyz.malefic.guptarealty.server.data.homeInfo
 import xyz.malefic.guptarealty.server.util.auth
 import xyz.malefic.guptarealty.server.util.error
 import xyz.malefic.guptarealty.server.util.json
 
 val home: Array<RoutingHttpHandler> =
     arrayOf(
-        "/api/home/description" bind GET to { request ->
-            json(description)
+        "/api/home" bind GET to { request ->
+            json(homeInfo)
         },
-        "/api/home/description" bind POST to
+        "/api/home" bind POST to
             auth {
-                description =
+                homeInfo =
                     try {
-                        json.decodeFromString<String>(bodyString())
+                        json.decodeFromString<HomeInfo>(bodyString())
                     } catch (e: Exception) {
-                        return@auth error("Invalid blog post")
+                        return@auth error("Invalid home settings")
                     }
 
                 Response(OK)

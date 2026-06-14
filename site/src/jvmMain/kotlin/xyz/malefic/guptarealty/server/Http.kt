@@ -13,13 +13,31 @@ import org.http4k.routing.routes
 import xyz.malefic.guptarealty.server.api.admin
 import xyz.malefic.guptarealty.server.api.blog
 import xyz.malefic.guptarealty.server.api.home
+import xyz.malefic.guptarealty.server.api.images
 import xyz.malefic.guptarealty.server.api.webinar
+import xyz.malefic.guptarealty.server.util.assetsPath
 import xyz.malefic.guptarealty.server.util.mimeTypes
 import xyz.malefic.guptarealty.server.util.staticRoots
+import java.io.File
 import java.nio.file.Files
 
 private fun serveStaticFile(req: Request): Response {
     val requestPath = req.uri.path.removePrefix("/")
+
+    if (requestPath.startsWith("assets/")) {
+        val fileName = requestPath.removePrefix("assets/")
+        val file = File(assetsPath, fileName)
+        if (file.exists() && file.isFile) {
+            val ext = fileName.substringAfterLast('.', "")
+            val contentType = mimeTypes.getOrDefault(ext.lowercase(), "application/octet-stream")
+            val bytes = file.readBytes()
+            return Response(OK)
+                .header("Content-Type", contentType)
+                .body(bytes.inputStream(), bytes.size.toLong())
+        }
+        return Response(NOT_FOUND)
+    }
+
     val ext = requestPath.substringAfterLast('.', "")
     val target = if (requestPath.isEmpty() || ext.isEmpty()) "index.html" else requestPath
     val contentType = mimeTypes.getOrDefault(ext.lowercase(), "text/html; charset=utf-8")
@@ -43,6 +61,7 @@ val apiRoutes: RoutingHttpHandler =
         "/api/ping" bind GET to { Response(OK).body("pong") },
         "/api/health" bind GET to { Response(OK).body("healthy") },
         *admin,
+        *images,
         *home,
         *blog,
         *webinar,

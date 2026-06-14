@@ -69,9 +69,9 @@ enum class AdminPage(
     val title: String,
     val route: String,
 ) {
-    INDEX("Settings", "/admin/"),
-    REVIEWS("Reviews", "/admin/reviews"),
-    BLOGS("Blogs", "/admin/blogs"),
+    HOME("Home", "/admin/"),
+    WEBINAR("Webinar", "/admin/webinar"),
+    BLOG("Blog", "/admin/blog"),
 }
 
 data class AdminLayoutData(
@@ -82,7 +82,7 @@ data class AdminLayoutData(
 fun initPageLayout(ctx: InitRouteContext) {
     ctx.data.addIfAbsent {
         console.warn("${ctx.route.path} did not set PageLayoutData")
-        AdminLayoutData(AdminPage.INDEX)
+        AdminLayoutData(AdminPage.HOME)
     }
 }
 
@@ -146,7 +146,7 @@ fun AdminLayout(
                         AdminPage.entries.forEach {
                             AdminNavLink(it.title, it.route)
                         }
-                        AdminNavLink("Home", "/")
+                        AdminNavLink("Back", "/")
                     }
                 }
 
@@ -158,6 +158,7 @@ fun AdminLayout(
                         .border(0.px)
                         .cursor(Cursor.Pointer)
                         .fontWeight(FontWeight.Bold)
+                        .padding(16.px)
                         .toAttrs {
                             onClick {
                                 localStorage.removeItem("admin_token")

@@ -218,7 +218,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                             }
                         }
                     }
-                    RegistrationSection(coroutineScope, w.date.toDisplayString())
+                    RegistrationSection(coroutineScope, w.instant.toDisplayString())
                 }
             }
         }
@@ -438,7 +438,7 @@ fun TipsSection() {
                     )
                 }
                 SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
-                    m.mistakes.forEach { m ->
+                    m.tips.forEach { m ->
                         MistakeCard(m.title, m.description) { MdIcon(m.icon, it) }
                     }
                 }

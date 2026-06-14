@@ -6,7 +6,11 @@ services:
     environment:
       - JAVA_OPTS=-Xmx512m
       - PORT=8080
+      - ASSETS_PATH=/app/assets
+      - BEARER_KEY=${BEARER_TOKEN}
       - FUB_API_KEY=${FUB_API_KEY}
+    volumes:
+      - assets_data:/app/assets
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/api/health"]
       interval: 30s
@@ -18,3 +22,6 @@ services:
         limits:
           memory: 768M
     restart: unless-stopped
+
+volumes:
+    assets_data:

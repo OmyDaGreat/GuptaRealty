@@ -37,7 +37,6 @@ fun MarkdownEditor(
                     this.initialEditType = "wysiwyg"
                     this.initialValue = initialValue
                     this.height = height
-                    this.hideModeSwitch = true
                     this.toolbarItems =
                         arrayOf(
                             arrayOf("heading", "bold", "italic", "strike"),

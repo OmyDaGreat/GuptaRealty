@@ -25,7 +25,6 @@ import xyz.malefic.guptarealty.model.error
 import xyz.malefic.guptarealty.model.json
 import xyz.malefic.guptarealty.server.data.currentWebinar
 import xyz.malefic.guptarealty.server.data.registrations
-import xyz.malefic.guptarealty.server.data.webinarName
 import xyz.malefic.guptarealty.server.data.webinarReviews
 import xyz.malefic.guptarealty.server.data.webinarTips
 import xyz.malefic.guptarealty.server.util.auth
@@ -83,7 +82,12 @@ val webinar: Array<RoutingHttpHandler> =
             },
         "/api/webinar/registrations" bind GET to
             auth {
-                json(registrations)
+                if (query("title") == null) {
+                    return@auth json(registrations)
+                } else {
+                    val title = query("title")!!
+                    return@auth json(registrations[title] ?: emptyList())
+                }
             },
         "/api/webinar/register" bind POST to request@{ request ->
             if (fubApiKey == null) {
@@ -100,11 +104,6 @@ val webinar: Array<RoutingHttpHandler> =
 
             val drip = request.query("drip").toBoolean()
 
-            registrations += registration
-            registrations = registrations.distinct()
-            log.d { "New registration: $registration" }
-            log.d { "Total registrations: ${registrations.size}" }
-
             val payload =
                 FollowUpBossEvent(
                     person =
@@ -116,7 +115,7 @@ val webinar: Array<RoutingHttpHandler> =
                             source = "guptarealty.com/webinar",
                             tags = listOf("Webinar") + if (drip) listOf("Drip") else emptyList(),
                         ),
-                    description = "Signed up for webinar \"$webinarName\"",
+                    description = "Signed up for webinar \"${currentWebinar.title}\"",
                 )
 
             val request =
@@ -131,8 +130,10 @@ val webinar: Array<RoutingHttpHandler> =
             if (response.status !in Status.SUCCESSFUL) {
                 log.e { "Failed to send registration to FollowUpBoss; returned\n${response.toMessage()}" }
                 return@request error("Failed to send registration to FollowUpBoss")
-            } else {
-                Response(OK)
             }
+
+            registrations[currentWebinar.title]?.add(registration) ?: registrations.put(currentWebinar.title, arrayListOf(registration))
+
+            Response(OK)
         },
     )

@@ -66,10 +66,9 @@ kotlin {
             implementation(libs.bundles.silk.icons)
             implementation(libs.bundles.compose)
             implementation(libs.bundles.kobweb)
-            implementation(wrappers.js)
             implementation(libs.kurrency)
-            implementation(libs.markdown)
             implementation(libs.kutint)
+            implementation(wrappers.js)
         }
 
         jvmMain.dependencies {

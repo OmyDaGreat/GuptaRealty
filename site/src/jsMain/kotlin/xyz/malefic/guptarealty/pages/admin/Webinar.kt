@@ -1,0 +1,398 @@
+package xyz.malefic.guptarealty.pages.admin
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.foundation.layout.Box
+import com.varabyte.kobweb.compose.foundation.layout.Column
+import com.varabyte.kobweb.compose.foundation.layout.Row
+import com.varabyte.kobweb.compose.ui.Alignment
+import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
+import com.varabyte.kobweb.compose.ui.modifiers.border
+import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
+import com.varabyte.kobweb.compose.ui.modifiers.color
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.gap
+import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.overflow
+import com.varabyte.kobweb.compose.ui.modifiers.padding
+import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.core.data.add
+import com.varabyte.kobweb.core.init.InitRoute
+import com.varabyte.kobweb.core.init.InitRouteContext
+import com.varabyte.kobweb.silk.components.icons.mdi.MdIcon
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiDelete
+import com.varabyte.kobweb.silk.components.icons.mdi.MdiPersonAdd
+import com.varabyte.kobweb.silk.style.toModifier
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.web.css.LineStyle
+import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.dom.Button
+import org.jetbrains.compose.web.dom.H2
+import org.jetbrains.compose.web.dom.H3
+import org.jetbrains.compose.web.dom.P
+import org.jetbrains.compose.web.dom.Text
+import xyz.malefic.guptarealty.api.getWebinar
+import xyz.malefic.guptarealty.api.getWebinarRegistrations
+import xyz.malefic.guptarealty.api.getWebinarReviews
+import xyz.malefic.guptarealty.api.getWebinarTips
+import xyz.malefic.guptarealty.api.postWebinar
+import xyz.malefic.guptarealty.api.postWebinarReviews
+import xyz.malefic.guptarealty.api.postWebinarTips
+import xyz.malefic.guptarealty.components.AdminDateTimeSelector
+import xyz.malefic.guptarealty.components.AdminField
+import xyz.malefic.guptarealty.components.AdminTextArea
+import xyz.malefic.guptarealty.components.Loading
+import xyz.malefic.guptarealty.components.MistakeCard
+import xyz.malefic.guptarealty.components.layouts.AdminLayoutData
+import xyz.malefic.guptarealty.components.layouts.AdminLayoutScope
+import xyz.malefic.guptarealty.components.layouts.AdminPage
+import xyz.malefic.guptarealty.model.Registration
+import xyz.malefic.guptarealty.model.Webinar
+import xyz.malefic.guptarealty.model.WebinarReview
+import xyz.malefic.guptarealty.model.WebinarTip
+import xyz.malefic.guptarealty.model.WebinarTipsSection
+import xyz.malefic.guptarealty.styles.AppColors
+import xyz.malefic.guptarealty.styles.AppRadius
+import xyz.malefic.guptarealty.styles.AppSpacing
+import xyz.malefic.guptarealty.styles.ContentCardStyle
+import xyz.malefic.guptarealty.styles.HeadlineMdStyle
+import xyz.malefic.guptarealty.styles.HeadlineSmStyle
+import xyz.malefic.guptarealty.styles.LabelMdStyle
+import xyz.malefic.guptarealty.styles.LabelSmStyle
+import xyz.malefic.guptarealty.styles.PrimaryButtonStyle
+import xyz.malefic.guptarealty.styles.SecondaryButtonStyle
+import xyz.malefic.guptarealty.styles.TertiaryButtonStyle
+
+@InitRoute
+fun initWebinarPage(ctx: InitRouteContext) {
+    ctx.data.add(AdminLayoutData(AdminPage.WEBINAR))
+}
+
+@Page
+@Composable
+fun AdminLayoutScope.WebinarPage() {
+    var webinar by remember { mutableStateOf<Webinar?>(null) }
+    var tipsSection by remember { mutableStateOf<WebinarTipsSection?>(null) }
+    var reviews by remember { mutableStateOf<List<WebinarReview>?>(null) }
+    var registrations by remember { mutableStateOf<List<Registration>?>(null) }
+    var message by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        webinar = getWebinar()
+        tipsSection = getWebinarTips()
+        reviews = getWebinarReviews()
+        registrations = getWebinarRegistrations(token)
+    }
+
+    Column(Modifier.fillMaxSize().overflow(Overflow.Auto).padding(AppSpacing.S4)) {
+        H2(HeadlineMdStyle.toModifier().margin(bottom = AppSpacing.S4).toAttrs()) {
+            Text("Webinar Management")
+        }
+
+        if (message != null) {
+            P(
+                Modifier
+                    .color(if (message!!.second) AppColors.OnPrimaryContainer else AppColors.Error)
+                    .backgroundColor(if (message!!.second) AppColors.PrimaryContainer else AppColors.ErrorContainer)
+                    .padding(AppSpacing.S2)
+                    .borderRadius(AppRadius.Default)
+                    .margin(bottom = AppSpacing.S3)
+                    .toAttrs(),
+            ) {
+                Text(message!!.first)
+            }
+        }
+
+        Loading(webinar) { currentWebinar ->
+            Column(
+                ContentCardStyle
+                    .toModifier()
+                    .fillMaxWidth()
+                    .margin(bottom = AppSpacing.S4),
+            ) {
+                H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Main Webinar Info") }
+
+                AdminField("Header", currentWebinar.header) { webinar = webinar?.copy(header = it) }
+                AdminField("Title", currentWebinar.title) { webinar = webinar?.copy(title = it) }
+                AdminTextArea("Description", currentWebinar.description) {
+                    webinar = webinar?.copy(description = it)
+                }
+                AdminField("Image URL", currentWebinar.imageUrl) {
+                    webinar = webinar?.copy(imageUrl = it)
+                }
+                AdminDateTimeSelector("Date & Time", currentWebinar.instant) {
+                    webinar = webinar?.copy(instant = it)
+                }
+
+                Button(
+                    PrimaryButtonStyle
+                        .toModifier()
+                        .margin(top = AppSpacing.S3)
+                        .toAttrs {
+                            onClick {
+                                scope.launch {
+                                    try {
+                                        postWebinar(token, webinar!!)
+                                        message = "Webinar updated successfully" to true
+                                    } catch (e: Exception) {
+                                        message = "Failed to update webinar" to false
+                                    }
+                                }
+                            }
+                        },
+                ) {
+                    Text("Save Webinar Info")
+                }
+            }
+        }
+
+        Loading(registrations) { currentRegistrations ->
+            Column(
+                ContentCardStyle
+                    .toModifier()
+                    .fillMaxWidth()
+                    .margin(bottom = AppSpacing.S4),
+            ) {
+                H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Current Registrations") }
+
+                if (currentRegistrations.isEmpty()) {
+                    P(LabelMdStyle.toModifier().toAttrs()) { Text("No registrations accessible.") }
+                } else {
+                    currentRegistrations.forEach { registration ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(AppSpacing.S2)
+                                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+                                .borderRadius(AppRadius.Md)
+                                .margin(bottom = AppSpacing.S2)
+                                .gap(AppSpacing.S2),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                H3(LabelMdStyle.toModifier().toAttrs()) { Text("${registration.firstName} ${registration.lastName}") }
+                                P(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) { Text(registration.email) }
+                            }
+                            P(LabelSmStyle.toModifier().toAttrs()) { Text(registration.phone) }
+                        }
+                    }
+                }
+            }
+        }
+
+        Loading(tipsSection) { currentTips ->
+            Column(
+                ContentCardStyle
+                    .toModifier()
+                    .fillMaxWidth()
+                    .margin(bottom = AppSpacing.S4),
+            ) {
+                H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Tips Section (Exactly 3)") }
+
+                AdminField("Section Header", currentTips.header) {
+                    tipsSection = tipsSection?.copy(header = it)
+                }
+
+                Row(Modifier.fillMaxWidth().gap(AppSpacing.S2).margin(bottom = AppSpacing.S4)) {
+                    (0..2).forEach { index ->
+                        val tip = currentTips.tips.getOrNull(index) ?: WebinarTip("help", "New Tip", "Description...")
+                        Column(
+                            Modifier
+                                .weight(1f)
+                                .padding(AppSpacing.S2)
+                                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+                                .borderRadius(AppRadius.Md),
+                        ) {
+                            H2(LabelMdStyle.toModifier().margin(bottom = AppSpacing.S2).toAttrs()) { Text("Tip #${index + 1}") }
+                            AdminField("Icon", tip.icon) {
+                                val newList = currentTips.tips.toMutableList()
+                                while (newList.size <= index) {
+                                    newList.add(
+                                        WebinarTip(
+                                            "help",
+                                            "",
+                                            "",
+                                        ),
+                                    )
+                                }
+                                newList[index] = tip.copy(icon = it)
+                                tipsSection = tipsSection?.copy(tips = newList)
+                            }
+                            AdminField("Title", tip.title) {
+                                val newList = currentTips.tips.toMutableList()
+                                while (newList.size <= index) {
+                                    newList.add(
+                                        WebinarTip(
+                                            "help",
+                                            "",
+                                            "",
+                                        ),
+                                    )
+                                }
+                                newList[index] = tip.copy(title = it)
+                                tipsSection = tipsSection?.copy(tips = newList)
+                            }
+                            AdminTextArea("Description", tip.description) {
+                                val newList = currentTips.tips.toMutableList()
+                                while (newList.size <= index) {
+                                    newList.add(
+                                        WebinarTip(
+                                            "help",
+                                            "",
+                                            "",
+                                        ),
+                                    )
+                                }
+                                newList[index] = tip.copy(description = it)
+                                tipsSection = tipsSection?.copy(tips = newList)
+                            }
+                        }
+                    }
+                }
+
+                H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Preview") }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .gap(AppSpacing.S2)
+                        .padding(AppSpacing.S3)
+                        .backgroundColor(AppColors.SurfaceLow)
+                        .borderRadius(AppRadius.Xl),
+                ) {
+                    currentTips.tips.take(3).forEach { tip ->
+                        Box(Modifier.weight(1f)) {
+                            MistakeCard(tip.title, tip.description) { MdIcon(tip.icon, it) }
+                        }
+                    }
+                }
+
+                Button(
+                    PrimaryButtonStyle
+                        .toModifier()
+                        .margin(top = AppSpacing.S3)
+                        .toAttrs {
+                            onClick {
+                                scope.launch {
+                                    message =
+                                        try {
+                                            val finalTips = tipsSection!!.tips.take(3).toMutableList()
+                                            while (finalTips.size < 3) finalTips.add(WebinarTip("help", "New Tip", "Description..."))
+                                            val section = tipsSection!!.copy(tips = finalTips)
+                                            postWebinarTips(token, section)
+                                            "Tips updated successfully" to true
+                                        } catch (e: Exception) {
+                                            "Failed to update tips" to false
+                                        }
+                                }
+                            }
+                        },
+                ) {
+                    Text("Save Tips")
+                }
+            }
+        }
+
+        Loading(reviews) { allReviews ->
+            Column(ContentCardStyle.toModifier().fillMaxWidth().margin(bottom = AppSpacing.S4)) {
+                H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Webinar Reviews") }
+
+                if (allReviews.isEmpty()) {
+                    P(LabelMdStyle.toModifier().toAttrs()) { Text("No reviews yet.") }
+                } else {
+                    allReviews.forEachIndexed { index, review ->
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(AppSpacing.S2)
+                                .border(1.px, LineStyle.Dashed, AppColors.OutlineVariant)
+                                .borderRadius(AppRadius.Md)
+                                .margin(bottom = AppSpacing.S2),
+                        ) {
+                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                H2(LabelMdStyle.toModifier().toAttrs()) { Text("Review #${index + 1}") }
+                                Box(Modifier.weight(1f))
+                                Button(
+                                    TertiaryButtonStyle
+                                        .toModifier()
+                                        .padding(AppSpacing.S1)
+                                        .toAttrs {
+                                            onClick {
+                                                reviews = reviews!!.toMutableList().apply { removeAt(index) }
+                                            }
+                                        },
+                                ) {
+                                    MdiDelete(Modifier.margin(right = 4.px))
+                                    Text("Remove")
+                                }
+                            }
+                            AdminField("Reviewer", review.reviewer) {
+                                val newList = reviews!!.toMutableList()
+                                newList[index] = review.copy(reviewer = it)
+                                reviews = newList
+                            }
+                            AdminField("Reviewer Description", review.reviewerDescription) {
+                                val newList = reviews!!.toMutableList()
+                                newList[index] = review.copy(reviewerDescription = it)
+                                reviews = newList
+                            }
+                            AdminField("Reviewer Image URL", review.reviewerImage) {
+                                val newList = reviews!!.toMutableList()
+                                newList[index] = review.copy(reviewerImage = it)
+                                reviews = newList
+                            }
+                            AdminTextArea("Review", review.review) {
+                                val newList = reviews!!.toMutableList()
+                                newList[index] = review.copy(review = it)
+                                reviews = newList
+                            }
+                        }
+                    }
+                }
+
+                Row(Modifier.gap(AppSpacing.S2).margin(top = AppSpacing.S3)) {
+                    Button(
+                        SecondaryButtonStyle
+                            .toModifier()
+                            .toAttrs {
+                                onClick {
+                                    reviews = reviews!! + WebinarReview("Name", "Description", "image", "Review...")
+                                }
+                            },
+                    ) {
+                        MdiPersonAdd(Modifier.margin(right = 4.px))
+                        Text("Add Review")
+                    }
+
+                    Button(
+                        PrimaryButtonStyle
+                            .toModifier()
+                            .toAttrs {
+                                onClick {
+                                    scope.launch {
+                                        try {
+                                            postWebinarReviews(token, reviews!!)
+                                            message = "Reviews updated successfully" to true
+                                        } catch (e: Exception) {
+                                            message = "Failed to update reviews" to false
+                                        }
+                                    }
+                                }
+                            },
+                    ) {
+                        Text("Save Reviews")
+                    }
+                }
+            }
+        }
+    }
+}

@@ -16,7 +16,7 @@ data class Webinar(
     val header: String,
     val title: String,
     val description: String,
-    val date: Instant,
+    val instant: Instant,
     val imageUrl: String,
 )
 
@@ -30,7 +30,7 @@ data class WebinarTip(
 @Serializable
 data class WebinarTipsSection(
     val header: String,
-    val mistakes: List<WebinarTip>,
+    val tips: List<WebinarTip>,
 )
 
 @Serializable

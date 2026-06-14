@@ -66,7 +66,7 @@ import xyz.malefic.guptarealty.util.Pages
 
 @Layout
 @Composable
-fun NavBarLayout(content: @Composable () -> Unit) {
+fun TopLevelLayout(content: @Composable () -> Unit) {
     val ctx = rememberPageContext()
     val currentRoute = ctx.route.path
     var isMenuOpen by remember { mutableStateOf(false) }

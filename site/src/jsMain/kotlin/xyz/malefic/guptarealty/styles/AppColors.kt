@@ -23,21 +23,20 @@ object AppColors {
 
     // ── Outline / Dividers ───────────────────────────────────────────────────
     val Outline = parseHex("#7c7484")
-    val OutlineVariant = parseHex("#cdc3d5") // Lavender divider
+    val OutlineVariant = parseHex("#cdc3d5")
 
     // ── Primary — Blue Violet ────────────────────────────────────────────────
-    val SurfaceTint = parseHex("#753dc7")
     val Primary = parseHex("#682db9")
     val OnPrimary = parseHex("#ffffff")
-    val PrimaryContainer = parseHex("#814ad3")
-    val OnPrimaryContainer = parseHex("#f3e6ff")
+    val PrimaryContainer = parseHex("#ecdcff")
+    val OnPrimaryContainer = parseHex("#280057")
     val InversePrimary = parseHex("#d6baff")
-    val PrimaryFixed = parseHex("#ecdcff") // Lavender wash
+    val PrimaryFixed = PrimaryContainer
     val PrimaryFixedDim = parseHex("#d6baff")
-    val OnPrimaryFixed = parseHex("#280057")
+    val OnPrimaryFixed = OnPrimaryContainer
     val OnPrimaryFixedVariant = parseHex("#5c1ead")
 
-    // ── Secondary — Tangerine Dream (primary CTA) ────────────────────────────
+    // ── Secondary — Burnt Sienna (primary CTA) ────────────────────────────
     val Secondary = parseHex("#904c33")
     val OnSecondary = parseHex("#ffffff")
     val SecondaryContainer = parseHex("#fea687")

@@ -53,7 +53,7 @@ import kotlin.uuid.Uuid
 
 @Page("{id}")
 @Composable
-fun IndividualBlogPage(ctx: PageContext) {
+fun IndividualPostPage(ctx: PageContext) {
     val id = ctx.route.params["id"]
     var post by remember { mutableStateOf<BlogPostResponse?>(null) }
 
