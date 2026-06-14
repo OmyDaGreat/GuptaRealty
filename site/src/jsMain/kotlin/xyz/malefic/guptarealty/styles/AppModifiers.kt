@@ -34,24 +34,24 @@ object AppModifiers {
                 property("-webkit-backdrop-filter", "blur(16px)")
             }
 
-    // ── Ambient purple-tinted shadow (low-opacity) ────────────────────────────
+    // ── Ambient neutral shadow (low-opacity) ──────────────────────────────────
     val SoftShadow: Modifier =
         Modifier
-            .boxShadow(0.px, 4.px, 24.px, 0.px, AppColors.PrimaryContainer.withAlpha(0.08f))
+            .boxShadow(0.px, 4.px, 24.px, 0.px, AppColors.OnSurface.withAlpha(0.06f))
 
     val ElevatedShadow: Modifier =
         Modifier
-            .boxShadow(0.px, 8.px, 32.px, 0.px, AppColors.PrimaryContainer.withAlpha(00.14f))
+            .boxShadow(0.px, 8.px, 32.px, 0.px, AppColors.OnSurface.withAlpha(0.12f))
 
-    // ── 1 px surface border for cards / inputs ────────────────────────────────
+    // ── 1 px structural border for cards / inputs ────────────────────────────
     val CardBorder: Modifier =
         Modifier
-            .border(1.px, LineStyle.Solid, AppColors.SurfaceHigh)
+            .border(1.px, LineStyle.Solid, AppColors.Outline)
 
-    // ── Base card surface  (white + border + soft shadow) ─────────────────────
+    // ── Base card surface  (Ivory Low + border + soft shadow) ─────────────────
     val Card: Modifier =
         Modifier
-            .backgroundColor(AppColors.SurfaceLowest)
+            .backgroundColor(AppColors.SurfaceLow)
             .borderRadius(AppRadius.Lg)
             .then(CardBorder)
             .then(SoftShadow)

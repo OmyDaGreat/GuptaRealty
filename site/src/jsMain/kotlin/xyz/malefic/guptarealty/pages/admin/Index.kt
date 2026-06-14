@@ -7,21 +7,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.varabyte.kobweb.compose.css.Cursor
-import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
-import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
-import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
-import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
@@ -34,7 +29,6 @@ import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
 import com.varabyte.kobweb.silk.style.toModifier
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.P
@@ -51,9 +45,11 @@ import xyz.malefic.guptarealty.components.layouts.AdminPage
 import xyz.malefic.guptarealty.model.HomeInfo
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.HeadlineMdStyle
 import xyz.malefic.guptarealty.styles.HeadlineSmStyle
+import xyz.malefic.guptarealty.styles.SecondaryButtonStyle
 
 @InitRoute
 fun initIndexPage(ctx: InitRouteContext) {
@@ -80,10 +76,10 @@ fun AdminLayoutScope.HomePage() {
         message?.let { message ->
             P(
                 Modifier
-                    .color(if (message.second) AppColors.OnPrimaryContainer else AppColors.Error)
-                    .backgroundColor(if (message.second) AppColors.PrimaryContainer else AppColors.ErrorContainer)
+                    .color(if (message.second) AppColors.OnSecondaryContainer else AppColors.Error)
+                    .backgroundColor(if (message.second) AppColors.SecondaryContainer else AppColors.ErrorContainer)
                     .padding(AppSpacing.S2)
-                    .borderRadius(8.px)
+                    .borderRadius(AppRadius.Default)
                     .margin(bottom = AppSpacing.S3)
                     .toAttrs(),
             ) {
@@ -148,15 +144,9 @@ fun AdminLayoutScope.HomePage() {
                 AdminField("DRE#", s.dreNumber) { settings = settings?.copy(dreNumber = it) }
 
                 Button(
-                    Modifier
+                    SecondaryButtonStyle
+                        .toModifier()
                         .margin(top = AppSpacing.S3)
-                        .backgroundColor(AppColors.Primary)
-                        .color(AppColors.OnPrimary)
-                        .padding(AppSpacing.S2, AppSpacing.S4)
-                        .borderRadius(50.px)
-                        .border(0.px)
-                        .cursor(Cursor.Pointer)
-                        .fontWeight(FontWeight.Bold)
                         .toAttrs {
                             onClick {
                                 scope.launch {

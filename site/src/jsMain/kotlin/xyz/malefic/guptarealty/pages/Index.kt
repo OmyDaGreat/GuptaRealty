@@ -26,7 +26,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
-import com.varabyte.kobweb.compose.ui.modifiers.borderTop
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
@@ -61,7 +60,6 @@ import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.FlexWrap
-import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.deg
 import org.jetbrains.compose.web.css.em
@@ -79,6 +77,7 @@ import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.model.HomeInfo
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.BodyLgStyle
 import xyz.malefic.guptarealty.styles.BodyMdStyle
@@ -90,6 +89,7 @@ import xyz.malefic.guptarealty.styles.LabelSmStyle
 import xyz.malefic.guptarealty.styles.PrimaryButtonStyle
 import xyz.malefic.guptarealty.styles.SecondaryButtonStyle
 import xyz.malefic.guptarealty.styles.SectionStyle
+import xyz.malefic.guptarealty.styles.SectionWarmStyle
 import xyz.malefic.guptarealty.styles.ShowOnMdStyle
 
 @Page
@@ -115,7 +115,7 @@ fun HomePage() {
 
 @Composable
 fun HeroSection(s: HomeInfo) {
-    Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceLow), contentAlignment = Alignment.Center) {
+    Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
                 numColumns(1, md = 2),
@@ -148,7 +148,7 @@ fun HeroSection(s: HomeInfo) {
                         Modifier
                             .size(400.px)
                             .borderRadius(48.px)
-                            .backgroundColor(AppColors.PrimaryFixed)
+                            .backgroundColor(AppColors.PrimaryContainer)
                             .rotate(3.deg)
                             .overflow(Overflow.Hidden),
                     ) {
@@ -166,7 +166,7 @@ fun HeroSection(s: HomeInfo) {
 
 @Composable
 fun AboutSection(s: HomeInfo) {
-    Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
+    Box(SectionWarmStyle.toModifier(), Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
                 numColumns(1, md = 12),
@@ -175,11 +175,11 @@ fun AboutSection(s: HomeInfo) {
                 Box(Modifier.gridColumn("span 5")) {
                     Image(
                         s.aboutImage,
-                        "Interior",
+                        "About Image",
                         Modifier
                             .fillMaxWidth()
                             .aspectRatio(4, 5)
-                            .borderRadius(16.px)
+                            .borderRadius(AppRadius.Lg)
                             .then(AppModifiers.SoftShadow),
                     )
                 }
@@ -220,8 +220,7 @@ fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
         Box(
             SectionStyle
                 .toModifier()
-                .backgroundColor(AppColors.SurfaceLowest)
-                .borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
+                .backgroundColor(AppColors.SurfaceLowest),
             contentAlignment = Alignment.Center,
         ) {
             Box(ContainerStyle.toModifier()) {
@@ -277,7 +276,7 @@ fun BlogCard(post: BlogPostResponse) {
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(16, 9)
-                .borderRadius(12.px)
+                .borderRadius(AppRadius.Md)
                 .overflow(Overflow.Hidden)
                 .margin(bottom = 16.px),
         ) {
@@ -291,15 +290,15 @@ fun BlogCard(post: BlogPostResponse) {
                     .position(Position.Absolute)
                     .top(16.px)
                     .left(16.px)
-                    .backgroundColor(AppColors.PrimaryFixed)
+                    .backgroundColor(AppColors.SecondaryContainer)
                     .padding(topBottom = 4.px, leftRight = 12.px)
-                    .borderRadius(50.px),
+                    .borderRadius(AppRadius.Full),
             ) {
                 post.tags.forEach {
                     Span(
                         LabelSmStyle
                             .toModifier()
-                            .color(AppColors.OnPrimary)
+                            .color(AppColors.OnSecondaryContainer)
                             .padding(2.px)
                             .toAttrs(),
                     ) { Text(it) }
@@ -333,17 +332,18 @@ fun CTASection(s: HomeInfo) {
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .backgroundColor(AppColors.PrimaryFixedDim.dim(0.2f))
-                    .borderRadius(48.px)
+                    .backgroundColor(AppColors.SecondaryFixed)
+                    .borderRadius(AppRadius.Xl)
                     .padding(AppSpacing.S10)
                     .textAlign(TextAlign.Center)
                     .position(Position.Relative)
                     .overflow(Overflow.Hidden),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 H2(
                     DisplayLgStyle
                         .toModifier()
-                        .color(AppColors.OnPrimary)
+                        .color(AppColors.OnSecondaryFixed)
                         .margin(bottom = 24.px)
                         .toAttrs(),
                 ) {
@@ -352,7 +352,7 @@ fun CTASection(s: HomeInfo) {
                 P(
                     BodyLgStyle
                         .toModifier()
-                        .color(AppColors.OnPrimaryContainer)
+                        .color(AppColors.OnSecondaryFixedVariant)
                         .margin(bottom = 40.px)
                         .maxWidth(600.px)
                         .styleModifier {
@@ -367,7 +367,7 @@ fun CTASection(s: HomeInfo) {
                     }
                     Link(
                         s.ctaDownloadLink,
-                        SecondaryButtonStyle.toModifier().color(AppColors.OnPrimary).border(color = AppColors.OnPrimary),
+                        SecondaryButtonStyle.toModifier().color(AppColors.OnSecondaryFixed).border(color = AppColors.OnSecondaryFixed),
                     ) {
                         Text("Download Homebuyer Guide")
                     }

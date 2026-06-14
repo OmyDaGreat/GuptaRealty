@@ -14,7 +14,6 @@ import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
-import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
@@ -43,12 +42,13 @@ import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.MarkdownContent
 import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.BodyMdStyle
 import xyz.malefic.guptarealty.styles.ContainerStyle
 import xyz.malefic.guptarealty.styles.DisplayLgStyle
 import xyz.malefic.guptarealty.styles.LabelMdStyle
-import xyz.malefic.guptarealty.styles.LabelSmStyle
+import xyz.malefic.guptarealty.styles.StatusChipTertiaryStyle
 import kotlin.uuid.Uuid
 
 @Page("{id}")
@@ -84,19 +84,11 @@ fun IndividualPostPage(ctx: PageContext) {
                 Column(Modifier.fillMaxWidth()) {
                     Row(Modifier.gap(8.px).margin(bottom = 16.px)) {
                         blogPost.tags.forEach { tag ->
-                            Box(
-                                Modifier
-                                    .backgroundColor(AppColors.PrimaryFixed)
-                                    .padding(topBottom = 4.px, leftRight = 12.px)
-                                    .borderRadius(50.px),
-                            ) {
-                                Span(
-                                    LabelSmStyle
-                                        .toModifier()
-                                        .color(AppColors.OnPrimary)
-                                        .toAttrs(),
-                                ) { Text(tag) }
-                            }
+                            Span(
+                                StatusChipTertiaryStyle
+                                    .toModifier()
+                                    .toAttrs(),
+                            ) { Text(tag) }
                         }
                     }
 
@@ -121,7 +113,7 @@ fun IndividualPostPage(ctx: PageContext) {
                             Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(21, 9)
-                                .borderRadius(16.px)
+                                .borderRadius(AppRadius.Lg)
                                 .objectFit(ObjectFit.Cover)
                                 .margin(bottom = 48.px),
                         )

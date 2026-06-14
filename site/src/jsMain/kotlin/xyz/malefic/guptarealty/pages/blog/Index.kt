@@ -50,6 +50,7 @@ import xyz.malefic.guptarealty.api.getBlog
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.styles.AppColors
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.BodyLgStyle
 import xyz.malefic.guptarealty.styles.BodyMdStyle
@@ -57,9 +58,9 @@ import xyz.malefic.guptarealty.styles.ContainerStyle
 import xyz.malefic.guptarealty.styles.DisplayLgStyle
 import xyz.malefic.guptarealty.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.styles.LabelMdStyle
-import xyz.malefic.guptarealty.styles.LabelSmStyle
 import xyz.malefic.guptarealty.styles.PropertyCardStyle
 import xyz.malefic.guptarealty.styles.SectionStyle
+import xyz.malefic.guptarealty.styles.StatusChipTertiaryStyle
 
 @Page
 @Composable
@@ -153,13 +154,13 @@ fun BlogCard(post: BlogPostResponse) {
         Column(
             PropertyCardStyle
                 .toModifier()
-                .fillMaxWidth()
-                .backgroundColor(AppColors.Surface),
+                .fillMaxWidth(),
         ) {
             Box(
                 Modifier
                     .fillMaxWidth()
                     .aspectRatio(16, 9)
+                    .borderRadius(AppRadius.Md)
                     .overflow(Overflow.Hidden),
             ) {
                 Image(
@@ -172,19 +173,11 @@ fun BlogCard(post: BlogPostResponse) {
             Column(Modifier.padding(AppSpacing.S4)) {
                 Row(Modifier.gap(8.px).margin(bottom = 12.px)) {
                     post.tags.take(2).forEach { tag ->
-                        Box(
-                            Modifier
-                                .backgroundColor(AppColors.PrimaryContainer)
-                                .padding(topBottom = 2.px, leftRight = 8.px)
-                                .borderRadius(50.px),
-                        ) {
-                            Span(
-                                LabelSmStyle
-                                    .toModifier()
-                                    .color(AppColors.OnPrimaryContainer)
-                                    .toAttrs(),
-                            ) { Text(tag) }
-                        }
+                        Span(
+                            StatusChipTertiaryStyle
+                                .toModifier()
+                                .toAttrs(),
+                        ) { Text(tag) }
                     }
                 }
 

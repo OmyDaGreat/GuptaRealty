@@ -53,8 +53,8 @@ val PrimaryButtonStyle =
         }
         hover {
             Modifier
-                .backgroundColor(AppColors.OnSecondaryContainer)
-                .boxShadow(0.px, 4.px, 12.px, 0.px, AppColors.Secondary.withAlpha(0.30f))
+                .backgroundColor(AppColors.SecondaryFixedDim)
+                .boxShadow(0.px, 4.px, 12.px, 0.px, AppColors.Secondary.withAlpha(0.20f))
                 .transform {
                     translateY((-1).px)
                 }
@@ -92,9 +92,9 @@ val SecondaryButtonStyle =
         }
         hover {
             Modifier
-                .backgroundColor(AppColors.PrimaryFixed)
-                .color(AppColors.OnPrimaryFixedVariant)
-                .border(2.px, LineStyle.Solid, AppColors.OnPrimaryFixedVariant)
+                .backgroundColor(AppColors.PrimaryFixedDim)
+                .color(AppColors.Primary)
+                .border(2.px, LineStyle.Solid, AppColors.Primary)
         }
         focus {
             Modifier.then(AppModifiers.FocusRing)
@@ -125,7 +125,7 @@ val TertiaryButtonStyle =
                 .gap(8.px)
         }
         hover {
-            Modifier.backgroundColor(AppColors.OutlineVariant)
+            Modifier.backgroundColor(AppColors.PrimaryFixedDim)
         }
         focus {
             Modifier.then(AppModifiers.FocusRing)

@@ -51,15 +51,24 @@ val SectionLavenderStyle =
 val SectionWarmStyle =
     CssStyle {
         base {
-            Modifier.backgroundColor(AppColors.SurfaceContainer)
+            Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap).backgroundColor(AppColors.SurfaceContainer)
         }
     }
 
-/** Dark footer / inverse surface section. */
+/** Recessed section wash — muted Ivory Dim tint for footers. */
+val SectionDimStyle =
+    CssStyle {
+        base {
+            Modifier.backgroundColor(AppColors.SurfaceDim)
+        }
+    }
+
+/** Dark inverse surface section. */
 val SectionInverseStyle =
     CssStyle {
         base {
             Modifier
+                .fillMaxWidth()
                 .backgroundColor(AppColors.InverseSurface)
                 .color(AppColors.InverseOnSurface)
         }

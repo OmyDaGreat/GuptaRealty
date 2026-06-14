@@ -36,11 +36,11 @@ val InputStyle =
         base {
             Modifier
                 .fillMaxWidth()
-                .backgroundColor(AppColors.Background)
+                .backgroundColor(AppColors.SurfaceLowest)
                 .color(AppColors.OnSurface)
                 .padding(topBottom = 12.px, leftRight = AppSpacing.S2)
                 .borderRadius(AppRadius.Default)
-                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+                .border(1.px, LineStyle.Solid, AppColors.Outline)
                 .fontFamily(*AppFonts.BODY_STACK)
                 .fontSize(16.px)
                 .fontWeight(400)
@@ -59,7 +59,7 @@ val InputStyle =
                 .boxShadow(0.px, 0.px, 0.px, 3.px, AppColors.Primary.withAlpha(0.12f))
         }
         placeholder {
-            Modifier.color(AppColors.Outline)
+            Modifier.color(AppColors.OnSurfaceVariant)
         }
     }
 
@@ -76,7 +76,7 @@ val SearchInputStyle =
                 .color(AppColors.OnSurface)
                 .padding(topBottom = AppSpacing.S2, leftRight = AppSpacing.S4)
                 .borderRadius(AppRadius.Full)
-                .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
+                .border(1.px, LineStyle.Solid, AppColors.Outline)
                 .then(AppModifiers.SoftShadow)
                 .fontFamily(*AppFonts.BODY_STACK)
                 .fontSize(18.px)
@@ -96,7 +96,7 @@ val SearchInputStyle =
                 .boxShadow(0.px, 0.px, 0.px, 4.px, AppColors.Primary.withAlpha(0.14f))
         }
         placeholder {
-            Modifier.color(AppColors.Outline)
+            Modifier.color(AppColors.OnSurfaceVariant)
         }
     }
 

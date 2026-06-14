@@ -25,7 +25,6 @@ import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.graphics.Color
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.alignItems
 import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
@@ -112,6 +111,7 @@ import xyz.malefic.guptarealty.model.WebinarReview
 import xyz.malefic.guptarealty.model.WebinarTipsSection
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.BodyLgStyle
 import xyz.malefic.guptarealty.styles.BodyMdStyle
@@ -123,6 +123,7 @@ import xyz.malefic.guptarealty.styles.LabelMdStyle
 import xyz.malefic.guptarealty.styles.LabelSmStyle
 import xyz.malefic.guptarealty.styles.PrimaryButtonStyle
 import xyz.malefic.guptarealty.styles.SectionStyle
+import xyz.malefic.guptarealty.styles.SectionWarmStyle
 import xyz.malefic.guptarealty.util.toDisplayString
 import xyz.malefic.kutint.rgba
 import kotlin.time.Duration.Companion.milliseconds
@@ -161,10 +162,10 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                     Column(Modifier.gridColumn("span 7")) {
                         Span(
                             Modifier
-                                .backgroundColor(AppColors.Primary)
-                                .color(AppColors.OnPrimary)
+                                .backgroundColor(AppColors.PrimaryContainer)
+                                .color(AppColors.OnPrimaryContainer)
                                 .padding(topBottom = 4.px, leftRight = 16.px)
-                                .borderRadius(50.px)
+                                .borderRadius(AppRadius.Full)
                                 .margin(bottom = 24.px)
                                 .toAttrs(),
                         ) { Text(w.header) }
@@ -184,7 +185,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                             Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(16, 9)
-                                .borderRadius(24.px)
+                                .borderRadius(AppRadius.Lg)
                                 .overflow(Overflow.Hidden)
                                 .then(AppModifiers.ElevatedShadow)
                                 .position(Position.Relative),
@@ -238,11 +239,11 @@ fun RegistrationSection(
 ) = Box(Modifier.gridColumn("span 5").padding(left = AppSpacing.S5)) {
     Column(
         Modifier
-            .backgroundColor(AppColors.Surface)
+            .backgroundColor(AppColors.SurfaceHighest)
             .padding(48.px)
-            .borderRadius(40.px)
-            .border(1.px, LineStyle.Solid, AppColors.Secondary)
-            .then(AppModifiers.SoftShadow),
+            .borderRadius(AppRadius.Xl)
+            .then(AppModifiers.ElevatedShadow)
+            .then(AppModifiers.CardBorder),
     ) {
         val name = remember { mutableStateOf("") }
         val email = remember { mutableStateOf("") }
@@ -407,9 +408,9 @@ fun RegistrationField(
             onInput { value.value = it.value }
             style {
                 width(100.percent)
-                backgroundColor(AppColors.SurfaceContainer)
-                border(1.px, LineStyle.Solid, AppColors.Primary)
-                borderRadius(12.px)
+                backgroundColor(AppColors.SurfaceLowest)
+                border(1.px, LineStyle.Solid, AppColors.Outline)
+                borderRadius(AppRadius.Default)
                 padding(16.px)
                 outline("none")
             }
@@ -419,7 +420,7 @@ fun RegistrationField(
 
 @Composable
 fun TipsSection() {
-    Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceContainer), contentAlignment = Alignment.Center) {
+    Box(SectionWarmStyle.toModifier(), contentAlignment = Alignment.Center) {
         Column(ContainerStyle.toModifier()) {
             var mistakes by remember { mutableStateOf<WebinarTipsSection?>(null) }
 
@@ -507,11 +508,11 @@ fun TestimonialCard(
 ) {
     Box(
         Modifier
-            .backgroundColor(AppColors.SurfaceContainer)
+            .backgroundColor(AppColors.SurfaceLow)
             .padding(40.px)
-            .borderRadius(40.px)
-            .border(1.px, LineStyle.Solid, AppColors.Secondary)
-            .then(AppModifiers.SoftShadow)
+            .borderRadius(AppRadius.Xl)
+            .then(AppModifiers.ElevatedShadow)
+            .then(AppModifiers.CardBorder)
             .transition {
                 property("opacity", "transform")
                 duration(0.2.s)
@@ -587,8 +588,8 @@ fun FinalCTASection() {
     Box(
         SectionStyle
             .toModifier()
-            .backgroundColor(AppColors.Primary)
-            .color(Colors.White)
+            .backgroundColor(AppColors.Secondary)
+            .color(AppColors.OnSecondary)
             .position(Position.Relative)
             .overflow(Overflow.Hidden),
         contentAlignment = Alignment.Center,
@@ -597,14 +598,14 @@ fun FinalCTASection() {
             H2(
                 DisplayLgStyle
                     .toModifier()
-                    .color(Colors.White)
+                    .color(AppColors.OnSecondary)
                     .margin(bottom = 32.px)
                     .toAttrs(),
             ) { Text("Ready to Take the First Step?") }
             P(
                 BodyLgStyle
                     .toModifier()
-                    .color(Color.rgba(255, 255, 255, 0.9f))
+                    .color(AppColors.OnSecondary.withAlpha(0.9f))
                     .margin(bottom = 48.px)
                     .maxWidth(700.px)
                     .styleModifier {

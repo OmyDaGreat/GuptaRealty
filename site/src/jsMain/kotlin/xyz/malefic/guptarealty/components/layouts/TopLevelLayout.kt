@@ -52,8 +52,10 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.components.Footer
+import xyz.malefic.guptarealty.components.CopyrightStrip
 import xyz.malefic.guptarealty.components.Logo
 import xyz.malefic.guptarealty.styles.AppColors
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.styles.HideOnMdStyle
@@ -85,7 +87,7 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
             ) {
                 Link("/", Modifier.textDecorationLine(TextDecorationLine.None)) {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.gap(16.px)) {
-                        Logo(Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.OutlineVariant))
+                        Logo(Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.Outline))
                         Span(HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
                             Text("Gupta Realty")
                         }
@@ -162,9 +164,9 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
                             Modifier
                                 .fillMaxWidth()
                                 .padding(12.px, 16.px)
-                                .borderRadius(50.px)
-                                .backgroundColor(if (isActive) AppColors.PrimaryFixed else Colors.Transparent)
-                                .color(if (isActive) AppColors.OnPrimaryFixedVariant else AppColors.OnSurfaceVariant)
+                                .borderRadius(AppRadius.Full)
+                                .backgroundColor(if (isActive) AppColors.PrimaryContainer else Colors.Transparent)
+                                .color(if (isActive) AppColors.OnPrimaryContainer else AppColors.OnSurfaceVariant)
                                 .fontWeight(if (isActive) 700 else 400)
                                 .textDecorationLine(TextDecorationLine.None)
                                 .onClick { isMenuOpen = false },
@@ -179,6 +181,7 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
         Column(Modifier.fillMaxWidth()) {
             content()
             Footer()
+            CopyrightStrip()
         }
     }
 }

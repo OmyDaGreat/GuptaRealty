@@ -21,7 +21,7 @@ val FloatingContactStyle =
                 .borderRadius(AppRadius.Xl)
                 .then(AppModifiers.CardBorder)
                 .padding(AppSpacing.S3)
-                .boxShadow(0.px, 8.px, 32.px, 0.px, AppColors.PrimaryContainer.withAlpha(0.12f))
+                .boxShadow(0.px, 8.px, 32.px, 0.px, AppColors.OnSurface.withAlpha(0.12f))
                 .position(Position.Fixed)
                 .bottom(24.px)
                 .right(24.px)

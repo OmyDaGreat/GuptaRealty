@@ -34,13 +34,30 @@ val StatusChipAccentStyle =
         }
     }
 
-/** DRE numbers, info labels — Lavender neutral pill */
+/** DRE numbers, info labels, featured badges — Lavender neutral pill */
 val StatusChipNeutralStyle =
     CssStyle {
         base {
             Modifier
-                .backgroundColor(AppColors.PrimaryFixed)
-                .color(AppColors.OnPrimaryFixedVariant)
+                .backgroundColor(AppColors.PrimaryContainer)
+                .color(AppColors.OnPrimaryContainer)
+                .padding(topBottom = 4.px, leftRight = 10.px)
+                .borderRadius(AppRadius.Full)
+                .fontFamily(*AppFonts.BODY_STACK)
+                .fontSize(12.px)
+                .lineHeight(1.2)
+                .display(DisplayStyle.LegacyInlineFlex)
+                .alignItems(AlignItems.Center)
+        }
+    }
+
+/** Amenity / feature tags — Warm Olive neutral pill */
+val StatusChipTertiaryStyle =
+    CssStyle {
+        base {
+            Modifier
+                .backgroundColor(AppColors.TertiaryContainer)
+                .color(AppColors.OnTertiaryContainer)
                 .padding(topBottom = 4.px, leftRight = 10.px)
                 .borderRadius(AppRadius.Full)
                 .fontFamily(*AppFonts.BODY_STACK)

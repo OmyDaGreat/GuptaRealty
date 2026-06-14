@@ -31,7 +31,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
-import com.varabyte.kobweb.compose.ui.modifiers.outline
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
@@ -56,9 +55,11 @@ import org.jetbrains.compose.web.dom.PasswordInput
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppModifiers
+import xyz.malefic.guptarealty.styles.AppRadius
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.BodyMdStyle
 import xyz.malefic.guptarealty.styles.HeadlineSmStyle
+import xyz.malefic.guptarealty.styles.InputStyle
 import xyz.malefic.guptarealty.util.postApi
 
 data class AdminLayoutScope(
@@ -127,9 +128,9 @@ fun AdminLayout(
                 Modifier
                     .width(260.px)
                     .fillMaxHeight()
-                    .backgroundColor(AppColors.Surface)
+                    .backgroundColor(AppColors.SurfaceContainer)
                     .padding(AppSpacing.S3)
-                    .borderRight(1.px, LineStyle.Solid, AppColors.OutlineVariant),
+                    .borderRight(1.px, LineStyle.Solid, AppColors.Outline),
             ) {
                 H1(
                     HeadlineSmStyle
@@ -201,12 +202,8 @@ private fun TokenInput(
             }
             PasswordInput(
                 token,
-                Modifier
-                    .fillMaxWidth()
-                    .padding(AppSpacing.S2)
-                    .borderRadius(8.px)
-                    .border(1.px, LineStyle.Solid, AppColors.OutlineVariant)
-                    .outline(0.px)
+                InputStyle
+                    .toModifier()
                     .toAttrs {
                         onInput { setToken(it.value) }
                         placeholder("Enter token...")
@@ -236,9 +233,9 @@ private fun AdminNavLink(
         Modifier
             .fillMaxWidth()
             .padding(AppSpacing.S2)
-            .borderRadius(8.px)
-            .backgroundColor(if (isActive) AppColors.PrimaryFixed else Colors.Transparent)
-            .color(if (isActive) AppColors.OnPrimaryFixedVariant else AppColors.OnSurfaceVariant)
+            .borderRadius(AppRadius.Default)
+            .backgroundColor(if (isActive) AppColors.PrimaryContainer else Colors.Transparent)
+            .color(if (isActive) AppColors.OnPrimaryContainer else AppColors.OnSurfaceVariant)
             .fontWeight(if (isActive) FontWeight.Bold else FontWeight.Normal)
             .textDecorationLine(TextDecorationLine.None)
             .margin(bottom = AppSpacing.S1),
