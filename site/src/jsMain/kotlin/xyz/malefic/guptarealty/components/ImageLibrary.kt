@@ -84,12 +84,12 @@ fun ImageLibrary(
             ) { Text("Upload New") }
         }
 
-        Loading(images) { allImages ->
-            if (allImages.isEmpty()) {
+        Loading(images) {
+            if (this.isEmpty()) {
                 P { Text("No images uploaded yet.") }
             } else {
                 SimpleGrid(numColumns(2, sm = 3, md = 4, lg = 6), Modifier.gap(AppSpacing.S2)) {
-                    allImages.forEach { fileName ->
+                    this.forEach { fileName ->
                         val url = "/assets/$fileName"
                         Column(
                             Modifier

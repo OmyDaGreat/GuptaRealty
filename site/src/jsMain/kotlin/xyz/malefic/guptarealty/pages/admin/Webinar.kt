@@ -113,24 +113,23 @@ fun AdminLayoutScope.WebinarPage() {
             }
         }
 
-        Loading(webinar) { currentWebinar ->
-            Column(
-                ContentCardStyle
-                    .toModifier()
-                    .fillMaxWidth()
-                    .margin(bottom = AppSpacing.S4),
-            ) {
+        Column(
+            ContentCardStyle
+                .toModifier()
+                .fillMaxWidth()
+                .margin(bottom = AppSpacing.S4),
+        ) {
+            Loading(webinar) {
                 H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Main Webinar Info") }
-
-                AdminField("Header", currentWebinar.header) { webinar = webinar?.copy(header = it) }
-                AdminField("Title", currentWebinar.title) { webinar = webinar?.copy(title = it) }
-                AdminTextArea("Description", currentWebinar.description) {
+                AdminField("Header", header) { webinar = webinar?.copy(header = it) }
+                AdminField("Title", title) { webinar = webinar?.copy(title = it) }
+                AdminTextArea("Description", description) {
                     webinar = webinar?.copy(description = it)
                 }
-                AdminField("Image URL", currentWebinar.imageUrl) {
+                AdminField("Image URL", imageUrl) {
                     webinar = webinar?.copy(imageUrl = it)
                 }
-                AdminDateTimeSelector("Date & Time", currentWebinar.instant) {
+                AdminDateTimeSelector("Date & Time", instant) {
                     webinar = webinar?.copy(instant = it)
                 }
 
@@ -156,19 +155,18 @@ fun AdminLayoutScope.WebinarPage() {
             }
         }
 
-        Loading(registrations) { currentRegistrations ->
-            Column(
-                ContentCardStyle
-                    .toModifier()
-                    .fillMaxWidth()
-                    .margin(bottom = AppSpacing.S4),
-            ) {
+        Column(
+            ContentCardStyle
+                .toModifier()
+                .fillMaxWidth()
+                .margin(bottom = AppSpacing.S4),
+        ) {
+            Loading(registrations) {
                 H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Current Registrations") }
-
-                if (currentRegistrations.isEmpty()) {
+                if (this.isEmpty()) {
                     P(LabelMdStyle.toModifier().toAttrs()) { Text("No registrations accessible.") }
                 } else {
-                    currentRegistrations.forEach { registration ->
+                    this.forEach { registration ->
                         Row(
                             Modifier
                                 .fillMaxWidth()
@@ -190,22 +188,22 @@ fun AdminLayoutScope.WebinarPage() {
             }
         }
 
-        Loading(tipsSection) { currentTips ->
-            Column(
-                ContentCardStyle
-                    .toModifier()
-                    .fillMaxWidth()
-                    .margin(bottom = AppSpacing.S4),
-            ) {
+        Column(
+            ContentCardStyle
+                .toModifier()
+                .fillMaxWidth()
+                .margin(bottom = AppSpacing.S4),
+        ) {
+            Loading(tipsSection) {
                 H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Tips Section (Exactly 3)") }
 
-                AdminField("Section Header", currentTips.header) {
+                AdminField("Section Header", header) {
                     tipsSection = tipsSection?.copy(header = it)
                 }
 
                 Row(Modifier.fillMaxWidth().gap(AppSpacing.S2).margin(bottom = AppSpacing.S4)) {
                     (0..2).forEach { index ->
-                        val tip = currentTips.tips.getOrNull(index) ?: WebinarTip("help", "New Tip", "Description...")
+                        val tip = tips.getOrNull(index) ?: WebinarTip("help", "New Tip", "Description...")
                         Column(
                             Modifier
                                 .weight(1f)
@@ -215,7 +213,7 @@ fun AdminLayoutScope.WebinarPage() {
                         ) {
                             H2(LabelMdStyle.toModifier().margin(bottom = AppSpacing.S2).toAttrs()) { Text("Tip #${index + 1}") }
                             AdminField("Icon", tip.icon) {
-                                val newList = currentTips.tips.toMutableList()
+                                val newList = tips.toMutableList()
                                 while (newList.size <= index) {
                                     newList.add(
                                         WebinarTip(
@@ -229,7 +227,7 @@ fun AdminLayoutScope.WebinarPage() {
                                 tipsSection = tipsSection?.copy(tips = newList)
                             }
                             AdminField("Title", tip.title) {
-                                val newList = currentTips.tips.toMutableList()
+                                val newList = tips.toMutableList()
                                 while (newList.size <= index) {
                                     newList.add(
                                         WebinarTip(
@@ -243,7 +241,7 @@ fun AdminLayoutScope.WebinarPage() {
                                 tipsSection = tipsSection?.copy(tips = newList)
                             }
                             AdminTextArea("Description", tip.description) {
-                                val newList = currentTips.tips.toMutableList()
+                                val newList = tips.toMutableList()
                                 while (newList.size <= index) {
                                     newList.add(
                                         WebinarTip(
@@ -269,7 +267,7 @@ fun AdminLayoutScope.WebinarPage() {
                         .backgroundColor(AppColors.SurfaceLow)
                         .borderRadius(AppRadius.Xl),
                 ) {
-                    currentTips.tips.take(3).forEach { tip ->
+                    tips.take(3).forEach { tip ->
                         Box(Modifier.weight(1f)) {
                             MistakeCard(tip.title, tip.description) { MdIcon(tip.icon, it) }
                         }
@@ -302,14 +300,14 @@ fun AdminLayoutScope.WebinarPage() {
             }
         }
 
-        Loading(reviews) { allReviews ->
-            Column(ContentCardStyle.toModifier().fillMaxWidth().margin(bottom = AppSpacing.S4)) {
+        Column(ContentCardStyle.toModifier().fillMaxWidth().margin(bottom = AppSpacing.S4)) {
+            Loading(reviews) {
                 H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Webinar Reviews") }
 
-                if (allReviews.isEmpty()) {
+                if (this.isEmpty()) {
                     P(LabelMdStyle.toModifier().toAttrs()) { Text("No reviews yet.") }
                 } else {
-                    allReviews.forEachIndexed { index, review ->
+                    this.forEachIndexed { index, review ->
                         Column(
                             Modifier
                                 .fillMaxWidth()

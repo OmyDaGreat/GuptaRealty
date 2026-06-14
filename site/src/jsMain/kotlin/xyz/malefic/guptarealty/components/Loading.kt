@@ -35,17 +35,9 @@ fun <T> Loading(
     value: T?,
     modifier: Modifier = Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap),
     contentAlignment: Alignment = Alignment.Center,
-    loadingContent: @Composable () -> Unit = { DefaultSpinner() },
-    content: @Composable (T) -> Unit = {},
-) {
-    if (value == null) {
-        Box(modifier, contentAlignment) {
-            loadingContent()
-        }
-    } else {
-        content(value)
-    }
-}
+    loadingContent: @Composable () -> Unit = { Spinner() },
+    content: @Composable T.() -> Unit = {},
+) = value?.let { value.content() } ?: Box(modifier, contentAlignment) { loadingContent() }
 
 val SpinKeyframes =
     Keyframes {
@@ -55,7 +47,7 @@ val SpinKeyframes =
     }
 
 @Composable
-fun DefaultSpinner() {
+fun Spinner() {
     Box(
         Modifier
             .size(48.px)

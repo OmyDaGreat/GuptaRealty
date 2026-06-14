@@ -79,8 +79,8 @@ fun BlogIndexPage() {
             contentAlignment = Alignment.Center,
         ) {
             Box(ContainerStyle.toModifier()) {
-                Loading(posts) { allPosts ->
-                    if (allPosts.isEmpty()) {
+                Loading(posts) {
+                    if (this.isEmpty()) {
                         Box(Modifier.fillMaxWidth().padding(topBottom = 100.px), contentAlignment = Alignment.Center) {
                             P(BodyLgStyle.toModifier().toAttrs()) {
                                 Text("No blog posts found.")
@@ -91,7 +91,7 @@ fun BlogIndexPage() {
                             numColumns(1, sm = 2, md = 3),
                             Modifier.gap(AppSpacing.Gutter).padding(topBottom = AppSpacing.SectionGap),
                         ) {
-                            allPosts.forEach { post ->
+                            this.forEach { post ->
                                 BlogCard(post)
                             }
                         }

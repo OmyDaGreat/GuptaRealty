@@ -103,18 +103,16 @@ fun HomePage() {
         posts = getBlog().sortedByDescending { it.date }.take(3)
     }
 
-    Loading(settings) { s ->
-        Column(Modifier.fillMaxSize()) {
-            HeroSection(s)
-            AboutSection(s)
-            BlogPreviewSection(posts)
-            CTASection(s)
-        }
+    Column(Modifier.fillMaxSize()) {
+        HeroSection(settings)
+        AboutSection(settings)
+        BlogPreviewSection(posts)
+        CTASection(settings)
     }
 }
 
 @Composable
-fun HeroSection(s: HomeInfo) {
+fun HeroSection(settings: HomeInfo?) {
     Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
@@ -122,17 +120,19 @@ fun HeroSection(s: HomeInfo) {
                 Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
             ) {
                 Column(Modifier.padding(topBottom = AppSpacing.SectionGap)) {
-                    H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
-                        Text(s.heroTitle)
-                    }
-                    P(
-                        BodyLgStyle
-                            .toModifier()
-                            .color(AppColors.OnSurfaceVariant)
-                            .margin(bottom = 32.px)
-                            .toAttrs(),
-                    ) {
-                        Text(s.heroSubtitle)
+                    Loading(settings) {
+                        H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
+                            Text(heroTitle)
+                        }
+                        P(
+                            BodyLgStyle
+                                .toModifier()
+                                .color(AppColors.OnSurfaceVariant)
+                                .margin(bottom = 32.px)
+                                .toAttrs(),
+                        ) {
+                            Text(heroSubtitle)
+                        }
                     }
                     Row(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap)) {
                         Link("https://example.com", PrimaryButtonStyle.toModifier()) {
@@ -152,11 +152,13 @@ fun HeroSection(s: HomeInfo) {
                             .rotate(3.deg)
                             .overflow(Overflow.Hidden),
                     ) {
-                        Image(
-                            s.heroImage,
-                            "Hero Image",
-                            Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
-                        )
+                        Loading(settings) {
+                            Image(
+                                heroImage,
+                                "Hero Image",
+                                Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
+                            )
+                        }
                     }
                 }
             }
@@ -165,7 +167,7 @@ fun HeroSection(s: HomeInfo) {
 }
 
 @Composable
-fun AboutSection(s: HomeInfo) {
+fun AboutSection(settings: HomeInfo?) {
     Box(SectionWarmStyle.toModifier(), Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             SimpleGrid(
@@ -173,65 +175,20 @@ fun AboutSection(s: HomeInfo) {
                 Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
             ) {
                 Box(Modifier.gridColumn("span 5")) {
-                    Image(
-                        s.aboutImage,
-                        "About Image",
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(4, 5)
-                            .borderRadius(AppRadius.Lg)
-                            .then(AppModifiers.SoftShadow),
-                    )
+                    Loading(settings) {
+                        Image(
+                            aboutImage,
+                            "About Image",
+                            Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(4, 5)
+                                .borderRadius(AppRadius.Lg)
+                                .then(AppModifiers.SoftShadow),
+                        )
+                    }
                 }
                 Column(Modifier.gridColumn("span 7").padding(left = AppSpacing.S5)) {
-                    Span(
-                        LabelMdStyle
-                            .toModifier()
-                            .color(AppColors.Secondary)
-                            .letterSpacing(0.2.em)
-                            .textTransform(TextTransform.Uppercase)
-                            .margin(bottom = 16.px)
-                            .toAttrs(),
-                    ) {
-                        Text(s.aboutLabel)
-                    }
-                    H2(
-                        DisplayLgStyle
-                            .toModifier()
-                            .fontSize(32.px)
-                            .margin(bottom = 24.px)
-                            .toAttrs(),
-                    ) {
-                        Text(s.aboutTitle)
-                    }
-
-                    P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
-                        Text(s.aboutDescription)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
-    Loading(posts) { allPosts ->
-        Box(
-            SectionStyle
-                .toModifier()
-                .backgroundColor(AppColors.SurfaceLowest),
-            contentAlignment = Alignment.Center,
-        ) {
-            Box(ContainerStyle.toModifier()) {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .justifyContent(JustifyContent.SpaceBetween)
-                        .alignItems(AlignItems.End)
-                        .margin(bottom = 48.px),
-                ) {
-                    Column {
+                    Loading(settings) {
                         Span(
                             LabelMdStyle
                                 .toModifier()
@@ -241,26 +198,75 @@ fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
                                 .margin(bottom = 16.px)
                                 .toAttrs(),
                         ) {
-                            Text("Insights")
+                            Text(aboutLabel)
                         }
-                        H2(DisplayLgStyle.toModifier().fontSize(32.px).toAttrs()) {
-                            Text("The Realty Blog")
+                        H2(
+                            DisplayLgStyle
+                                .toModifier()
+                                .fontSize(32.px)
+                                .margin(bottom = 24.px)
+                                .toAttrs(),
+                        ) {
+                            Text(aboutTitle)
                         }
-                    }
-                    Link(
-                        "/blog/",
-                        ShowOnMdStyle
-                            .toModifier()
-                            .color(AppColors.Primary)
-                            .fontWeight(FontWeight.Bold)
-                            .textDecorationLine(TextDecorationLine.None),
-                    ) {
-                        Text("View All Stories")
+
+                        P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
+                            Text(aboutDescription)
+                        }
                     }
                 }
+            }
+        }
+    }
+}
 
+@Composable
+fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
+    Box(
+        SectionStyle
+            .toModifier()
+            .backgroundColor(AppColors.SurfaceLowest),
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(ContainerStyle.toModifier()) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .justifyContent(JustifyContent.SpaceBetween)
+                    .alignItems(AlignItems.End)
+                    .margin(bottom = 48.px),
+            ) {
+                Column {
+                    Span(
+                        LabelMdStyle
+                            .toModifier()
+                            .color(AppColors.Secondary)
+                            .letterSpacing(0.2.em)
+                            .textTransform(TextTransform.Uppercase)
+                            .margin(bottom = 16.px)
+                            .toAttrs(),
+                    ) {
+                        Text("Insights")
+                    }
+                    H2(DisplayLgStyle.toModifier().fontSize(32.px).toAttrs()) {
+                        Text("The Realty Blog")
+                    }
+                }
+                Link(
+                    "/blog/",
+                    ShowOnMdStyle
+                        .toModifier()
+                        .color(AppColors.Primary)
+                        .fontWeight(FontWeight.Bold)
+                        .textDecorationLine(TextDecorationLine.None),
+                ) {
+                    Text("View All Stories")
+                }
+            }
+
+            Loading(posts) {
                 SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
-                    allPosts.forEach { post ->
+                    this.forEach { post ->
                         BlogCard(post)
                     }
                 }
@@ -326,7 +332,7 @@ fun BlogCard(post: BlogPostResponse) {
 }
 
 @Composable
-fun CTASection(s: HomeInfo) {
+fun CTASection(settings: HomeInfo?) {
     Box(SectionStyle.toModifier(), contentAlignment = Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             Column(
@@ -340,36 +346,38 @@ fun CTASection(s: HomeInfo) {
                     .overflow(Overflow.Hidden),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                H2(
-                    DisplayLgStyle
-                        .toModifier()
-                        .color(AppColors.OnSecondaryFixed)
-                        .margin(bottom = 24.px)
-                        .toAttrs(),
-                ) {
-                    Text(s.ctaTitle)
-                }
-                P(
-                    BodyLgStyle
-                        .toModifier()
-                        .color(AppColors.OnSecondaryFixedVariant)
-                        .margin(bottom = 40.px)
-                        .maxWidth(600.px)
-                        .styleModifier {
-                            property("margin-inline", "auto")
-                        }.toAttrs(),
-                ) {
-                    Text(s.ctaDescription)
-                }
-                Row(Modifier.gap(16.px).justifyContent(JustifyContent.Center).flexWrap(FlexWrap.Wrap)) {
-                    Link(s.ctaSearchLink, PrimaryButtonStyle.toModifier()) {
-                        Text("Search Now")
-                    }
-                    Link(
-                        s.ctaDownloadLink,
-                        SecondaryButtonStyle.toModifier().color(AppColors.OnSecondaryFixed).border(color = AppColors.OnSecondaryFixed),
+                Loading(settings) {
+                    H2(
+                        DisplayLgStyle
+                            .toModifier()
+                            .color(AppColors.OnSecondaryFixed)
+                            .margin(bottom = 24.px)
+                            .toAttrs(),
                     ) {
-                        Text("Download Homebuyer Guide")
+                        Text(ctaTitle)
+                    }
+                    P(
+                        BodyLgStyle
+                            .toModifier()
+                            .color(AppColors.OnSecondaryFixedVariant)
+                            .margin(bottom = 40.px)
+                            .maxWidth(600.px)
+                            .styleModifier {
+                                property("margin-inline", "auto")
+                            }.toAttrs(),
+                    ) {
+                        Text(ctaDescription)
+                    }
+                    Row(Modifier.gap(16.px).justifyContent(JustifyContent.Center).flexWrap(FlexWrap.Wrap)) {
+                        Link(ctaSearchLink, PrimaryButtonStyle.toModifier()) {
+                            Text("Search Now")
+                        }
+                        Link(
+                            ctaDownloadLink,
+                            SecondaryButtonStyle.toModifier().color(AppColors.OnSecondaryFixed).border(color = AppColors.OnSecondaryFixed),
+                        ) {
+                            Text("Download Homebuyer Guide")
+                        }
                     }
                 }
             }

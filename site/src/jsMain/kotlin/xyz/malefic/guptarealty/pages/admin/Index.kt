@@ -87,61 +87,61 @@ fun AdminLayoutScope.HomePage() {
             }
         }
 
-        Loading(settings) { s ->
-            Column(
-                AppModifiers.Card
-                    .padding(AppSpacing.S4)
-                    .fillMaxWidth()
-                    .margin(bottom = AppSpacing.S4),
-            ) {
+        Column(
+            AppModifiers.Card
+                .padding(AppSpacing.S4)
+                .fillMaxWidth()
+                .margin(bottom = AppSpacing.S4),
+        ) {
+            Loading(settings) {
                 H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) { Text("Hero Section") }
-                AdminField("Hero Title", s.heroTitle) { settings = settings?.copy(heroTitle = it) }
-                AdminField("Hero Subtitle", s.heroSubtitle) {
+                AdminField("Hero Title", heroTitle) { settings = settings?.copy(heroTitle = it) }
+                AdminField("Hero Subtitle", heroSubtitle) {
                     settings = settings?.copy(heroSubtitle = it)
                 }
                 Row(Modifier.gap(AppSpacing.S2), verticalAlignment = Alignment.CenterVertically) {
-                    AdminField("Hero Image URL", s.heroImage) {
+                    AdminField("Hero Image URL", heroImage) {
                         settings = settings?.copy(heroImage = it)
                     }
                     Button(Modifier.onClick { selectingImageFor = "heroImage" }.toAttrs()) { Text("Pick") }
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) { Text("About Section") }
-                AdminField("About Label", s.aboutLabel) {
+                AdminField("About Label", aboutLabel) {
                     settings = settings?.copy(aboutLabel = it)
                 }
-                AdminField("About Title", s.aboutTitle) {
+                AdminField("About Title", aboutTitle) {
                     settings = settings?.copy(aboutTitle = it)
                 }
-                AdminTextArea("About Description", s.aboutDescription) {
+                AdminTextArea("About Description", aboutDescription) {
                     settings = settings?.copy(aboutDescription = it)
                 }
                 Row(Modifier.gap(AppSpacing.S2), verticalAlignment = Alignment.CenterVertically) {
-                    AdminField("About Image URL", s.aboutImage) {
+                    AdminField("About Image URL", aboutImage) {
                         settings = settings?.copy(aboutImage = it)
                     }
                     Button(Modifier.onClick { selectingImageFor = "aboutImage" }.toAttrs()) { Text("Pick") }
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) { Text("CTA Section") }
-                AdminField("CTA Title", s.ctaTitle) { settings = settings?.copy(ctaTitle = it) }
-                AdminField("CTA Description", s.ctaDescription) {
+                AdminField("CTA Title", ctaTitle) { settings = settings?.copy(ctaTitle = it) }
+                AdminField("CTA Description", ctaDescription) {
                     settings = settings?.copy(ctaDescription = it)
                 }
-                AdminField("CTA Search Link", s.ctaSearchLink) {
+                AdminField("CTA Search Link", ctaSearchLink) {
                     settings = settings?.copy(ctaSearchLink = it)
                 }
-                AdminField("CTA Download Link", s.ctaDownloadLink) {
+                AdminField("CTA Download Link", ctaDownloadLink) {
                     settings = settings?.copy(ctaDownloadLink = it)
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) { Text("Contact & Global") }
-                AdminField("Email", s.contactEmail) { settings = settings?.copy(contactEmail = it) }
-                AdminField("Phone", s.contactPhone) { settings = settings?.copy(contactPhone = it) }
-                AdminField("Address", s.contactAddress) {
+                AdminField("Email", contactEmail) { settings = settings?.copy(contactEmail = it) }
+                AdminField("Phone", contactPhone) { settings = settings?.copy(contactPhone = it) }
+                AdminField("Address", contactAddress) {
                     settings = settings?.copy(contactAddress = it)
                 }
-                AdminField("DRE#", s.dreNumber) { settings = settings?.copy(dreNumber = it) }
+                AdminField("DRE#", dreNumber) { settings = settings?.copy(dreNumber = it) }
 
                 Button(
                     SecondaryButtonStyle

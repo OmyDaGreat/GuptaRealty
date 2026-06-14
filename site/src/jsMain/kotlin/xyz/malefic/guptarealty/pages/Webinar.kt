@@ -154,7 +154,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                 webinar = getWebinar()
             }
 
-            Loading(webinar) { w ->
+            Loading(webinar) {
                 SimpleGrid(
                     numColumns(1, lg = 12),
                     Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
@@ -168,9 +168,9 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                                 .borderRadius(AppRadius.Full)
                                 .margin(bottom = 24.px)
                                 .toAttrs(),
-                        ) { Text(w.header) }
+                        ) { Text(header) }
                         H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
-                            Text(w.title)
+                            Text(title)
                         }
                         P(
                             BodyLgStyle
@@ -179,7 +179,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                                 .margin(bottom = 40.px)
                                 .toAttrs(),
                         ) {
-                            Text(w.description)
+                            Text(description)
                         }
                         Box(
                             Modifier
@@ -191,8 +191,8 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                                 .position(Position.Relative),
                         ) {
                             Image(
-                                w.imageUrl,
-                                w.title,
+                                imageUrl,
+                                title,
                                 Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
                             )
                             Box(
@@ -219,7 +219,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                             }
                         }
                     }
-                    RegistrationSection(coroutineScope, w.instant.toDisplayString())
+                    RegistrationSection(coroutineScope, instant.toDisplayString())
                 }
             }
         }
@@ -428,9 +428,9 @@ fun TipsSection() {
                 mistakes = getWebinarTips()
             }
 
-            Loading(mistakes) { m ->
+            Loading(mistakes) {
                 Column(Modifier.fillMaxWidth().textAlign(TextAlign.Center).margin(bottom = 64.px)) {
-                    H2(HeadlineMdStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text(m.header) }
+                    H2(HeadlineMdStyle.toModifier().margin(bottom = 16.px).toAttrs()) { Text(header) }
                     Box(
                         Modifier
                             .size(width = 96.px, height = 6.px)
@@ -439,8 +439,8 @@ fun TipsSection() {
                     )
                 }
                 SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
-                    m.tips.forEach { m ->
-                        MistakeCard(m.title, m.description) { MdIcon(m.icon, it) }
+                    tips.forEach { tip ->
+                        MistakeCard(tip.title, tip.description) { MdIcon(tip.icon, it) }
                     }
                 }
             }
@@ -493,8 +493,8 @@ fun TestimonialsSection(coroutineScope: CoroutineScope) {
                         }
                     }
                 }
-                Loading(reviews) { rs ->
-                    TestimonialCard(rs[currentIndex], visible)
+                Loading(reviews) {
+                    TestimonialCard(this[currentIndex], visible)
                 }
             }
         }

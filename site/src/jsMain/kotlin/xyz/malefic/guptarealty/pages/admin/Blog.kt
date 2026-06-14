@@ -118,9 +118,9 @@ fun AdminLayoutScope.BlogPage() {
                     },
             ) { Text("Create New Post") }
 
-            Loading(posts) { allPosts ->
-                Column(Modifier.fillMaxWidth().gap(AppSpacing.S2)) {
-                    allPosts.forEach { post ->
+            Column(Modifier.fillMaxWidth().gap(AppSpacing.S2)) {
+                Loading(posts) {
+                    this.forEach { post ->
                         Row(
                             AppModifiers.Card.padding(AppSpacing.S3).fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,

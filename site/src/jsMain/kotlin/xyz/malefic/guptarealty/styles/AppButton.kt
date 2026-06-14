@@ -77,7 +77,7 @@ val SecondaryButtonStyle =
             Modifier
                 .backgroundColor(Colors.Transparent)
                 .color(AppColors.Primary)
-                .padding(topBottom = 12.px, leftRight = AppSpacing.S3)
+                .padding(topBottom = 10.px, leftRight = AppSpacing.S3)
                 .borderRadius(AppRadius.Default)
                 .border(2.px, LineStyle.Solid, AppColors.Primary)
                 .cursor(Cursor.Pointer)

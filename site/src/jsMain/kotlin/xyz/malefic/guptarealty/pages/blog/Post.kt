@@ -80,20 +80,18 @@ fun IndividualPostPage(ctx: PageContext) {
                 }
             }
 
-            Loading(post) { blogPost ->
-                Column(Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth()) {
+                Loading(post) {
                     Row(Modifier.gap(8.px).margin(bottom = 16.px)) {
-                        blogPost.tags.forEach { tag ->
-                            Span(
-                                StatusChipTertiaryStyle
-                                    .toModifier()
-                                    .toAttrs(),
-                            ) { Text(tag) }
+                        tags.forEach { tag ->
+                            Span(StatusChipTertiaryStyle.toModifier().toAttrs()) {
+                                Text(tag)
+                            }
                         }
                     }
 
                     H1(DisplayLgStyle.toModifier().margin(bottom = 16.px).toAttrs()) {
-                        Text(blogPost.title)
+                        Text(title)
                     }
 
                     Span(
@@ -103,13 +101,13 @@ fun IndividualPostPage(ctx: PageContext) {
                             .margin(bottom = 48.px)
                             .toAttrs(),
                     ) {
-                        Text("Published on ${blogPost.date}")
+                        Text("Published on $date")
                     }
 
-                    if (blogPost.imageUrl != null) {
+                    imageUrl?.let {
                         Image(
-                            blogPost.imageUrl,
-                            blogPost.title,
+                            imageUrl,
+                            title,
                             Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(21, 9)
@@ -126,7 +124,7 @@ fun IndividualPostPage(ctx: PageContext) {
                             .align(Alignment.CenterHorizontally),
                     ) {
                         MarkdownContent(
-                            blogPost.content,
+                            content,
                             Modifier
                                 .fillMaxWidth()
                                 .color(AppColors.OnSurface)
