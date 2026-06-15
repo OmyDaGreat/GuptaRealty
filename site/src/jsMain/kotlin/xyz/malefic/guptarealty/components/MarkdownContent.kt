@@ -33,7 +33,7 @@ import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.Div
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppFonts
-import xyz.malefic.guptarealty.util.Editor
+import xyz.malefic.guptarealty.util.js.Editor
 import kotlin.random.Random
 
 val MarkdownContentStyle =

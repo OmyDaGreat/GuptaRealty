@@ -63,10 +63,10 @@ kotlin {
         jsMain.dependencies {
             implementation(npm("@js-joda/timezone", "2.25.1"))
             implementation(npm("@toast-ui/editor", "3.2.2"))
+            implementation(npm("minisearch", "7.2.0"))
             implementation(libs.bundles.silk.icons)
             implementation(libs.bundles.compose)
             implementation(libs.bundles.kobweb)
-            implementation(libs.kurrency)
             implementation(libs.kutint)
             implementation(wrappers.js)
         }

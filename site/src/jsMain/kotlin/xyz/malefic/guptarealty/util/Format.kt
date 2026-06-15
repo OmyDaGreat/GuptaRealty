@@ -2,14 +2,7 @@ package xyz.malefic.guptarealty.util
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.kimplify.kurrency.CurrencyFormatter
-import org.kimplify.kurrency.Kurrency
 import kotlin.time.Instant
-
-val formatter = CurrencyFormatter()
-
-val Number.price: String
-    get() = formatter.formatCurrencyStyle(this.toString(), Kurrency.USD)
 
 fun Instant.toDisplayString(timeZone: TimeZone = TimeZone.currentSystemDefault()): String {
     val dt = toLocalDateTime(timeZone)

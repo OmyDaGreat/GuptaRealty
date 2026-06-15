@@ -1,4 +1,4 @@
-package xyz.malefic.guptarealty.util
+package xyz.malefic.guptarealty.util.js
 
 @JsModule("@toast-ui/editor")
 @JsNonModule

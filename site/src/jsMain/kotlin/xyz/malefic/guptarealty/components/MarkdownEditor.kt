@@ -13,7 +13,7 @@ import com.varabyte.kobweb.compose.ui.toAttrs
 import js.objects.unsafeJso
 import kotlinx.browser.document
 import org.jetbrains.compose.web.dom.Div
-import xyz.malefic.guptarealty.util.Editor
+import xyz.malefic.guptarealty.util.js.Editor
 import kotlin.random.Random
 
 @Composable
