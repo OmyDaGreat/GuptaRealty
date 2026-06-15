@@ -14,6 +14,7 @@ import xyz.malefic.guptarealty.server.api.admin
 import xyz.malefic.guptarealty.server.api.assets
 import xyz.malefic.guptarealty.server.api.blog
 import xyz.malefic.guptarealty.server.api.home
+import xyz.malefic.guptarealty.server.api.testimonial
 import xyz.malefic.guptarealty.server.api.webinar
 import xyz.malefic.guptarealty.server.util.assetsPath
 import xyz.malefic.guptarealty.server.util.mimeTypes
@@ -39,7 +40,7 @@ private fun serveStaticFile(req: Request): Response {
     }
 
     val ext = requestPath.substringAfterLast('.', "")
-    val target = if (requestPath.isEmpty() || ext.isEmpty()) "index.html" else requestPath
+    val target = if (requestPath.isBlank() || ext.isBlank()) "index.html" else requestPath
     val contentType = mimeTypes.getOrDefault(ext.lowercase(), "text/html; charset=utf-8")
 
     for (root in staticRoots) {
@@ -65,6 +66,7 @@ val apiRoutes: RoutingHttpHandler =
         *home,
         *blog,
         *webinar,
+        *testimonial,
     )
 
 val http: HttpHandler =

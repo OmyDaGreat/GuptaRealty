@@ -287,7 +287,7 @@ fun BlogCard(post: BlogPostResponse) {
                 .margin(bottom = 16.px),
         ) {
             Image(
-                post.imageUrl ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png", // TODO: Better default image
+                post.imageSrc ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png", // TODO: Better default image
                 post.title,
                 Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
             )

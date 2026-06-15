@@ -13,7 +13,7 @@ data class BlogPostResponse(
     val title: String,
     val summary: String,
     val content: String,
-    val imageUrl: String? = null,
+    val imageSrc: String? = null,
     val tags: List<String> = emptyList(),
     val date: LocalDate,
 )
@@ -23,7 +23,7 @@ data class BlogPostRequest(
     val title: String,
     val summary: String,
     val content: String,
-    val imageUrl: String? = null,
+    val imageSrc: String? = null,
     val tags: List<String> = emptyList(),
 ) {
     fun toResponse(
@@ -33,5 +33,5 @@ data class BlogPostRequest(
                 .now()
                 .toLocalDateTime(TimeZone.currentSystemDefault())
                 .date,
-    ) = BlogPostResponse(id, title, summary, content, imageUrl, tags, date)
+    ) = BlogPostResponse(id, title, summary, content, imageSrc, tags, date)
 }

@@ -63,7 +63,7 @@ object AppColors {
     val OnErrorContainer = parseHex("#93000a")
 
     // ── Background / Root ────────────────────────────────────────────────────
-    val Background = parseHex("#fdf9e9") // Ivory Mist
+    val Background = parseHex("#fdf9e9")
     val OnBackground = parseHex("#1c1c13")
     val SurfaceVariant = parseHex("#e6e3d3")
 }

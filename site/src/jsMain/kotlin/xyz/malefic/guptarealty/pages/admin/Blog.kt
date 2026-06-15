@@ -62,17 +62,17 @@ import xyz.malefic.guptarealty.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.styles.LabelMdStyle
 
 @InitRoute
-fun initBlogsPage(ctx: InitRouteContext) {
+fun initBlogPage(ctx: InitRouteContext) {
     ctx.data.add(AdminLayoutData(AdminPage.BLOG))
 }
 
 @Page
 @Composable
 fun AdminLayoutScope.BlogPage() {
+    val scope = rememberCoroutineScope()
     var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
     var editingPost by remember { mutableStateOf<BlogPostResponse?>(null) }
     var isCreating by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         posts = getBlog().sortedByDescending { it.date }
@@ -177,7 +177,7 @@ fun BlogEditor(
     var title by remember { mutableStateOf(post?.title ?: "") }
     var summary by remember { mutableStateOf(post?.summary ?: "") }
     var content by remember { mutableStateOf(post?.content ?: "") }
-    var imageUrl by remember { mutableStateOf(post?.imageUrl ?: "") }
+    var imageUrl by remember { mutableStateOf(post?.imageSrc ?: "") }
     var tagsString by remember { mutableStateOf(post?.tags?.joinToString(", ") ?: "") }
 
     Column(AppModifiers.Card.padding(AppSpacing.S4).fillMaxWidth()) {
@@ -214,8 +214,8 @@ fun BlogEditor(
                                     title = title,
                                     content = content,
                                     summary = summary,
-                                    imageUrl = imageUrl,
-                                    tags = tagsString.split(",").map { it.trim() }.filter { it.isNotEmpty() },
+                                    imageSrc = imageUrl,
+                                    tags = tagsString.split(",").map { it.trim() }.filter { it.isNotBlank() },
                                 ),
                             )
                         }

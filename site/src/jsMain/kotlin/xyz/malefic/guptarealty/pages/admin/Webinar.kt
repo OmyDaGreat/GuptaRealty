@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import co.touchlab.kermit.Logger
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import com.varabyte.kobweb.silk.components.icons.mdi.MdIcon
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiDelete
 import com.varabyte.kobweb.silk.components.icons.mdi.MdiPersonAdd
 import com.varabyte.kobweb.silk.style.toModifier
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.px
@@ -80,18 +82,23 @@ fun initWebinarPage(ctx: InitRouteContext) {
 @Page
 @Composable
 fun AdminLayoutScope.WebinarPage() {
+    val scope = rememberCoroutineScope()
     var webinar by remember { mutableStateOf<Webinar?>(null) }
     var tipsSection by remember { mutableStateOf<WebinarTipsSection?>(null) }
     var reviews by remember { mutableStateOf<List<WebinarReview>?>(null) }
     var registrations by remember { mutableStateOf<List<Registration>?>(null) }
     var message by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        webinar = getWebinar()
-        tipsSection = getWebinarTips()
-        reviews = getWebinarReviews()
-        registrations = getWebinarRegistrations(token)
+        val webinarDeferred = async { getWebinar() }
+        val tipsSectionDeferred = async { getWebinarTips() }
+        val reviewsDeferred = async { getWebinarReviews() }
+        val registrationsDeferred = async { getWebinarRegistrations(token) }
+
+        webinar = webinarDeferred.await()
+        tipsSection = tipsSectionDeferred.await()
+        reviews = reviewsDeferred.await()
+        registrations = registrationsDeferred.await()
     }
 
     Column(Modifier.fillMaxSize().overflow(Overflow.Auto).padding(AppSpacing.S4)) {
@@ -126,8 +133,8 @@ fun AdminLayoutScope.WebinarPage() {
                 AdminTextArea("Description", description) {
                     webinar = webinar?.copy(description = it)
                 }
-                AdminField("Image URL", imageUrl) {
-                    webinar = webinar?.copy(imageUrl = it)
+                AdminField("Image URL", imageSrc) {
+                    webinar = webinar?.copy(imageSrc = it)
                 }
                 DateTimeSelector("Date & Time", instant) {
                     webinar = webinar?.copy(instant = it)
@@ -144,6 +151,7 @@ fun AdminLayoutScope.WebinarPage() {
                                         postWebinar(token, webinar!!)
                                         message = "Webinar updated successfully" to true
                                     } catch (e: Exception) {
+                                        Logger.e(e, "Webinar") { "Failed to update webinar" }
                                         message = "Failed to update webinar" to false
                                     }
                                 }
@@ -271,6 +279,7 @@ fun AdminLayoutScope.WebinarPage() {
                                             postWebinarTips(token, section)
                                             "Tips updated successfully" to true
                                         } catch (e: Exception) {
+                                            Logger.e(e, "Webinar") { "Failed to update tips" }
                                             "Failed to update tips" to false
                                         }
                                 }
@@ -363,6 +372,7 @@ fun AdminLayoutScope.WebinarPage() {
                                             postWebinarReviews(token, reviews!!)
                                             message = "Reviews updated successfully" to true
                                         } catch (e: Exception) {
+                                            Logger.e(e, "Webinar") { "Failed to update reviews" }
                                             message = "Failed to update reviews" to false
                                         }
                                     }

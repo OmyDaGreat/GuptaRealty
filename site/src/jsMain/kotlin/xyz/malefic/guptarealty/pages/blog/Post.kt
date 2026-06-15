@@ -104,9 +104,9 @@ fun IndividualPostPage(ctx: PageContext) {
                         Text("Published on $date")
                     }
 
-                    imageUrl?.let {
+                    imageSrc?.let {
                         Image(
-                            imageUrl,
+                            imageSrc,
                             title,
                             Modifier
                                 .fillMaxWidth()

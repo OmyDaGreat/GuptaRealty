@@ -191,7 +191,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                                 .position(Position.Relative),
                         ) {
                             Image(
-                                imageUrl,
+                                imageSrc,
                                 title,
                                 Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
                             )

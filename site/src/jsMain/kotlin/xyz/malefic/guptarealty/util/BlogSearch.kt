@@ -34,7 +34,7 @@ object BlogSearch {
                         summary = post.summary
                         content = post.content
                         tags = post.tags.toTypedArray()
-                        imageUrl = post.imageUrl
+                        imageUrl = post.imageSrc
                         date = post.date.toString()
                     }
                 }.toTypedArray()

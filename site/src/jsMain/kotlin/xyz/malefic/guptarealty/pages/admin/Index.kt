@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import co.touchlab.kermit.Logger
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -59,8 +60,8 @@ fun initIndexPage(ctx: InitRouteContext) {
 @Page
 @Composable
 fun AdminLayoutScope.HomePage() {
-    var settings by remember { mutableStateOf<HomeInfo?>(null) }
     val scope = rememberCoroutineScope()
+    var settings by remember { mutableStateOf<HomeInfo?>(null) }
     var message by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
     var selectingImageFor by remember { mutableStateOf<String?>(null) }
 
@@ -154,6 +155,7 @@ fun AdminLayoutScope.HomePage() {
                                         postHomeSettings(settings!!, token)
                                         message = "Settings saved successfully" to true
                                     } catch (e: Exception) {
+                                        Logger.e(e, "Index") { "Failed to save settings" }
                                         message = "Failed to save settings" to false
                                     }
                                 }

@@ -17,7 +17,7 @@ data class Webinar(
     val title: String,
     val description: String,
     val instant: Instant,
-    val imageUrl: String,
+    val imageSrc: String,
 )
 
 @Serializable

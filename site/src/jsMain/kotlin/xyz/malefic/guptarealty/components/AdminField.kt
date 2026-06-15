@@ -8,10 +8,10 @@ import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
-import org.jetbrains.compose.web.attributes.InputType
-import org.jetbrains.compose.web.dom.Input
+import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.dom.Label
 import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.TextInput
 import xyz.malefic.guptarealty.styles.AppSpacing
 import xyz.malefic.guptarealty.styles.InputStyle
 import xyz.malefic.guptarealty.styles.LabelMdStyle
@@ -29,13 +29,37 @@ fun AdminField(
                 Link(it, label)
             } ?: Text(label)
         }
-        Input(
-            InputType.Text,
+        TextInput(
+            value,
             InputStyle
                 .toModifier()
                 .toAttrs {
-                    value(value)
                     onInput { onValueChange(it.value) }
+                },
+        )
+    }
+}
+
+@Composable
+fun AdminFieldNull(
+    label: String,
+    value: String?,
+    link: String? = null,
+    onValueChange: (String?) -> Unit,
+) {
+    Column(Modifier.fillMaxWidth().margin(bottom = AppSpacing.S2)) {
+        Label(attrs = LabelMdStyle.toModifier().margin(bottom = AppSpacing.S1).toAttrs()) {
+            link?.let {
+                Link(it, label)
+            } ?: Text(label)
+        }
+        TextInput(
+            value ?: "",
+            InputStyle
+                .toModifier()
+                .toAttrs {
+                    placeholder("Optional")
+                    onInput { onValueChange(it.value.ifBlank { null }) }
                 },
         )
     }

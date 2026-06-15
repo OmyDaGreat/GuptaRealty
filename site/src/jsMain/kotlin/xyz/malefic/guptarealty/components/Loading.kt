@@ -25,19 +25,12 @@ import org.jetbrains.compose.web.css.s
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppSpacing
 
-/**
- * Renders [loadingContent] while [value] is null, then calls [content] with the
- * unwrapped value once it arrives. [modifier] is applied to the loading wrapper only,
- * so it has no layout impact on the resolved content.
- */
 @Composable
 fun <T> Loading(
     value: T?,
-    modifier: Modifier = Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap),
-    contentAlignment: Alignment = Alignment.Center,
-    loadingContent: @Composable () -> Unit = { Spinner() },
     content: @Composable T.() -> Unit = {},
-) = value?.let { value.content() } ?: Box(modifier, contentAlignment) { loadingContent() }
+) = value?.let { value.content() }
+    ?: Box(Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap), Alignment.Center) { Spinner() }
 
 val SpinKeyframes =
     Keyframes {

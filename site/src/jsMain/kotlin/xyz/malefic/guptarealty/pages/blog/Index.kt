@@ -252,7 +252,7 @@ fun BlogCard(post: BlogPostResponse) {
                     .overflow(Overflow.Hidden),
             ) {
                 Image(
-                    post.imageUrl ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png", // TODO: Better placeholder
+                    post.imageSrc ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png", // TODO: Better placeholder
                     post.title,
                     Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
                 )

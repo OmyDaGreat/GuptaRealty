@@ -73,6 +73,7 @@ enum class AdminPage(
     HOME("Home", "/admin/"),
     WEBINAR("Webinar", "/admin/webinar"),
     BLOG("Blog", "/admin/blog"),
+    TESTIMONIAL("Testimonial", "/admin/testimonial"),
 }
 
 data class AdminLayoutData(
