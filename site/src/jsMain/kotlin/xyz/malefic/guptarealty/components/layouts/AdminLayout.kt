@@ -77,7 +77,7 @@ enum class AdminPage(
     HOME("Home", "/admin/"),
     WEBINAR("Webinar", "/admin/webinar"),
     BLOG("Blog", "/admin/blog"),
-    TESTIMONIALS("Testimonials", "/admin/testimonial"),
+    TESTIMONIALS("Testimonials", "/admin/testimonials"),
 }
 
 data class AdminLayoutData(
