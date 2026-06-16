@@ -11,5 +11,50 @@ var testimonials by file(
             "this is content a lot of content the most content no content does content like i do content",
             "/Logo.jpg",
         ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
+        Testimonial(
+            "Ruchika Gupta",
+            "this is content a lot of content the most content no content does content like i do content",
+            "/Logo.jpg",
+        ),
     ),
 )

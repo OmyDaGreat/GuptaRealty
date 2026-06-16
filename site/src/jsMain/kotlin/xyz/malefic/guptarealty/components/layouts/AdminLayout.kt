@@ -7,6 +7,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.varabyte.kobweb.compose.css.AlignSelf
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -18,19 +19,21 @@ import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
+import com.varabyte.kobweb.compose.ui.modifiers.alignSelf
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.borderRight
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
-import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.flexShrink
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.minHeight
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
@@ -48,6 +51,7 @@ import kotlinx.browser.localStorage
 import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.H1
 import org.jetbrains.compose.web.dom.P
@@ -73,7 +77,7 @@ enum class AdminPage(
     HOME("Home", "/admin/"),
     WEBINAR("Webinar", "/admin/webinar"),
     BLOG("Blog", "/admin/blog"),
-    TESTIMONIAL("Testimonial", "/admin/testimonial"),
+    TESTIMONIALS("Testimonials", "/admin/testimonial"),
 }
 
 data class AdminLayoutData(
@@ -124,11 +128,12 @@ fun AdminLayout(
     if (verificationState != VerificationState.VERIFIED) {
         TokenInput(verificationState, token) { token = it }
     } else {
-        Row(Modifier.fillMaxSize().backgroundColor(AppColors.SurfaceLow)) {
+        Row(Modifier.fillMaxWidth().minHeight(100.vh).backgroundColor(AppColors.SurfaceLow)) {
             Column(
                 Modifier
                     .width(260.px)
-                    .fillMaxHeight()
+                    .alignSelf(AlignSelf.Stretch)
+                    .flexShrink(0)
                     .backgroundColor(AppColors.SurfaceContainer)
                     .padding(AppSpacing.S3)
                     .borderRight(1.px, LineStyle.Solid, AppColors.Outline),

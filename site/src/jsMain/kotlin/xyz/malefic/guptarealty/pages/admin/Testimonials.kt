@@ -56,12 +56,12 @@ import xyz.malefic.guptarealty.styles.TertiaryButtonStyle
 
 @InitRoute
 fun initTestimonialsPage(ctx: InitRouteContext) {
-    ctx.data.add(AdminLayoutData(AdminPage.TESTIMONIAL))
+    ctx.data.add(AdminLayoutData(AdminPage.TESTIMONIALS))
 }
 
 @Page
 @Composable
-fun AdminLayoutScope.TestimonialPage() {
+fun AdminLayoutScope.TestimonialsPage() {
     val scope = rememberCoroutineScope()
     var testimonials by remember { mutableStateOf<List<Testimonial>?>(null) }
     var message by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
