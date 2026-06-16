@@ -25,6 +25,7 @@ import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.Polaroid
 import xyz.malefic.guptarealty.model.Testimonial
 import xyz.malefic.guptarealty.styles.AppSpacing
+import kotlin.math.max
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -32,7 +33,7 @@ import kotlin.random.Random
 @Composable
 fun TestimonialsPage() {
     var testimonials by remember { mutableStateOf<List<Testimonial>?>(null) }
-    val playgroundHeight = remember(testimonials?.size) { testimonials?.let { 15.0 * it.size } ?: 100.0 }
+    val playgroundHeight = remember(testimonials?.size) { max(testimonials?.let { 15.0 * it.size } ?: 100.0, 100.0) }
 
     LaunchedEffect(Unit) {
         testimonials = getTestimonials()
