@@ -60,11 +60,11 @@ import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.components.icons.mdi.MdIcon
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiArrowBack
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiArrowForward
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiPlayArrow
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiStar
+import com.varabyte.kobweb.silk.components.icons.ms.MsArrowBack
+import com.varabyte.kobweb.silk.components.icons.ms.MsArrowForward
+import com.varabyte.kobweb.silk.components.icons.ms.MsIcon
+import com.varabyte.kobweb.silk.components.icons.ms.MsPlayArrow
+import com.varabyte.kobweb.silk.components.icons.ms.MsStar
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.style.toModifier
@@ -213,7 +213,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                                         .then(AppModifiers.SoftShadow),
                                 ) {
                                     Center {
-                                        MdiPlayArrow(Modifier.scale(200.percent).color(Colors.White))
+                                        MsPlayArrow(Modifier.scale(200.percent).color(Colors.White))
                                     }
                                 }
                             }
@@ -440,7 +440,7 @@ fun TipsSection() {
                 }
                 SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
                     tips.forEach { tip ->
-                        MistakeCard(tip.title, tip.description) { MdIcon(tip.icon, it) }
+                        MistakeCard(tip.title, tip.description) { MsIcon(tip.icon, it) }
                     }
                 }
             }
@@ -487,8 +487,8 @@ fun TestimonialsSection(coroutineScope: CoroutineScope) {
                     reviews?.let { rs ->
                         if (rs.size > 1) {
                             Row(Modifier.gap(16.px)) {
-                                TestimonialNavButton(onClick = { navigate(-1) }) { MdiArrowBack(it) }
-                                TestimonialNavButton(onClick = { navigate(1) }) { MdiArrowForward(it) }
+                                TestimonialNavButton(onClick = { navigate(-1) }) { MsArrowBack(it) }
+                                TestimonialNavButton(onClick = { navigate(1) }) { MsArrowForward(it) }
                             }
                         }
                     }
@@ -524,7 +524,7 @@ fun TestimonialCard(
     ) {
         Column {
             Row(Modifier.gap(4.px).margin(bottom = 24.px)) {
-                repeat(5) { MdiStar(Modifier.color(AppColors.Secondary)) }
+                repeat(5) { MsStar(Modifier.color(AppColors.Secondary)) }
             }
             Box(
                 Modifier

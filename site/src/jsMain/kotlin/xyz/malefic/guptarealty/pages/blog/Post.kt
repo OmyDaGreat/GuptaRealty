@@ -30,7 +30,7 @@ import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.PageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiArrowBack
+import com.varabyte.kobweb.silk.components.icons.ms.MsArrowBack
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.px
@@ -73,7 +73,7 @@ fun IndividualPostPage(ctx: PageContext) {
                     .textDecorationLine(TextDecorationLine.None),
             ) {
                 Row(Modifier.gap(8.px), verticalAlignment = Alignment.CenterVertically) {
-                    MdiArrowBack()
+                    MsArrowBack()
                     Span(LabelMdStyle.toModifier().toAttrs()) {
                         Text("Back to Blog")
                     }

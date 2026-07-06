@@ -24,8 +24,8 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.data.add
 import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiDelete
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiPersonAdd
+import com.varabyte.kobweb.silk.components.icons.ms.MsDelete
+import com.varabyte.kobweb.silk.components.icons.ms.MsPersonAdd
 import com.varabyte.kobweb.silk.style.toModifier
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.LineStyle
@@ -99,7 +99,7 @@ fun AdminLayoutScope.TestimonialsPage() {
                                         }
                                     },
                             ) {
-                                MdiDelete(Modifier.margin(right = 4.px))
+                                MsDelete(Modifier.margin(right = 4.px))
                                 Text("Remove")
                             }
                         }
@@ -132,7 +132,7 @@ fun AdminLayoutScope.TestimonialsPage() {
                             }
                         },
                 ) {
-                    MdiPersonAdd(Modifier.margin(right = 4.px))
+                    MsPersonAdd(Modifier.margin(right = 4.px))
                     Text("Add Review")
                 }
 

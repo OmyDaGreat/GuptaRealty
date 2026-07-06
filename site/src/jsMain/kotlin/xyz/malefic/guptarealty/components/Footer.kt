@@ -14,10 +14,10 @@ import com.varabyte.kobweb.compose.ui.modifiers.gridColumn
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.toAttrs
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiBusiness
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiMail
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiPhone
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiVerified
+import com.varabyte.kobweb.silk.components.icons.ms.MsBusiness
+import com.varabyte.kobweb.silk.components.icons.ms.MsMail
+import com.varabyte.kobweb.silk.components.icons.ms.MsPhone
+import com.varabyte.kobweb.silk.components.icons.ms.MsVerified
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
@@ -97,10 +97,10 @@ fun Footer() =
                             .toAttrs(),
                     ) { Text("GET IN TOUCH") }
                     SimpleGrid(numColumns(1, md = 2), Modifier.gap(24.px)) {
-                        ContactInfoItem("Direct", "714-767-5752") { MdiPhone(it) }
-                        ContactInfoItem("Email", "ruchikagupta@firstteam.com") { MdiMail(it) }
-                        ContactInfoItem("Brokerage", "First Team Real Estate") { MdiBusiness(it) }
-                        ContactInfoItem("License", "DRE# 02161384") { MdiVerified(it) }
+                        ContactInfoItem("Direct", "714-767-5752") { MsPhone(it) }
+                        ContactInfoItem("Email", "ruchikagupta@firstteam.com") { MsMail(it) }
+                        ContactInfoItem("Brokerage", "First Team Real Estate") { MsBusiness(it) }
+                        ContactInfoItem("License", "DRE# 02161384") { MsVerified(it) }
                     }
                 }
             }

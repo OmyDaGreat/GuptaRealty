@@ -40,7 +40,7 @@ import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.layout.Layout
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiMenu
+import com.varabyte.kobweb.silk.components.icons.ms.MsMenu
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.LineStyle
@@ -51,8 +51,8 @@ import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.guptarealty.components.Footer
 import xyz.malefic.guptarealty.components.CopyrightStrip
+import xyz.malefic.guptarealty.components.Footer
 import xyz.malefic.guptarealty.components.Logo
 import xyz.malefic.guptarealty.styles.AppColors
 import xyz.malefic.guptarealty.styles.AppRadius
@@ -122,7 +122,7 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
                             onClick { isMenuOpen = !isMenuOpen }
                         },
                 ) {
-                    MdiMenu()
+                    MsMenu()
                 }
             }
         }

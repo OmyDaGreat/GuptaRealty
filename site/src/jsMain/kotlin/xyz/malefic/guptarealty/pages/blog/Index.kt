@@ -45,8 +45,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.graphics.Image
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiClose
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiSearch
+import com.varabyte.kobweb.silk.components.icons.ms.MsClose
+import com.varabyte.kobweb.silk.components.icons.ms.MsSearch
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
@@ -191,7 +191,7 @@ fun BlogHeroSection(
                         .position(Position.Relative),
                     Alignment.CenterStart,
                 ) {
-                    MdiSearch(
+                    MsSearch(
                         Modifier
                             .color(AppColors.OnSurfaceVariant)
                             .position(Position.Absolute)
@@ -224,7 +224,7 @@ fun BlogHeroSection(
                                 .cursor(Cursor.Pointer)
                                 .onClick { onQueryChange("") },
                         ) {
-                            MdiClose(Modifier.color(AppColors.OnSurfaceVariant).size(18.px))
+                            MsClose(Modifier.color(AppColors.OnSurfaceVariant).size(18.px))
                         }
                     }
                 }

@@ -29,9 +29,9 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.data.add
 import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
-import com.varabyte.kobweb.silk.components.icons.mdi.MdIcon
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiDelete
-import com.varabyte.kobweb.silk.components.icons.mdi.MdiPersonAdd
+import com.varabyte.kobweb.silk.components.icons.ms.MsDelete
+import com.varabyte.kobweb.silk.components.icons.ms.MsIcon
+import com.varabyte.kobweb.silk.components.icons.ms.MsPersonAdd
 import com.varabyte.kobweb.silk.style.toModifier
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -259,7 +259,7 @@ fun AdminLayoutScope.WebinarPage() {
                 ) {
                     tips.take(3).forEach { tip ->
                         Box(Modifier.weight(1f)) {
-                            MistakeCard(tip.title, tip.description) { MdIcon(tip.icon, it) }
+                            MistakeCard(tip.title, tip.description) { MsIcon(tip.icon, it) }
                         }
                     }
                 }
@@ -320,7 +320,7 @@ fun AdminLayoutScope.WebinarPage() {
                                             }
                                         },
                                 ) {
-                                    MdiDelete(Modifier.margin(right = 4.px))
+                                    MsDelete(Modifier.margin(right = 4.px))
                                     Text("Remove")
                                 }
                             }
@@ -358,7 +358,7 @@ fun AdminLayoutScope.WebinarPage() {
                                 }
                             },
                     ) {
-                        MdiPersonAdd(Modifier.margin(right = 4.px))
+                        MsPersonAdd(Modifier.margin(right = 4.px))
                         Text("Add Review")
                     }
 
