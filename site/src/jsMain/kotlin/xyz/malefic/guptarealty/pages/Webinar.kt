@@ -275,7 +275,7 @@ fun RegistrationSection(
                 .margin(bottom = 32.px)
                 .toAttrs(),
         ) {
-            Text("Register now to receive the webinar link and a free Home Buyer's Toolkit PDF.")
+            Text("Register now to receive the webinar link and a free Home Buyer's Toolkit.")
         }
 
         RegistrationField("Full Name", name, "Enter your name")
@@ -377,7 +377,7 @@ fun RegistrationSection(
                     .textAlign(TextAlign.Center)
                     .toAttrs(),
             ) {
-                Text("I consent to receive promotional emails from Ruchika Gupta, with or without the use of automation.")
+                Text("I consent to receive exclusive market updates from Ruchika Gupta, with or without the use of automation.")
             }
         }
         P(
@@ -545,17 +545,10 @@ fun TestimonialCard(
                     Text("\"${review.review}\"")
                 }
             }
-            Row(Modifier.gap(16.px), verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    review.reviewerImage,
-                    review.reviewer,
-                    Modifier.size(56.px).borderRadius(50.percent).objectFit(ObjectFit.Cover),
-                )
-                Column {
-                    Span(LabelMdStyle.toModifier().toAttrs()) { Text(review.reviewer) }
-                    Span(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {
-                        Text(review.reviewerDescription)
-                    }
+            Column(Modifier.gap(16.px)) {
+                Span(LabelMdStyle.toModifier().toAttrs()) { Text(review.reviewer) }
+                Span(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {
+                    Text(review.reviewerDescription)
                 }
             }
         }

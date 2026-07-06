@@ -37,7 +37,6 @@ import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.api.getTestimonials
 import xyz.malefic.guptarealty.api.postTestimonials
 import xyz.malefic.guptarealty.components.AdminField
-import xyz.malefic.guptarealty.components.AdminFieldNull
 import xyz.malefic.guptarealty.components.AdminTextArea
 import xyz.malefic.guptarealty.components.Loading
 import xyz.malefic.guptarealty.components.layouts.AdminLayoutData
@@ -111,11 +110,6 @@ fun AdminLayoutScope.TestimonialsPage() {
                         AdminTextArea("Testimonial", testimonial.quote) {
                             val newList = testimonials!!.toMutableList()
                             newList[index] = testimonial.copy(quote = it)
-                            testimonials = newList
-                        }
-                        AdminFieldNull("Testimonial Image URL", testimonial.imageSrc) {
-                            val newList = testimonials!!.toMutableList()
-                            newList[index] = testimonial.copy(imageSrc = it)
                             testimonials = newList
                         }
                     }

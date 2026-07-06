@@ -37,6 +37,5 @@ data class WebinarTipsSection(
 data class WebinarReview(
     val reviewer: String,
     val reviewerDescription: String,
-    val reviewerImage: String,
     val review: String,
 )

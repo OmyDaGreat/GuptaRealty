@@ -334,11 +334,6 @@ fun AdminLayoutScope.WebinarPage() {
                                 newList[index] = review.copy(reviewerDescription = it)
                                 reviews = newList
                             }
-                            AdminField("Reviewer Image URL", review.reviewerImage) {
-                                val newList = reviews!!.toMutableList()
-                                newList[index] = review.copy(reviewerImage = it)
-                                reviews = newList
-                            }
                             AdminTextArea("Review", review.review) {
                                 val newList = reviews!!.toMutableList()
                                 newList[index] = review.copy(review = it)
@@ -354,7 +349,7 @@ fun AdminLayoutScope.WebinarPage() {
                             .toModifier()
                             .toAttrs {
                                 onClick {
-                                    reviews = reviews!! + WebinarReview("Name", "Description", "image", "Review...")
+                                    reviews = reviews!! + WebinarReview("Name", "Description", "Review...")
                                 }
                             },
                     ) {

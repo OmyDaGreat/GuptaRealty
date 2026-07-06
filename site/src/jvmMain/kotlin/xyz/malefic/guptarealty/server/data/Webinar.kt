@@ -40,13 +40,11 @@ var webinarReviews by file(
         WebinarReview(
             "Mark & Sarah Thompson",
             "New Homeowners, Irvine",
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuDABXqZiK9yZKb-RRKmDrqGBFGreGt177dM_PlZcxT6ZuOHNlEbRD_RmtkCEUBpB3CWLb4JPdkNG4Kajom_60ccRqKUfMfkWndi0ZX_iRCqYTru7xuMJW7nn9gnIgnkEufgFEAqeADrQT1QDahHTkRtzVOTr5FnhUOLtA2pS0IN7G6r56Cb-LZhhvqgSjmcCmegKAdHUMIrcNZsYMteuRNNEC46OZH_gZeFvWYwFE7ne8efX6nBMDm2-LmQ3FAEdGctPB1w0BUuuGw",
             "Ruchika's webinar was the turning point for us. She simplified the escrow process and gave us the confidence to put in our first offer. We closed last month!",
         ),
         WebinarReview(
             "idk some reviewer",
             "Retired, Anaheim",
-            "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png",
             "Some rly rly long review ahhhgiweajifgjwalfjwal",
         ),
     ),
