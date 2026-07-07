@@ -26,6 +26,7 @@ val localProperties =
     }
 
 kobweb {
+    pagesPackage = "xyz.malefic.guptarealty.client.pages"
     app {
         index {
             description.set("Powered by Kobweb")
