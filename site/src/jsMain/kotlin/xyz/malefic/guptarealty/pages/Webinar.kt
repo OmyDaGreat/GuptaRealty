@@ -12,13 +12,11 @@ import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontStyle
 import com.varabyte.kobweb.compose.css.FontWeight
-import com.varabyte.kobweb.compose.css.JustifyContent
 import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.functions.blur
 import com.varabyte.kobweb.compose.css.margin
-import com.varabyte.kobweb.compose.css.overflowY
 import com.varabyte.kobweb.compose.css.scale
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -34,14 +32,12 @@ import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
-import com.varabyte.kobweb.compose.ui.modifiers.display
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontStyle
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.gridColumn
-import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.maxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
@@ -51,7 +47,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.position
-import com.varabyte.kobweb.compose.ui.modifiers.scale
 import com.varabyte.kobweb.compose.ui.modifiers.size
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.transform
@@ -63,7 +58,6 @@ import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.icons.ms.MsArrowBack
 import com.varabyte.kobweb.silk.components.icons.ms.MsArrowForward
 import com.varabyte.kobweb.silk.components.icons.ms.MsIcon
-import com.varabyte.kobweb.silk.components.icons.ms.MsPlayArrow
 import com.varabyte.kobweb.silk.components.icons.ms.MsStar
 import com.varabyte.kobweb.silk.components.layout.SimpleGrid
 import com.varabyte.kobweb.silk.components.layout.numColumns
@@ -74,7 +68,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.css.AnimationTimingFunction
-import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.backgroundColor
@@ -195,28 +188,6 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                                 title,
                                 Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
                             )
-                            Box(
-                                Modifier
-                                    .fillMaxSize()
-                                    .backgroundColor(rgba(0, 0, 0, 0.2f))
-                                    .display(DisplayStyle.Flex)
-                                    .justifyContent(JustifyContent.Center)
-                                    .alignItems(AlignItems.Center)
-                                    .cursor(Cursor.Pointer),
-                            ) {
-                                Box(
-                                    Modifier
-                                        .size(80.px)
-                                        .backgroundColor(AppColors.Secondary)
-                                        .borderRadius(50.percent)
-                                        .display(DisplayStyle.Flex)
-                                        .then(AppModifiers.SoftShadow),
-                                ) {
-                                    Center {
-                                        MsPlayArrow(Modifier.scale(200.percent).color(Colors.White))
-                                    }
-                                }
-                            }
                         }
                     }
                     RegistrationSection(coroutineScope, instant.toDisplayString())
@@ -531,9 +502,7 @@ fun TestimonialCard(
                     .fillMaxWidth()
                     .margin(bottom = 32.px)
                     .maxHeight(240.px)
-                    .styleModifier {
-                        overflowY(Overflow.Auto)
-                    },
+                    .overflow { y(Overflow.Auto) },
             ) {
                 P(
                     HeadlineSmStyle

@@ -56,6 +56,6 @@ var currentWebinar by file(
         "Mastering the Market: A Guide for First-Time Buyers",
         "Join Ruchika Gupta for an exclusive deep dive into the 2026 real estate landscape. Learn how to navigate interest rates and find your dream home with confidence.",
         LocalDateTime(2026, 6, 23, 4, 0).toInstant(TimeZone.currentSystemDefault()),
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCM7sKezxKRo-EioXnRhIC_IiX-GdPFc7eJGkEWj4tKCl60ICSqdCPP35EQti9h7fRB4leoi2omg3ptiVBuVcxg8PALJfH_71PnmmxDcu8NUftKKF6pG4VBCQ8QqHpEELt4bQ7w_z8u_jMhn_0eSRxE-NiVhXHzTDIszoeKs_lIsbASO045cROxdCd64vQm-Mu3dwkTOJR225Mtw63B7WPBbI04mTSwLs792n6BuyBftL04Fl1z_hpwzwJi9uDEKj12VCtKrn8_dlY",
+        "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F065%2F940%2F783%2Fnon_2x%2Fnew-apartment-keys-exchange-modern-residential-building-luxury-living-space-real-estate-investment-home-purchase-property-sale-free-photo.jpeg&f=1&nofb=1&ipt=ade2933d2fac61b9b5e7553389057e7bc2079893b38b72deb450dc71c3684a0f",
     ),
 )
