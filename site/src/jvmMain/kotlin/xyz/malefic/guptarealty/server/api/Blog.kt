@@ -23,7 +23,7 @@ val blog: Array<RoutingHttpHandler> =
             val id =
                 try {
                     Uuid.parse(request.query("id") ?: return@request Response(OK).json(blogs))
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     return@request error("Invalid blog post ID")
                 }
 
@@ -34,7 +34,7 @@ val blog: Array<RoutingHttpHandler> =
                 val post =
                     try {
                         json.decodeFromString<BlogPostRequest>(bodyString())
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         return@auth error("Invalid blog post")
                     }
 
@@ -47,7 +47,7 @@ val blog: Array<RoutingHttpHandler> =
                 val post =
                     try {
                         json.decodeFromString<BlogPostRequest>(bodyString()).toResponse(id)
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         return@auth error("Invalid blog post")
                     }
 

@@ -13,6 +13,7 @@ import org.http4k.routing.routes
 import xyz.malefic.guptarealty.server.api.admin
 import xyz.malefic.guptarealty.server.api.assets
 import xyz.malefic.guptarealty.server.api.blog
+import xyz.malefic.guptarealty.server.api.contact
 import xyz.malefic.guptarealty.server.api.home
 import xyz.malefic.guptarealty.server.api.testimonial
 import xyz.malefic.guptarealty.server.api.webinar
@@ -63,10 +64,11 @@ val apiRoutes: RoutingHttpHandler =
         "/api/health" bind GET to { Response(OK).body("healthy") },
         *admin,
         *assets,
-        *home,
         *blog,
-        *webinar,
+        *contact,
+        *home,
         *testimonial,
+        *webinar,
     )
 
 val http: HttpHandler =

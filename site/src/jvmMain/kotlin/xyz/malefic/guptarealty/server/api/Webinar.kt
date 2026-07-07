@@ -38,7 +38,7 @@ private val client = OkHttp()
 
 val webinar: Array<RoutingHttpHandler> =
     arrayOf(
-        "/api/webinar" bind GET to { request ->
+        "/api/webinar" bind GET to { _ ->
             json(currentWebinar)
         },
         "/api/webinar" bind POST to
@@ -46,7 +46,7 @@ val webinar: Array<RoutingHttpHandler> =
                 currentWebinar =
                     try {
                         json.decodeFromString(bodyString())
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         return@auth error("Invalid webinar")
                     }
 
@@ -60,7 +60,7 @@ val webinar: Array<RoutingHttpHandler> =
                 webinarTips =
                     try {
                         json.decodeFromString(bodyString())
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         return@auth Response(BAD_REQUEST).json("Invalid webinar tips".error)
                     }
 
@@ -74,7 +74,7 @@ val webinar: Array<RoutingHttpHandler> =
                 webinarReviews =
                     try {
                         json.decodeFromString(bodyString())
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         return@auth error("Invalid webinar reviews")
                     }
 
@@ -98,7 +98,7 @@ val webinar: Array<RoutingHttpHandler> =
             val registration =
                 try {
                     json.decodeFromString<Registration>(request.bodyString())
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     return@request error("Invalid registration")
                 }
 
