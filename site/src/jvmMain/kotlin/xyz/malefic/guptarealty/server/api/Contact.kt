@@ -55,7 +55,13 @@ val contact: Array<RoutingHttpHandler> =
                             source = "guptarealty.com/contact",
                             tags = listOf("Inquiry"),
                         ),
-                    description = contact.message,
+                    description =
+                        contact.message
+                            .trim()
+                            .replace("\r\n", "\n")
+                            .replace('\r', '\n')
+                            .replace(Regex("[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]"), "")
+                            .take(1000),
                 )
 
             val request =
