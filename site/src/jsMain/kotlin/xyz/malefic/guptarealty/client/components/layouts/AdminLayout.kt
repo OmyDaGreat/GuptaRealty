@@ -74,6 +74,7 @@ enum class AdminPage(
     val title: String,
     val route: String,
 ) {
+    SITE("Site", "/admin/site"),
     HOME("Home", "/admin/"),
     WEBINAR("Webinar", "/admin/webinar"),
     BLOG("Blog", "/admin/blog"),
@@ -107,7 +108,7 @@ fun AdminLayout(
 ) {
     var token by remember { mutableStateOf(localStorage.getItem("admin_token") ?: "") }
     var verificationState by remember { mutableStateOf(VerificationState.VERIFYING) }
-    val page = ctx.data.getValue<AdminLayoutData>().page
+    val page by remember { mutableStateOf(ctx.data.getValue<AdminLayoutData>().page) }
 
     LaunchedEffect(token) {
         if (token.isBlank()) {
@@ -116,12 +117,16 @@ fun AdminLayout(
         }
         verificationState = VerificationState.VERIFYING
         try {
-            postApi("admin/verify", token)
-            verificationState = VerificationState.VERIFIED
-            localStorage.setItem("admin_token", token)
+            val response = postApi("admin/verify", token)
+            if (response.ok) {
+                verificationState = VerificationState.VERIFIED
+                localStorage.setItem("admin_token", token)
+            } else {
+                verificationState = VerificationState.INVALID
+            }
         } catch (e: Exception) {
-            console.log(e)
-            verificationState = if (token.isNotBlank()) VerificationState.INVALID else VerificationState.EMPTY
+            console.log("Network error during verification: $e")
+            verificationState = VerificationState.INVALID
         }
     }
 
@@ -168,8 +173,7 @@ fun AdminLayout(
                             onClick {
                                 localStorage.removeItem("admin_token")
                                 token = ""
-                                verificationState =
-                                    VerificationState.EMPTY
+                                verificationState = VerificationState.EMPTY
                             }
                         },
                 ) {

@@ -15,6 +15,7 @@ import xyz.malefic.guptarealty.server.api.assets
 import xyz.malefic.guptarealty.server.api.blog
 import xyz.malefic.guptarealty.server.api.contact
 import xyz.malefic.guptarealty.server.api.home
+import xyz.malefic.guptarealty.server.api.site
 import xyz.malefic.guptarealty.server.api.testimonial
 import xyz.malefic.guptarealty.server.api.webinar
 import xyz.malefic.guptarealty.server.util.assetsPath
@@ -67,6 +68,7 @@ val apiRoutes: RoutingHttpHandler =
         *blog,
         *contact,
         *home,
+        *site,
         *testimonial,
         *webinar,
     )

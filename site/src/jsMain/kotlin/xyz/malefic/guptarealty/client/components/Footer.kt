@@ -40,8 +40,10 @@ import xyz.malefic.guptarealty.client.styles.LabelSmStyle
 import xyz.malefic.guptarealty.client.styles.SectionInverseStyle
 import xyz.malefic.guptarealty.client.styles.SectionWarmStyle
 
+import xyz.malefic.guptarealty.model.SiteInfo
+
 @Composable
-fun Footer() =
+fun Footer(siteInfo: SiteInfo?) =
     Box(
         SectionWarmStyle.toModifier().padding(top = 24.px, bottom = 24.px).borderTop(1.px, LineStyle.Solid, AppColors.OutlineVariant),
         Alignment.Center,
@@ -55,7 +57,7 @@ fun Footer() =
                             .color(AppColors.Primary)
                             .margin(bottom = 24.px)
                             .toAttrs(),
-                    ) { Text("Gupta Realty") }
+                    ) { Text(siteInfo?.siteName ?: "Gupta Realty") }
                     P(
                         BodyMdStyle
                             .toModifier()
@@ -63,7 +65,7 @@ fun Footer() =
                             .margin(bottom = 24.px)
                             .toAttrs(),
                     ) {
-                        Text("A real estate experience defined by sophistication, expertise, and personalized service.")
+                        Text(siteInfo?.footerDescription ?: "A real estate experience defined by sophistication, expertise, and personalized service.")
                     }
                 }
                 Column {
@@ -94,10 +96,10 @@ fun Footer() =
                             .toAttrs(),
                     ) { Text("GET IN TOUCH") }
                     SimpleGrid(numColumns(1, md = 2), Modifier.gap(24.px)) {
-                        ContactInfoItem("Direct", "714-767-5752") { MsPhone(it) }
-                        ContactInfoItem("Email", "ruchikagupta@firstteam.com") { MsMail(it) }
-                        ContactInfoItem("Brokerage", "First Team Real Estate") { MsBusiness(it) }
-                        ContactInfoItem("License", "DRE# 02161384") { MsVerified(it) }
+                        ContactInfoItem("Direct", siteInfo?.agentPhone ?: "714-767-5752") { MsPhone(it) }
+                        ContactInfoItem("Email", siteInfo?.agentEmail ?: "ruchikagupta@firstteam.com") { MsMail(it) }
+                        ContactInfoItem("Brokerage", siteInfo?.brokerageName ?: "First Team Real Estate") { MsBusiness(it) }
+                        ContactInfoItem("License", siteInfo?.agentLicense ?: "DRE# 02161384") { MsVerified(it) }
                     }
                 }
             }
@@ -105,7 +107,7 @@ fun Footer() =
     }
 
 @Composable
-fun CopyrightStrip() =
+fun CopyrightStrip(siteInfo: SiteInfo?) =
     Box(SectionInverseStyle.toModifier().padding(topBottom = AppSpacing.S3), Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             P(
@@ -114,7 +116,7 @@ fun CopyrightStrip() =
                     .color(AppColors.InverseOnSurface)
                     .toAttrs(),
             ) {
-                Text("© 2026 Gupta Realty. Ruchika Gupta | DRE# 02047333. First Team Real Estate. All rights reserved.")
+                Text("© 2026 ${siteInfo?.siteName ?: "Gupta Realty"}. ${siteInfo?.agentName ?: "Ruchika Gupta"} | ${siteInfo?.agentLicense ?: "DRE# 02161384"}. ${siteInfo?.brokerageName ?: "First Team Real Estate"}. All rights reserved.")
             }
         }
     }

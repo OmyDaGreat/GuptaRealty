@@ -1,7 +1,8 @@
 package xyz.malefic.guptarealty.client.api
 
+import com.varabyte.kobweb.browser.api
+import com.varabyte.kobweb.browser.http.bodyOf
 import kotlinx.browser.window
-import kotlinx.coroutines.await
 import org.w3c.files.File
 import org.w3c.xhr.FormData
 import xyz.malefic.guptarealty.client.util.getApi
@@ -25,7 +26,5 @@ suspend fun uploadAsset(
     val formData = FormData()
     formData.append("file", file)
 
-    window
-        .fetch("/api/assets", js("{ method: 'POST', body: formData, headers: { 'Authorization': 'Bearer ' + token } }"))
-        .await()
+    window.api.post("assets", bodyOf(formData), mapOf("Authorization" to "Bearer $token"))
 }

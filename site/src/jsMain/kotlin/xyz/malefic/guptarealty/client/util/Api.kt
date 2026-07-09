@@ -20,13 +20,17 @@ suspend inline fun <reified E> getApiList(
     token: String? = null,
 ) = window.api
     .get(url, headers = token?.let { mapOf("Authorization" to "Bearer $it") } ?: emptyMap())
-    .text()
-    .await()
-    .let {
-        try {
-            json.decodeFromString<List<E>>(it)
-        } catch (e: Exception) {
-            console.log("Couldn't deserialize list: $e")
+    .let { response ->
+        if (response.ok) {
+            val text = response.text().await()
+            try {
+                json.decodeFromString<List<E>>(text)
+            } catch (e: Exception) {
+                console.log("Couldn't deserialize list: $e")
+                emptyList()
+            }
+        } else {
+            console.log("API Error ${response.status}: ${response.statusText}")
             emptyList()
         }
     }

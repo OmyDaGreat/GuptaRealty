@@ -44,7 +44,14 @@ val staticRoots: List<Path> by lazy {
 val assetsPath: String = System.getProperty("ASSETS_PATH") ?: System.getenv("ASSETS_PATH") ?: "assets"
 
 val userId = Uuid.random()
+
 val bearerToken =
-    Base64.encode((System.getProperty("BEARER_TOKEN") ?: System.getenv("BEARER_TOKEN") ?: "before-universe-bagel").encodeToByteArray())
+    Base64.encode(
+        (
+            System.getProperty("BEARER_TOKEN")?.takeIf { it.isNotBlank() }
+                ?: System.getenv("BEARER_TOKEN")?.takeIf { it.isNotBlank() }
+                ?: "before-universe-bagel"
+        ).encodeToByteArray(),
+    )
 
 val fubApiKey: String? = System.getProperty("FUB_API_KEY") ?: System.getenv("FUB_API_KEY")

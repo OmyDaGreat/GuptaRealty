@@ -34,8 +34,8 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.guptarealty.client.api.getHomeSettings
-import xyz.malefic.guptarealty.client.api.postHomeSettings
+import xyz.malefic.guptarealty.client.api.getSiteSettings
+import xyz.malefic.guptarealty.client.api.postSiteSettings
 import xyz.malefic.guptarealty.client.components.AdminField
 import xyz.malefic.guptarealty.client.components.AdminTextArea
 import xyz.malefic.guptarealty.client.components.AssetLibrary
@@ -50,28 +50,28 @@ import xyz.malefic.guptarealty.client.styles.AppSpacing
 import xyz.malefic.guptarealty.client.styles.HeadlineMdStyle
 import xyz.malefic.guptarealty.client.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.client.styles.SecondaryButtonStyle
-import xyz.malefic.guptarealty.model.HomeInfo
+import xyz.malefic.guptarealty.model.SiteInfo
 
 @InitRoute
-fun initIndexPage(ctx: InitRouteContext) {
-    ctx.data.add(AdminLayoutData(AdminPage.HOME))
+fun initSitePage(ctx: InitRouteContext) {
+    ctx.data.add(AdminLayoutData(AdminPage.SITE))
 }
 
 @Page
 @Composable
-fun AdminLayoutScope.HomePage() {
+fun AdminLayoutScope.SiteSettingsPage() {
     val scope = rememberCoroutineScope()
-    var settings by remember { mutableStateOf<HomeInfo?>(null) }
+    var settings by remember { mutableStateOf<SiteInfo?>(null) }
     var message by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
     var selectingImageFor by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        settings = getHomeSettings()
+        settings = getSiteSettings()
     }
 
     Column(Modifier.fillMaxSize().overflow(Overflow.Auto).padding(AppSpacing.S4)) {
         H2(HeadlineMdStyle.toModifier().margin(bottom = AppSpacing.S4).toAttrs()) {
-            Text("Home Page Settings")
+            Text("Global Site Settings")
         }
 
         message?.let { message ->
@@ -96,60 +96,52 @@ fun AdminLayoutScope.HomePage() {
         ) {
             Loading(settings) {
                 H2(HeadlineSmStyle.toModifier().margin(bottom = AppSpacing.S3).toAttrs()) {
-                    Text("Hero Section")
+                    Text("Branding")
                 }
-                AdminField("Hero Title", heroTitle) {
-                    settings = settings?.copy(heroTitle = it)
-                }
-                AdminField("Hero Subtitle", heroSubtitle) {
-                    settings = settings?.copy(heroSubtitle = it)
+                AdminField("Site Name", siteName) {
+                    settings = settings?.copy(siteName = it)
                 }
                 Row(
                     Modifier.gap(AppSpacing.S2),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    AdminField("Hero Image URL", heroImage) {
-                        settings = settings?.copy(heroImage = it)
+                    AdminField("Logo URL", logoUrl) {
+                        settings = settings?.copy(logoUrl = it)
                     }
-                    Button(Modifier.onClick { selectingImageFor = "heroImage" }.toAttrs()) { Text("Pick") }
+                    Button(Modifier.onClick { selectingImageFor = "logoUrl" }.toAttrs()) { Text("Pick") }
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
-                    Text("About Section")
+                    Text("Agent Information")
                 }
-                AdminField("About Label", aboutLabel) {
-                    settings = settings?.copy(aboutLabel = it)
+                AdminField("Agent Name", agentName) {
+                    settings = settings?.copy(agentName = it)
                 }
-                AdminField("About Title", aboutTitle) {
-                    settings = settings?.copy(aboutTitle = it)
+                AdminField("Agent License (DRE#)", agentLicense) {
+                    settings = settings?.copy(agentLicense = it)
                 }
-                AdminTextArea("About Description", aboutDescription) {
-                    settings = settings?.copy(aboutDescription = it)
-                }
-                Row(
-                    Modifier.gap(AppSpacing.S2),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    AdminField("About Image URL", aboutImage) {
-                        settings = settings?.copy(aboutImage = it)
-                    }
-                    Button(Modifier.onClick { selectingImageFor = "aboutImage" }.toAttrs()) { Text("Pick") }
+                AdminField("Brokerage Name", brokerageName) {
+                    settings = settings?.copy(brokerageName = it)
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
-                    Text("CTA Section")
+                    Text("Contact Information")
                 }
-                AdminField("CTA Title", ctaTitle) {
-                    settings = settings?.copy(ctaTitle = it)
+                AdminField("Email", agentEmail) {
+                    settings = settings?.copy(agentEmail = it)
                 }
-                AdminField("CTA Description", ctaDescription) {
-                    settings = settings?.copy(ctaDescription = it)
+                AdminField("Phone", agentPhone) {
+                    settings = settings?.copy(agentPhone = it)
                 }
-                AdminField("CTA Search Link", ctaSearchLink) {
-                    settings = settings?.copy(ctaSearchLink = it)
+                AdminField("Address", agentAddress) {
+                    settings = settings?.copy(agentAddress = it)
                 }
-                AdminField("CTA Download Link", ctaDownloadLink) {
-                    settings = settings?.copy(ctaDownloadLink = it)
+
+                H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
+                    Text("Footer")
+                }
+                AdminTextArea("Footer Description", footerDescription) {
+                    settings = settings?.copy(footerDescription = it)
                 }
 
                 Button(
@@ -161,25 +153,24 @@ fun AdminLayoutScope.HomePage() {
                                 scope.launch {
                                     message =
                                         try {
-                                            postHomeSettings(settings!!, token)
+                                            postSiteSettings(settings!!, token)
                                             "Settings saved successfully" to true
                                         } catch (e: Exception) {
-                                            Logger.e(e, "Index") { "Failed to save settings" }
+                                            Logger.e(e, "Site") { "Failed to save settings" }
                                             "Failed to save settings" to false
                                         }
                                 }
                             }
                         },
                 ) {
-                    Text("Save All Settings")
+                    Text("Save Site Settings")
                 }
             }
         }
 
         AssetLibrary(token) { url ->
-            when (selectingImageFor) {
-                "aboutImage" -> settings = settings?.copy(aboutImage = url)
-                "heroImage" -> settings = settings?.copy(heroImage = url)
+            if (selectingImageFor == "logoUrl") {
+                settings = settings?.copy(logoUrl = url)
             }
             selectingImageFor = null
         }

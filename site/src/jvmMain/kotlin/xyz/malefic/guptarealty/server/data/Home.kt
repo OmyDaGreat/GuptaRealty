@@ -22,9 +22,5 @@ var homeInfo by file(
         ctaDescription = "Access our exclusive database of local listings and find your perfect home before it even hits the open market.",
         ctaSearchLink = "/contact",
         ctaDownloadLink = "/contact",
-        contactEmail = "ruchika@guptarealty.com",
-        contactPhone = "(714) 767-5752",
-        contactAddress = "Orange County, CA",
-        dreNumber = "02047333",
     ),
 )

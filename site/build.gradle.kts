@@ -46,6 +46,10 @@ kobweb {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
+
     configAsKobwebApplication("guptarealty")
 
     jvm {
@@ -128,14 +132,12 @@ afterEvaluate {
     afterEvaluate {
         tasks.named<JavaExec>("jvmRun") {
             dependsOn(dockerRuntime)
-            systemProperty(
-                "FUB_API_KEY",
-                localProperties["FUB_API_KEY"] ?: System.getenv("FUB_API_KEY") ?: "",
-            )
-            systemProperty(
-                "BEARER_TOKEN",
-                localProperties["BEARER_TOKEN"] ?: System.getenv("BEARER_TOKEN") ?: "",
-            )
+            (localProperties["FUB_API_KEY"] ?: System.getenv("FUB_API_KEY"))?.let {
+                systemProperty("FUB_API_KEY", it)
+            }
+            (localProperties["BEARER_TOKEN"] ?: System.getenv("BEARER_TOKEN"))?.let {
+                systemProperty("BEARER_TOKEN", it)
+            }
         }
     }
 }

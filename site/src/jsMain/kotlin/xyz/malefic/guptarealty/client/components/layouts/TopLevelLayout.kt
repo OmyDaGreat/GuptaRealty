@@ -1,6 +1,7 @@
 package xyz.malefic.guptarealty.client.components.layouts
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,7 @@ import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
+import xyz.malefic.guptarealty.client.api.getSiteSettings
 import xyz.malefic.guptarealty.client.components.CopyrightStrip
 import xyz.malefic.guptarealty.client.components.Footer
 import xyz.malefic.guptarealty.client.components.Logo
@@ -64,6 +66,7 @@ import xyz.malefic.guptarealty.client.styles.NavLinkActiveStyle
 import xyz.malefic.guptarealty.client.styles.NavLinkStyle
 import xyz.malefic.guptarealty.client.styles.ShowOnMdStyle
 import xyz.malefic.guptarealty.client.util.TopLevelPages
+import xyz.malefic.guptarealty.model.SiteInfo
 
 @Layout
 @Composable
@@ -71,6 +74,16 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
     val ctx = rememberPageContext()
     val currentRoute = ctx.route.path
     var isMenuOpen by remember { mutableStateOf(false) }
+    var siteInfo by remember { mutableStateOf<SiteInfo?>(null) }
+
+    LaunchedEffect(Unit) {
+        siteInfo =
+            try {
+                getSiteSettings()
+            } catch (_: Exception) {
+                null
+            }
+    }
 
     Column(Modifier.fillMaxWidth().minHeight(100.vh).backgroundColor(AppColors.Background)) {
         Box(NavBarStyle.toModifier(), Alignment.Center) {
@@ -83,9 +96,12 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
             ) {
                 Link("/", Modifier.textDecorationLine(TextDecorationLine.None)) {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.gap(16.px)) {
-                        Logo(Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.Outline))
+                        Logo(
+                            Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.Outline),
+                            siteInfo?.logoUrl,
+                        )
                         Span(HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
-                            Text("Gupta Realty")
+                            Text(siteInfo?.siteName ?: "Gupta Realty")
                         }
                     }
                 }
@@ -145,16 +161,16 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
                         .onClick { it.stopPropagation() },
                 ) {
                     Row(Modifier.margin(bottom = 32.px).gap(16.px), verticalAlignment = Alignment.CenterVertically) {
-                        Logo(Modifier.size(64.px).borderRadius(50.percent))
+                        Logo(Modifier.size(64.px).borderRadius(50.percent), siteInfo?.logoUrl)
                         Column {
                             Span(HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
-                                Text("Ruchika Gupta")
+                                Text(siteInfo?.agentName ?: "Ruchika Gupta")
                             }
                             Span(LabelSmStyle.toModifier().color(AppColors.OnSurfaceVariant).toAttrs()) {
-                                Text("DRE# 02047333")
+                                Text(siteInfo?.agentLicense ?: "DRE# 02161384")
                             }
                             Span(LabelSmStyle.toModifier().color(AppColors.Secondary).toAttrs()) {
-                                Text("714-767-5752")
+                                Text(siteInfo?.agentPhone ?: "714-767-5752")
                             }
                         }
                     }
@@ -182,8 +198,8 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
 
         Column(Modifier.fillMaxWidth()) {
             content()
-            Footer()
-            CopyrightStrip()
+            Footer(siteInfo)
+            CopyrightStrip(siteInfo)
         }
     }
 }

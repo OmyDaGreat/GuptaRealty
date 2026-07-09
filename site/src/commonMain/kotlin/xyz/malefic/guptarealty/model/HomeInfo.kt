@@ -15,8 +15,4 @@ data class HomeInfo(
     val ctaDescription: String,
     val ctaSearchLink: String,
     val ctaDownloadLink: String,
-    val contactEmail: String,
-    val contactPhone: String,
-    val contactAddress: String,
-    val dreNumber: String,
 )
