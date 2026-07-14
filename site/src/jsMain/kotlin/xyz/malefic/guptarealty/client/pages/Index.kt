@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.AlignItems
+import com.varabyte.kobweb.compose.css.AlignSelf
 import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.JustifyContent
@@ -16,16 +17,20 @@ import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.TextTransform
 import com.varabyte.kobweb.compose.css.WhiteSpace
+import com.varabyte.kobweb.compose.css.autoLength
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.alignItems
+import com.varabyte.kobweb.compose.ui.modifiers.alignSelf
 import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
+import com.varabyte.kobweb.compose.ui.modifiers.bottom
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
@@ -39,18 +44,21 @@ import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.left
 import com.varabyte.kobweb.compose.ui.modifiers.letterSpacing
 import com.varabyte.kobweb.compose.ui.modifiers.margin
+import com.varabyte.kobweb.compose.ui.modifiers.marginInline
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.minHeight
 import com.varabyte.kobweb.compose.ui.modifiers.objectFit
+import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.overflow
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.position
-import com.varabyte.kobweb.compose.ui.modifiers.rotate
-import com.varabyte.kobweb.compose.ui.modifiers.size
+import com.varabyte.kobweb.compose.ui.modifiers.right
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
 import com.varabyte.kobweb.compose.ui.modifiers.textTransform
 import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
+import com.varabyte.kobweb.compose.ui.modifiers.zIndex
 import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
@@ -61,8 +69,8 @@ import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.Position
-import org.jetbrains.compose.web.css.deg
 import org.jetbrains.compose.web.css.em
+import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.dom.H1
 import org.jetbrains.compose.web.dom.H2
@@ -71,7 +79,7 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.client.api.getBlog
-import xyz.malefic.guptarealty.client.api.getHomeSettings
+import xyz.malefic.guptarealty.client.api.getHomeInfo
 import xyz.malefic.guptarealty.client.components.Loading
 import xyz.malefic.guptarealty.client.styles.AppColors
 import xyz.malefic.guptarealty.client.styles.AppModifiers
@@ -81,13 +89,13 @@ import xyz.malefic.guptarealty.client.styles.BodyLgStyle
 import xyz.malefic.guptarealty.client.styles.BodyMdStyle
 import xyz.malefic.guptarealty.client.styles.ContainerStyle
 import xyz.malefic.guptarealty.client.styles.DisplayLgStyle
+import xyz.malefic.guptarealty.client.styles.HeadlineMdStyle
 import xyz.malefic.guptarealty.client.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.client.styles.LabelMdStyle
 import xyz.malefic.guptarealty.client.styles.LabelSmStyle
 import xyz.malefic.guptarealty.client.styles.PrimaryButtonStyle
 import xyz.malefic.guptarealty.client.styles.SecondaryButtonStyle
 import xyz.malefic.guptarealty.client.styles.SectionStyle
-import xyz.malefic.guptarealty.client.styles.SectionWarmStyle
 import xyz.malefic.guptarealty.client.styles.ShowOnMdStyle
 import xyz.malefic.guptarealty.model.BlogPostResponse
 import xyz.malefic.guptarealty.model.HomeInfo
@@ -95,69 +103,79 @@ import xyz.malefic.guptarealty.model.HomeInfo
 @Page
 @Composable
 fun HomePage() {
-    var settings by remember { mutableStateOf<HomeInfo?>(null) }
+    var info by remember { mutableStateOf<HomeInfo?>(null) }
     var posts by remember { mutableStateOf<List<BlogPostResponse>?>(null) }
 
     LaunchedEffect(Unit) {
-        settings = getHomeSettings()
+        info = getHomeInfo()
         posts = getBlog().sortedByDescending { it.date }.take(3)
     }
 
     Column(Modifier.fillMaxSize()) {
-        HeroSection(settings)
-        AboutSection(settings)
+        HeroSection(info)
+        StatsSection(info)
+        AboutSection(info)
         BlogPreviewSection(posts)
-        CTASection(settings)
+        CTASection(info)
     }
 }
 
 @Composable
-fun HeroSection(settings: HomeInfo?) {
-    Box(SectionStyle.toModifier(), Alignment.Center) {
-        Box(ContainerStyle.toModifier()) {
-            SimpleGrid(
-                numColumns(1, md = 2),
-                Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
-            ) {
-                Column(Modifier.padding(topBottom = AppSpacing.SectionGap)) {
-                    Loading(settings) {
-                        H1(DisplayLgStyle.toModifier().margin(bottom = 24.px).toAttrs()) {
-                            Text(heroTitle)
-                        }
-                        P(
-                            BodyLgStyle
-                                .toModifier()
-                                .color(AppColors.OnSurfaceVariant)
-                                .margin(bottom = 32.px)
-                                .toAttrs(),
-                        ) {
-                            Text(heroSubtitle)
-                        }
-                        Row(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap)) {
-                            Link(ctaSearchLink, PrimaryButtonStyle.toModifier()) {
-                                Text("Search Homes")
-                            }
-                            Link("/contact", SecondaryButtonStyle.toModifier()) {
-                                Text("Schedule Consultation")
-                            }
-                        }
-                    }
-                }
-                Box(ShowOnMdStyle.toModifier().justifyContent(JustifyContent.Center)) {
-                    Box(
-                        Modifier
-                            .size(400.px)
-                            .borderRadius(48.px)
-                            .backgroundColor(AppColors.PrimaryContainer)
-                            .rotate(3.deg)
-                            .overflow(Overflow.Hidden),
+fun HeroSection(info: HomeInfo?) {
+    Box(
+        SectionStyle
+            .toModifier()
+            .position(Position.Relative)
+            .overflow(Overflow.Hidden)
+            .aspectRatio(16, 9)
+            .padding(bottom = AppSpacing.SectionGap),
+        Alignment.Center,
+    ) {
+        Loading(info) {
+            Image(
+                heroImage,
+                "Hero Image",
+                Modifier
+                    .fillMaxSize()
+                    .objectFit(ObjectFit.Cover)
+                    .position(Position.Absolute)
+                    .zIndex(1),
+            )
+
+            Box(ContainerStyle.toModifier().zIndex(2)) {
+                Column(
+                    Modifier
+                        .fillMaxWidth(50.percent)
+                        .padding(topBottom = AppSpacing.SectionGap)
+                        .textAlign(TextAlign.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    H1(
+                        DisplayLgStyle
+                            .toModifier()
+                            .color(AppColors.Secondary)
+                            .margin(bottom = 24.px)
+                            .toAttrs(),
                     ) {
-                        Loading(settings) {
-                            Image(
-                                heroImage,
-                                "Hero Image",
-                                Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
-                            )
+                        Text(heroTitle)
+                    }
+                    P(
+                        BodyLgStyle
+                            .toModifier()
+                            .color(AppColors.OnBackground)
+                            .margin(bottom = 32.px)
+                            .maxWidth(800.px)
+                            .marginInline(autoLength)
+                            .toAttrs(),
+                    ) {
+                        Text(heroSubtitle)
+                    }
+                    Box(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap), contentAlignment = Alignment.Center) {
+                        Link(
+                            "/contact",
+                            PrimaryButtonStyle.toModifier(),
+                        ) {
+                            Text("Let's Talk")
                         }
                     }
                 }
@@ -167,15 +185,72 @@ fun HeroSection(settings: HomeInfo?) {
 }
 
 @Composable
-fun AboutSection(settings: HomeInfo?) {
-    Box(SectionWarmStyle.toModifier(), Alignment.Center) {
-        Box(ContainerStyle.toModifier()) {
+fun StatsSection(info: HomeInfo?) =
+    Loading(info) {
+        val statsList = listOf(stats.first, stats.second, stats.third)
+
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .backgroundColor(AppColors.Secondary)
+                .minHeight(248.px)
+                .position(Position.Relative),
+            contentAlignment = Alignment.Center,
+        ) {
+            Row(
+                Modifier.fillMaxWidth().padding(AppSpacing s 2),
+                Arrangement.SpaceEvenly,
+                Alignment.CenterVertically,
+            ) {
+                statsList.forEach {
+                    Span(
+                        HeadlineMdStyle
+                            .toModifier()
+                            .color(AppColors.OnSecondary)
+                            .padding(16.px)
+                            .textAlign(TextAlign.Center)
+                            .toAttrs(),
+                    ) {
+                        Text(it)
+                    }
+                }
+            }
+
+            statsNotice?.let {
+                Span(
+                    LabelSmStyle
+                        .toModifier()
+                        .color(AppColors.OnSecondary)
+                        .opacity(0.6)
+                        .fontSize(0.7.em)
+                        .position(Position.Absolute)
+                        .bottom(12.px)
+                        .right(24.px)
+                        .toAttrs(),
+                ) {
+                    Text(it)
+                }
+            }
+        }
+    }
+
+@Composable
+fun AboutSection(info: HomeInfo?) {
+    Box(
+        Modifier
+            .backgroundColor(AppColors.SurfaceContainer)
+            .margin(AppSpacing s 8)
+            .borderRadius(AppRadius.Lg)
+            .alignSelf(AlignSelf.Stretch),
+        Alignment.Center,
+    ) {
+        Box(ContainerStyle.toModifier().padding(AppSpacing s 8)) {
             SimpleGrid(
                 numColumns(1, md = 12),
                 Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
             ) {
                 Box(Modifier.gridColumn("span 5")) {
-                    Loading(settings) {
+                    Loading(info) {
                         Image(
                             aboutImage,
                             "About Image",
@@ -188,19 +263,7 @@ fun AboutSection(settings: HomeInfo?) {
                     }
                 }
                 Column(Modifier.gridColumn("span 7").padding(left = AppSpacing.S5)) {
-                    Loading(settings) {
-                        Span(
-                            LabelMdStyle
-                                .toModifier()
-                                .color(AppColors.Secondary)
-                                .letterSpacing(0.2.em)
-                                .textTransform(TextTransform.Uppercase)
-                                .margin(bottom = 16.px)
-                                .toAttrs(),
-                        ) {
-                            Text(aboutLabel)
-                        }
-
+                    Loading(info) {
                         H2(
                             DisplayLgStyle
                                 .toModifier()
@@ -213,6 +276,14 @@ fun AboutSection(settings: HomeInfo?) {
 
                         P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
                             Text(aboutDescription)
+                        }
+                    }
+                    Box(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap), Alignment.Center) {
+                        Link(
+                            "/contact",
+                            PrimaryButtonStyle.toModifier(),
+                        ) {
+                            Text("Let's Talk")
                         }
                     }
                 }

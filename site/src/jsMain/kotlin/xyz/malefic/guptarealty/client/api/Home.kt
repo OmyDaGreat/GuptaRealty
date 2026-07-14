@@ -10,7 +10,7 @@ import xyz.malefic.guptarealty.client.util.getApiList
 import xyz.malefic.guptarealty.client.util.postApi
 import xyz.malefic.guptarealty.model.HomeInfo
 
-suspend fun getHomeSettings() = getApi<HomeInfo>("home")
+suspend fun getHomeInfo() = getApi<HomeInfo>("home")
 
 suspend fun postHomeSettings(
     settings: HomeInfo,

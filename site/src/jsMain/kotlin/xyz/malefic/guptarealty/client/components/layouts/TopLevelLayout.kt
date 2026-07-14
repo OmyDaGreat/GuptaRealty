@@ -53,7 +53,6 @@ import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.client.api.getSiteSettings
 import xyz.malefic.guptarealty.client.components.CopyrightStrip
-import xyz.malefic.guptarealty.client.components.Footer
 import xyz.malefic.guptarealty.client.components.Logo
 import xyz.malefic.guptarealty.client.styles.AppColors
 import xyz.malefic.guptarealty.client.styles.AppRadius
@@ -91,7 +90,7 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
                 Modifier
                     .fillMaxWidth()
                     .maxWidth(AppSpacing.ContainerMax)
-                    .height(80.px),
+                    .height(64.px),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Link("/", Modifier.textDecorationLine(TextDecorationLine.None)) {
@@ -100,7 +99,7 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
                             Modifier.size(40.px).borderRadius(50.percent).border(1.px, LineStyle.Solid, AppColors.Outline),
                             siteInfo?.logoUrl,
                         )
-                        Span(HeadlineSmStyle.toModifier().color(AppColors.Primary).toAttrs()) {
+                        Span(HeadlineSmStyle.toModifier().color(AppColors.Secondary).toAttrs()) {
                             Text(siteInfo?.siteName ?: "Gupta Realty")
                         }
                     }
@@ -198,7 +197,6 @@ fun TopLevelLayout(content: @Composable () -> Unit) {
 
         Column(Modifier.fillMaxWidth()) {
             content()
-            Footer(siteInfo)
             CopyrightStrip(siteInfo)
         }
     }

@@ -34,7 +34,7 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
-import xyz.malefic.guptarealty.client.api.getHomeSettings
+import xyz.malefic.guptarealty.client.api.getHomeInfo
 import xyz.malefic.guptarealty.client.api.postHomeSettings
 import xyz.malefic.guptarealty.client.components.AdminField
 import xyz.malefic.guptarealty.client.components.AdminTextArea
@@ -66,7 +66,7 @@ fun AdminLayoutScope.HomePage() {
     var selectingImageFor by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
-        settings = getHomeSettings()
+        settings = getHomeInfo()
     }
 
     Column(Modifier.fillMaxSize().overflow(Overflow.Auto).padding(AppSpacing.S4)) {
@@ -116,9 +116,6 @@ fun AdminLayoutScope.HomePage() {
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
                     Text("About Section")
-                }
-                AdminField("About Label", aboutLabel) {
-                    settings = settings?.copy(aboutLabel = it)
                 }
                 AdminField("About Title", aboutTitle) {
                     settings = settings?.copy(aboutTitle = it)

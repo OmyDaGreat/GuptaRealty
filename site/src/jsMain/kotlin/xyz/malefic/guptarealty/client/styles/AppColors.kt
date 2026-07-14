@@ -1,5 +1,7 @@
 package xyz.malefic.guptarealty.client.styles
 
+import com.varabyte.kobweb.compose.ui.graphics.Colors
+import xyz.malefic.kutint.kutint
 import xyz.malefic.kutint.parseHex
 
 object AppColors {
@@ -63,7 +65,7 @@ object AppColors {
     val OnErrorContainer = parseHex("#93000a")
 
     // ── Background / Root ────────────────────────────────────────────────────
-    val Background = parseHex("#fdf9e9")
+    val Background = Colors.White.kutint
     val OnBackground = parseHex("#1c1c13")
     val SurfaceVariant = parseHex("#e6e3d3")
 }
