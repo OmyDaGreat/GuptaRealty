@@ -123,6 +123,33 @@ fun AdminLayoutScope.SiteSettingsPage() {
                 AdminField("Brokerage Name", brokerageName) {
                     settings = settings?.copy(brokerageName = it)
                 }
+                AdminField("Brokerage License (DRE#)", brokerageLicense) {
+                    settings = settings?.copy(brokerageLicense = it)
+                }
+
+                H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
+                    Text("Affiliation Logos")
+                }
+                affiliationLogos.forEachIndexed { index, logo ->
+                    Row(
+                        Modifier.gap(AppSpacing.S2).fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        AdminField("Logo URL ${index + 1}", logo) { newVal ->
+                            val newList = affiliationLogos.toMutableList()
+                            newList[index] = newVal
+                            settings = settings?.copy(affiliationLogos = newList)
+                        }
+                        Button(Modifier.onClick {
+                            val newList = affiliationLogos.toMutableList()
+                            newList.removeAt(index)
+                            settings = settings?.copy(affiliationLogos = newList)
+                        }.toAttrs()) { Text("Remove") }
+                    }
+                }
+                Button(Modifier.onClick {
+                    settings = settings?.copy(affiliationLogos = affiliationLogos + "")
+                }.toAttrs()) { Text("Add Logo") }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
                     Text("Contact Information")
@@ -136,12 +163,24 @@ fun AdminLayoutScope.SiteSettingsPage() {
                 AdminField("Address", agentAddress) {
                     settings = settings?.copy(agentAddress = it)
                 }
+                AdminField("TikTok URL", tiktokUrl) {
+                    settings = settings?.copy(tiktokUrl = it)
+                }
+                AdminField("Instagram URL", instagramUrl) {
+                    settings = settings?.copy(instagramUrl = it)
+                }
+                AdminField("LinkedIn URL", linkedinUrl) {
+                    settings = settings?.copy(linkedinUrl = it)
+                }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
                     Text("Footer")
                 }
                 AdminTextArea("Footer Description", footerDescription) {
                     settings = settings?.copy(footerDescription = it)
+                }
+                AdminTextArea("Legal Disclaimer", disclaimerText) {
+                    settings = settings?.copy(disclaimerText = it)
                 }
 
                 Button(

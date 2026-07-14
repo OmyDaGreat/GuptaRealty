@@ -15,6 +15,7 @@ kobweb-core = { module = "com.varabyte.kobweb:kobweb-core ", version.ref = "kobw
 kobweb-silk = { module = "com.varabyte.kobweb:kobweb-silk", version.ref = "kobweb" }
 kobweb-api = { module = "com.varabyte.kobweb:kobweb-api", version.ref = "kobweb" }
 silk-icons-ms = { module = "com.varabyte.kobwebx:silk-icons-ms", version.ref = "kobweb" }
+silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "kobweb" }
 
 kutint = { group = "xyz.malefic", name = "kutint", version.ref = "kutint" }
 
@@ -38,6 +39,6 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-kobweb = ["kobweb-core", "kobweb-silk", "silk-icons-ms"]
+kobweb = ["kobweb-core", "kobweb-silk", "silk-icons-ms", "silk-icons-fa"]
 compose = ["compose-html-core", "compose-runtime"]
 http4k = ["http4k-core", "http4k-multipart", "http4k-server-undertow", "http4k-format-kotlinx", "http4k-client-okhttp", "http4k-hot-reload"]

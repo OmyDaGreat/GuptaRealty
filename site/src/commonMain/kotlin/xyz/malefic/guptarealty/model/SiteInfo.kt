@@ -11,6 +11,12 @@ data class SiteInfo(
     val agentEmail: String,
     val agentAddress: String,
     val brokerageName: String,
+    val brokerageLicense: String,
     val footerDescription: String,
     val logoUrl: String,
+    val affiliationLogos: List<String>,
+    val tiktokUrl: String,
+    val instagramUrl: String,
+    val linkedinUrl: String,
+    val disclaimerText: String,
 )

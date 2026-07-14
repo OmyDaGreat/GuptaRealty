@@ -32,6 +32,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.bottom
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.cursor
+import com.varabyte.kobweb.compose.ui.modifiers.fillMaxHeight
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.flexWrap
@@ -69,6 +70,7 @@ import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.em
+import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
 import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.H1
@@ -530,11 +532,13 @@ fun BlogCard(post: BlogPostResponse) =
                 .overflow(Overflow.Hidden)
                 .margin(bottom = 16.px),
         ) {
-            Image(
-                post.imageSrc ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png", // TODO: Better default image
-                post.title,
-                Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
-            )
+            post.imageSrc?.let {
+                Image(
+                    post.imageSrc,
+                    post.title,
+                    Modifier.fillMaxSize().objectFit(ObjectFit.Cover),
+                )
+            }
             Row(
                 Modifier
                     .position(Position.Absolute)
@@ -603,17 +607,18 @@ fun ReviewSection(info: HomeInfo?) =
                     .zIndex(1),
             )
 
-            Box(ContainerStyle.toModifier().zIndex(2)) {
+            Box(ContainerStyle.toModifier().fillMaxHeight().zIndex(2), Alignment.CenterStart) {
                 Column(
                     Modifier
                         .fillMaxWidth()
                         .maxWidth(800.px)
                         .padding(topBottom = AppSpacing.SectionGap)
-                        .textAlign(TextAlign.Center),
+                        .textAlign(TextAlign.Center)
+                        .fillMaxWidth(50.percent),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     H1(
-                        DisplayLgStyle
+                        HeadlineMdStyle
                             .toModifier()
                             .color(AppColors.Secondary)
                             .margin(bottom = 24.px)
@@ -622,7 +627,7 @@ fun ReviewSection(info: HomeInfo?) =
                         Text(quote)
                     }
                     P(
-                        BodyLgStyle
+                        HeadlineSmStyle
                             .toModifier()
                             .color(AppColors.OnBackground)
                             .margin(bottom = 32.px)
