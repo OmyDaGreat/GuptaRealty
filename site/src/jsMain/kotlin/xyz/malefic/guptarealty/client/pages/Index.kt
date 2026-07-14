@@ -23,6 +23,7 @@ import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.alignItems
 import com.varabyte.kobweb.compose.ui.modifiers.alignSelf
 import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
@@ -372,7 +373,11 @@ fun HelpBox(info: HelpBoxHomeInfo) =
 
 @Composable
 fun InstagramSection(info: HomeInfo?) =
-    Box(SectionStyle.toModifier()) {
+    Box(
+        Modifier
+            .backgroundColor(AppColors.Secondary)
+            .padding(top = AppSpacing s 8, leftRight = AppSpacing s 8, bottom = AppSpacing s 12),
+    ) {
         Box(ContainerStyle.toModifier()) {
             Loading(info?.insta) {
                 SimpleGrid(
@@ -385,6 +390,7 @@ fun InstagramSection(info: HomeInfo?) =
                                 .toModifier()
                                 .fontSize(32.px)
                                 .margin(bottom = 24.px)
+                                .color(AppColors.OnSecondary)
                                 .toAttrs(),
                         ) {
                             Text(title)
@@ -394,11 +400,12 @@ fun InstagramSection(info: HomeInfo?) =
                                 .toModifier()
                                 .margin(bottom = 24.px)
                                 .whiteSpace(WhiteSpace.PreWrap)
+                                .color(AppColors.OnSecondary)
                                 .toAttrs(),
                         ) {
                             Text(description)
                         }
-                        Link(followLink, ShowOnMdStyle.toModifier()) {
+                        Link(followLink, ShowOnMdStyle.toModifier().color(Colors.White)) {
                             Text("Follow on Instagram")
                         }
                     }
@@ -411,7 +418,16 @@ fun InstagramSection(info: HomeInfo?) =
 
 @Composable
 fun YoutubeSection(info: HomeInfo?) =
-    Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceContainer)) {
+    Box(
+        Modifier
+            .backgroundColor(AppColors.SurfaceContainer)
+            .margin(top = AppSpacing s -8, leftRight = AppSpacing s 8)
+            .padding(AppSpacing s 8)
+            .position(Position.Relative)
+            .zIndex(2)
+            .borderRadius(topLeft = AppRadius.Lg, topRight = AppRadius.Lg)
+            .alignSelf(AlignSelf.Stretch),
+    ) {
         Box(ContainerStyle.toModifier()) {
             Loading(info?.youtube) {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {

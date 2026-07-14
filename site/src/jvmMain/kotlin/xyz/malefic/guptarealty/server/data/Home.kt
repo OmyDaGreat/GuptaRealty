@@ -76,7 +76,7 @@ var homeInfo by file(
             Testimonial(
                 author = "Ruchika",
                 quote = "Wow wowow owowow",
-                imageSrc = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.licdn.com%2Fdms%2Fimage%2Fsync%2Fv2%2FD5627AQG1OsXV92bqPA%2Farticleshare-shrink_800%2FB56ZwU6Fi5IYAI-%2F0%2F1769877299077%3Fe%3D2147483647%26v%3Dbeta%26t%3DkB28XlekXeat3fqlQsJ4ZL1tiYZacDRrHQsaDvo60ao&f=1&nofb=1&ipt=cfcdd886d3bb08f4cdba747166f69f0a45f34d0d2463df96bc4e590781ab9cf2",
+                imageSrc = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F021%2F433%2F017%2Foriginal%2Fsample-rubber-stamp-free-png.png&f=1&nofb=1&ipt=29aa18bb79ae95986cc75dd7afd3cebeb193b1de12a193ce9c15b05878313919",
             ),
     ),
 )
