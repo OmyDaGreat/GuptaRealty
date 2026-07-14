@@ -1,14 +1,23 @@
 package xyz.malefic.guptarealty.server.data
 
+import xyz.malefic.guptarealty.model.AboutHomeInfo
+import xyz.malefic.guptarealty.model.HelpBoxHomeInfo
+import xyz.malefic.guptarealty.model.HelpHomeInfo
+import xyz.malefic.guptarealty.model.HeroHomeInfo
 import xyz.malefic.guptarealty.model.HomeInfo
+import xyz.malefic.guptarealty.model.SocialHomeInfo
+import xyz.malefic.guptarealty.model.Testimonial
 import xyz.malefic.guptarealty.server.util.file
 
 var homeInfo by file(
     "home-info.json",
     HomeInfo(
-        heroTitle = "Results You'll Love, Without the Guesswork",
-        heroSubtitle = "I believe that achieving great results shouldn't come with a side of overwhelm. I’m here to streamline the entire process, giving you total clarity and confidence from day one.",
-        heroImage = "/Logo.jpg",
+        hero =
+            HeroHomeInfo(
+                title = "Results You'll Love, Without the Guesswork",
+                subtitle = "I believe that achieving great results shouldn't come with a side of overwhelm. I’m here to streamline the entire process, giving you total clarity and confidence from day one.",
+                image = "/Logo.jpg",
+            ),
         stats =
             Triple(
                 "Backed by #1 Independent Brokerage in CA",
@@ -16,19 +25,58 @@ var homeInfo by file(
                 "61+ office locations expanding across the US",
             ),
         statsNotice = "Brokerage stats provided by FTRE based on 2025 year-end data.",
-        aboutTitle = "Hi! I'm Ruchika",
-        aboutDescription =
-            """
-            I help buyers, and sellers navigate the OC real estate market with confidence — and I’ve been licensed since January 2022.
-            Originally from India, I’ve called OC home for the past 20 years and have lived in Anaheim since then.
+        help =
+            HelpHomeInfo(
+                title = "How Can I Help?",
+                description = "Whether you are a seller, buyer, or both, I'm here to guide you along every step of the process.",
+                boxes =
+                    Pair(
+                        HelpBoxHomeInfo(
+                            image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.lgo.org.uk%2Fassets%2Finline%2F5856%2FWEB-Man-with-clipboard-knocking-on-door.jpg&f=1&nofb=1&ipt=f942d90fdfabc624fa58d7b327915b35e9ba626fcfaeaa053b0ea3a2efa76ecd",
+                            title = "Sellers",
+                            description = "Tailored strategies to maximize your return.",
+                        ),
+                        HelpBoxHomeInfo(
+                            image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.lgo.org.uk%2Fassets%2Finline%2F5856%2FWEB-Man-with-clipboard-knocking-on-door.jpg&f=1&nofb=1&ipt=f942d90fdfabc624fa58d7b327915b35e9ba626fcfaeaa053b0ea3a2efa76ecd",
+                            title = "Buyers",
+                            description = "Achieve homeownership—minus the guesswork.",
+                        ),
+                    ),
+            ),
+        about =
+            AboutHomeInfo(
+                title = "Hi! I'm Ruchika",
+                description =
+                    """
+                    I help buyers, and sellers navigate the OC real estate market with confidence — and I’ve been licensed since January 2022.
+                    Originally from India, I’ve called OC home for the past 20 years and have lived in Anaheim since then.
 
-            I’m known for being personable, organized, and honest — but also a strong advocate when it matters most.
-            Outside of real estate, I’m a big traveler. When I’m not working, you can usually find me playing board games with my kids or finding a new coffee shop somewhere.
-            """.trimIndent(),
-        aboutImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuCuwNDb-CwDlopOQd4M9z3qBsg47Jva-z3IKYTWAqKhXGqgBv2NtxGRCt-jSRpohSDwMsX40mGSIGNOz1apgYvVFiwjYWU-Hr9gDe9tl3LB2AtgcF9HBpYMqEc4hgpCT-QjcjVm9ziJAGwY14iXUG09Izkj-tWX-_1ms4BS2xhq1Lf7ZXLMJL9tpGfKAdYRfbEQb9HgLYxMpq20gtvpZPknpotYaCYkfxyGkojJSeOyL2LaDJEqrdnx7qKd-slF0Ub2NRLljwbqyEc",
-        ctaTitle = "Looking for properties?",
-        ctaDescription = "Access our exclusive database of local listings and find your perfect home before it even hits the open market.",
-        ctaSearchLink = "/contact",
-        ctaDownloadLink = "/contact",
+                    I’m known for being personable, organized, and honest — but also a strong advocate when it matters most.
+                    Outside of real estate, I’m a big traveler. When I’m not working, you can usually find me playing board games with my kids or finding a new coffee shop somewhere.
+                    """.trimIndent(),
+                image = "https://lh3.googleusercontent.com/aida-public/AB6AXuCuwNDb-CwDlopOQd4M9z3qBsg47Jva-z3IKYTWAqKhXGqgBv2NtxGRCt-jSRpohSDwMsX40mGSIGNOz1apgYvVFiwjYWU-Hr9gDe9tl3LB2AtgcF9HBpYMqEc4hgpCT-QjcjVm9ziJAGwY14iXUG09Izkj-tWX-_1ms4BS2xhq1Lf7ZXLMJL9tpGfKAdYRfbEQb9HgLYxMpq20gtvpZPknpotYaCYkfxyGkojJSeOyL2LaDJEqrdnx7qKd-slF0Ub2NRLljwbqyEc",
+            ),
+        insta =
+            SocialHomeInfo(
+                title = "The Unfiltered Version",
+                description = "No perfectly staged content here — just home tours, market truths, and the real stories behind every OC deal. Come hang out on Instagram, where it's a lot more fun than a regular open house.",
+                followLink = "https://www.instagram.com/ruchika.realtor/",
+                posts = "https://www.instagram.com/p/DR49lRfAfe2/embed/" to "https://www.instagram.com/p/DaS1JrPv02w/embed/",
+            ),
+        youtube =
+            SocialHomeInfo(
+                title = "Learn Before You Leap",
+                description = "Buying or selling a home comes with a lot of decisions — and a lot of ways to get it wrong. On my YouTube channel, I break down what actually matters: how to avoid costly pitfalls, what smart buyers and sellers do differently, and everything I wish more people knew before they signed on the dotted line.",
+                followLink = "https://www.youtube.com/channel/UCbPMvIhONGrwsFiFZmu_sgg",
+                posts =
+                    "https://youtube.com/embed/rgIC0NPFwyA?si=rapKvSrJKQEy0hDV?rel=0" to
+                        "https://youtube.com/embed/xeqV4rADEEM?si=xZ3v5wqfptIG8jy1?rel=0",
+            ),
+        testimonial =
+            Testimonial(
+                author = "Ruchika",
+                quote = "Wow wowow owowow",
+                imageSrc = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.licdn.com%2Fdms%2Fimage%2Fsync%2Fv2%2FD5627AQG1OsXV92bqPA%2Farticleshare-shrink_800%2FB56ZwU6Fi5IYAI-%2F0%2F1769877299077%3Fe%3D2147483647%26v%3Dbeta%26t%3DkB28XlekXeat3fqlQsJ4ZL1tiYZacDRrHQsaDvo60ao&f=1&nofb=1&ipt=cfcdd886d3bb08f4cdba747166f69f0a45f34d0d2463df96bc4e590781ab9cf2",
+            ),
     ),
 )

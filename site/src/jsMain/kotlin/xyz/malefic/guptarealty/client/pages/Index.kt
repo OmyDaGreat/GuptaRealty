@@ -18,7 +18,6 @@ import com.varabyte.kobweb.compose.css.TextDecorationLine
 import com.varabyte.kobweb.compose.css.TextTransform
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.css.autoLength
-import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.alignItems
 import com.varabyte.kobweb.compose.ui.modifiers.alignSelf
 import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
-import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.bottom
 import com.varabyte.kobweb.compose.ui.modifiers.color
@@ -40,6 +38,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.fontSize
 import com.varabyte.kobweb.compose.ui.modifiers.fontWeight
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.gridColumn
+import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.left
 import com.varabyte.kobweb.compose.ui.modifiers.letterSpacing
@@ -59,7 +58,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.textTransform
 import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
-import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.graphics.Image
@@ -70,8 +68,8 @@ import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.FlexWrap
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.em
-import org.jetbrains.compose.web.css.percent
 import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.vh
 import org.jetbrains.compose.web.dom.H1
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
@@ -80,6 +78,7 @@ import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.client.api.getBlog
 import xyz.malefic.guptarealty.client.api.getHomeInfo
+import xyz.malefic.guptarealty.client.components.Iframe
 import xyz.malefic.guptarealty.client.components.Loading
 import xyz.malefic.guptarealty.client.styles.AppColors
 import xyz.malefic.guptarealty.client.styles.AppModifiers
@@ -94,10 +93,10 @@ import xyz.malefic.guptarealty.client.styles.HeadlineSmStyle
 import xyz.malefic.guptarealty.client.styles.LabelMdStyle
 import xyz.malefic.guptarealty.client.styles.LabelSmStyle
 import xyz.malefic.guptarealty.client.styles.PrimaryButtonStyle
-import xyz.malefic.guptarealty.client.styles.SecondaryButtonStyle
 import xyz.malefic.guptarealty.client.styles.SectionStyle
 import xyz.malefic.guptarealty.client.styles.ShowOnMdStyle
 import xyz.malefic.guptarealty.model.BlogPostResponse
+import xyz.malefic.guptarealty.model.HelpBoxHomeInfo
 import xyz.malefic.guptarealty.model.HomeInfo
 
 @Page
@@ -115,25 +114,28 @@ fun HomePage() {
         HeroSection(info)
         StatsSection(info)
         AboutSection(info)
+        HelpSection(info)
+        InstagramSection(info)
+        YoutubeSection(info)
         BlogPreviewSection(posts)
-        CTASection(info)
+        ReviewSection(info)
     }
 }
 
 @Composable
-fun HeroSection(info: HomeInfo?) {
+fun HeroSection(info: HomeInfo?) =
     Box(
         SectionStyle
             .toModifier()
             .position(Position.Relative)
             .overflow(Overflow.Hidden)
-            .aspectRatio(16, 9)
+            .minHeight(80.vh)
             .padding(bottom = AppSpacing.SectionGap),
         Alignment.Center,
     ) {
-        Loading(info) {
+        Loading(info?.hero) {
             Image(
-                heroImage,
+                image,
                 "Hero Image",
                 Modifier
                     .fillMaxSize()
@@ -145,7 +147,8 @@ fun HeroSection(info: HomeInfo?) {
             Box(ContainerStyle.toModifier().zIndex(2)) {
                 Column(
                     Modifier
-                        .fillMaxWidth(50.percent)
+                        .fillMaxWidth()
+                        .maxWidth(640.px)
                         .padding(topBottom = AppSpacing.SectionGap)
                         .textAlign(TextAlign.Center),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -157,18 +160,16 @@ fun HeroSection(info: HomeInfo?) {
                             .margin(bottom = 24.px)
                             .toAttrs(),
                     ) {
-                        Text(heroTitle)
+                        Text(title)
                     }
                     P(
                         BodyLgStyle
                             .toModifier()
                             .color(AppColors.OnBackground)
                             .margin(bottom = 32.px)
-                            .maxWidth(800.px)
-                            .marginInline(autoLength)
                             .toAttrs(),
                     ) {
-                        Text(heroSubtitle)
+                        Text(subtitle)
                     }
                     Box(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap), contentAlignment = Alignment.Center) {
                         Link(
@@ -182,7 +183,6 @@ fun HeroSection(info: HomeInfo?) {
             }
         }
     }
-}
 
 @Composable
 fun StatsSection(info: HomeInfo?) =
@@ -197,21 +197,22 @@ fun StatsSection(info: HomeInfo?) =
                 .position(Position.Relative),
             contentAlignment = Alignment.Center,
         ) {
-            Row(
-                Modifier.fillMaxWidth().padding(AppSpacing s 2),
-                Arrangement.SpaceEvenly,
-                Alignment.CenterVertically,
-            ) {
-                statsList.forEach {
-                    Span(
-                        HeadlineMdStyle
-                            .toModifier()
-                            .color(AppColors.OnSecondary)
-                            .padding(16.px)
-                            .textAlign(TextAlign.Center)
-                            .toAttrs(),
-                    ) {
-                        Text(it)
+            Box(ContainerStyle.toModifier()) {
+                SimpleGrid(
+                    numColumns(1, md = 3),
+                    Modifier.fillMaxWidth().padding(AppSpacing s 2),
+                ) {
+                    statsList.forEach {
+                        Span(
+                            HeadlineMdStyle
+                                .toModifier()
+                                .color(AppColors.OnSecondary)
+                                .padding(16.px)
+                                .textAlign(TextAlign.Center)
+                                .toAttrs(),
+                        ) {
+                            Text(it)
+                        }
                     }
                 }
             }
@@ -235,24 +236,23 @@ fun StatsSection(info: HomeInfo?) =
     }
 
 @Composable
-fun AboutSection(info: HomeInfo?) {
+fun AboutSection(info: HomeInfo?) =
     Box(
         Modifier
             .backgroundColor(AppColors.SurfaceContainer)
-            .margin(AppSpacing s 8)
-            .borderRadius(AppRadius.Lg)
+            .margin(topBottom = AppSpacing s 8)
             .alignSelf(AlignSelf.Stretch),
         Alignment.Center,
     ) {
-        Box(ContainerStyle.toModifier().padding(AppSpacing s 8)) {
+        Box(ContainerStyle.toModifier().padding(topBottom = AppSpacing s 8)) {
             SimpleGrid(
                 numColumns(1, md = 12),
                 Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
             ) {
                 Box(Modifier.gridColumn("span 5")) {
-                    Loading(info) {
+                    Loading(info?.about) {
                         Image(
-                            aboutImage,
+                            image,
                             "About Image",
                             Modifier
                                 .fillMaxWidth()
@@ -263,7 +263,7 @@ fun AboutSection(info: HomeInfo?) {
                     }
                 }
                 Column(Modifier.gridColumn("span 7").padding(left = AppSpacing.S5)) {
-                    Loading(info) {
+                    Loading(info?.about) {
                         H2(
                             DisplayLgStyle
                                 .toModifier()
@@ -271,14 +271,14 @@ fun AboutSection(info: HomeInfo?) {
                                 .margin(bottom = 24.px)
                                 .toAttrs(),
                         ) {
-                            Text(aboutTitle)
+                            Text(title)
                         }
 
                         P(BodyLgStyle.toModifier().whiteSpace(WhiteSpace.PreWrap).toAttrs()) {
-                            Text(aboutDescription)
+                            Text(description)
                         }
                     }
-                    Box(Modifier.gap(16.px).flexWrap(FlexWrap.Wrap), Alignment.Center) {
+                    Box(Modifier.margin(top = 24.px).gap(16.px).flexWrap(FlexWrap.Wrap), Alignment.Center) {
                         Link(
                             "/contact",
                             PrimaryButtonStyle.toModifier(),
@@ -290,11 +290,173 @@ fun AboutSection(info: HomeInfo?) {
             }
         }
     }
-}
 
 @Composable
-fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
-    Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceLowest), Alignment.Center) {
+fun HelpSection(info: HomeInfo?) =
+    Box(SectionStyle.toModifier()) {
+        Box(ContainerStyle.toModifier()) {
+            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Loading(info?.help) {
+                    H2(
+                        DisplayLgStyle
+                            .toModifier()
+                            .fontSize(32.px)
+                            .margin(bottom = 24.px)
+                            .toAttrs(),
+                    ) {
+                        Text(title)
+                    }
+                    Span(
+                        BodyLgStyle
+                            .toModifier()
+                            .whiteSpace(WhiteSpace.PreWrap)
+                            .textAlign(TextAlign.Center)
+                            .toAttrs(),
+                    ) {
+                        Text(description)
+                    }
+
+                    SimpleGrid(
+                        numColumns(1, md = 2),
+                        Modifier
+                            .gap(AppSpacing.Gutter)
+                            .margin(top = 48.px)
+                            .fillMaxWidth(),
+                    ) {
+                        HelpBox(boxes.first)
+                        HelpBox(boxes.second)
+                    }
+                }
+            }
+        }
+    }
+
+@Composable
+fun HelpBox(info: HelpBoxHomeInfo) =
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .backgroundColor(AppColors.SurfaceLow)
+            .borderRadius(AppRadius.Lg)
+            .overflow(Overflow.Hidden)
+            .then(AppModifiers.SoftShadow),
+    ) {
+        Image(info.image, "${info.title} Help Image", Modifier.fillMaxWidth().height(240.px).objectFit(ObjectFit.Cover))
+        Column(Modifier.padding(AppSpacing.S4)) {
+            H2(
+                HeadlineMdStyle
+                    .toModifier()
+                    .color(AppColors.Secondary)
+                    .margin(bottom = 8.px)
+                    .toAttrs(),
+            ) {
+                Text(info.title)
+            }
+            P(
+                BodyMdStyle
+                    .toModifier()
+                    .color(AppColors.OnBackground)
+                    .margin(bottom = 24.px)
+                    .toAttrs(),
+            ) {
+                Text(info.description)
+            }
+            Link(
+                "/contact",
+                PrimaryButtonStyle.toModifier(),
+            ) {
+                Text("Learn More")
+            }
+        }
+    }
+
+@Composable
+fun InstagramSection(info: HomeInfo?) =
+    Box(SectionStyle.toModifier()) {
+        Box(ContainerStyle.toModifier()) {
+            Loading(info?.insta) {
+                SimpleGrid(
+                    numColumns(1, md = 3),
+                    Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
+                ) {
+                    Column {
+                        H2(
+                            DisplayLgStyle
+                                .toModifier()
+                                .fontSize(32.px)
+                                .margin(bottom = 24.px)
+                                .toAttrs(),
+                        ) {
+                            Text(title)
+                        }
+                        P(
+                            BodyLgStyle
+                                .toModifier()
+                                .margin(bottom = 24.px)
+                                .whiteSpace(WhiteSpace.PreWrap)
+                                .toAttrs(),
+                        ) {
+                            Text(description)
+                        }
+                        Link(followLink, ShowOnMdStyle.toModifier()) {
+                            Text("Follow on Instagram")
+                        }
+                    }
+                    Iframe(posts.first, Modifier.fillMaxWidth().aspectRatio(9, 16).minHeight(450.px))
+                    Iframe(posts.second, Modifier.fillMaxWidth().aspectRatio(9, 16).minHeight(450.px))
+                }
+            }
+        }
+    }
+
+@Composable
+fun YoutubeSection(info: HomeInfo?) =
+    Box(SectionStyle.toModifier().backgroundColor(AppColors.SurfaceContainer)) {
+        Box(ContainerStyle.toModifier()) {
+            Loading(info?.youtube) {
+                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .maxWidth(800.px)
+                            .margin(bottom = 48.px)
+                            .textAlign(TextAlign.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        H2(
+                            DisplayLgStyle
+                                .toModifier()
+                                .fontSize(32.px)
+                                .margin(bottom = 24.px)
+                                .toAttrs(),
+                        ) {
+                            Text(title)
+                        }
+                        P(
+                            BodyLgStyle
+                                .toModifier()
+                                .margin(bottom = 24.px)
+                                .whiteSpace(WhiteSpace.PreWrap)
+                                .toAttrs(),
+                        ) {
+                            Text(description)
+                        }
+                        Link(followLink, ShowOnMdStyle.toModifier()) {
+                            Text("Follow on YouTube")
+                        }
+                    }
+                    SimpleGrid(numColumns(1, md = 2), Modifier.gap(AppSpacing.Gutter).fillMaxWidth()) {
+                        Iframe(posts.first, Modifier.fillMaxWidth().aspectRatio(16, 9))
+                        Iframe(posts.second, Modifier.fillMaxWidth().aspectRatio(16, 9))
+                    }
+                }
+            }
+        }
+    }
+
+@Composable
+fun BlogPreviewSection(posts: List<BlogPostResponse>?) =
+    Box(SectionStyle.toModifier(), Alignment.Center) {
         Box(ContainerStyle.toModifier()) {
             Row(
                 Modifier
@@ -340,10 +502,9 @@ fun BlogPreviewSection(posts: List<BlogPostResponse>?) {
             }
         }
     }
-}
 
 @Composable
-fun BlogCard(post: BlogPostResponse) {
+fun BlogCard(post: BlogPostResponse) =
     Column(Modifier.fillMaxWidth().cursor(Cursor.Pointer)) {
         Box(
             Modifier
@@ -403,61 +564,59 @@ fun BlogCard(post: BlogPostResponse) {
             Text("Read Story")
         }
     }
-}
 
 @Composable
-fun CTASection(settings: HomeInfo?) {
-    Box(SectionStyle.toModifier(), Alignment.Center) {
-        Box(ContainerStyle.toModifier()) {
-            Column(
+fun ReviewSection(info: HomeInfo?) =
+    Box(
+        SectionStyle
+            .toModifier()
+            .position(Position.Relative)
+            .overflow(Overflow.Hidden)
+            .minHeight(60.vh)
+            .padding(bottom = AppSpacing.SectionGap),
+        Alignment.Center,
+    ) {
+        Loading(info?.testimonial) {
+            Image(
+                imageSrc ?: "https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png",
+                "Review Image",
                 Modifier
-                    .fillMaxWidth()
-                    .backgroundColor(AppColors.SecondaryFixed)
-                    .borderRadius(AppRadius.Xl)
-                    .padding(AppSpacing.S10)
-                    .textAlign(TextAlign.Center)
-                    .position(Position.Relative)
-                    .overflow(Overflow.Hidden),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Loading(settings) {
-                    H2(
+                    .fillMaxSize()
+                    .objectFit(ObjectFit.Cover)
+                    .position(Position.Absolute)
+                    .zIndex(1),
+            )
+
+            Box(ContainerStyle.toModifier().zIndex(2)) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .maxWidth(800.px)
+                        .padding(topBottom = AppSpacing.SectionGap)
+                        .textAlign(TextAlign.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    H1(
                         DisplayLgStyle
                             .toModifier()
-                            .color(AppColors.OnSecondaryFixed)
+                            .color(AppColors.Secondary)
                             .margin(bottom = 24.px)
                             .toAttrs(),
                     ) {
-                        Text(ctaTitle)
+                        Text(quote)
                     }
                     P(
                         BodyLgStyle
                             .toModifier()
-                            .color(AppColors.OnSecondaryFixedVariant)
-                            .margin(bottom = 40.px)
-                            .maxWidth(600.px)
-                            .styleModifier {
-                                property("margin-inline", "auto")
-                            }.toAttrs(),
+                            .color(AppColors.OnBackground)
+                            .margin(bottom = 32.px)
+                            .maxWidth(800.px)
+                            .marginInline(autoLength)
+                            .toAttrs(),
                     ) {
-                        Text(ctaDescription)
-                    }
-                    Row(Modifier.gap(16.px).justifyContent(JustifyContent.Center).flexWrap(FlexWrap.Wrap)) {
-                        Link(ctaSearchLink, PrimaryButtonStyle.toModifier()) {
-                            Text("Search Now")
-                        }
-                        Link(
-                            ctaDownloadLink,
-                            SecondaryButtonStyle
-                                .toModifier()
-                                .color(AppColors.OnSecondaryFixed)
-                                .border(color = AppColors.OnSecondaryFixed),
-                        ) {
-                            Text("Download Homebuyer Guide")
-                        }
+                        Text("- $author")
                     }
                 }
             }
         }
     }
-}
