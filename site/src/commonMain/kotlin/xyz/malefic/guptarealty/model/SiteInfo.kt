@@ -19,4 +19,5 @@ data class SiteInfo(
     val instagramUrl: String,
     val linkedinUrl: String,
     val disclaimerText: String,
+    val disclaimerLogo: String?,
 )

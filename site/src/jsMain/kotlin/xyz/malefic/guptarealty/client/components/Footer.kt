@@ -3,12 +3,13 @@ package xyz.malefic.guptarealty.client.components
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.TextDecorationLine
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.toAttrs
+import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.fontSize
@@ -20,6 +21,8 @@ import com.varabyte.kobweb.compose.ui.modifiers.opacity
 import com.varabyte.kobweb.compose.ui.modifiers.padding
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
+import com.varabyte.kobweb.compose.ui.modifiers.width
+import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.icons.fa.FaInstagram
 import com.varabyte.kobweb.silk.components.icons.fa.FaLinkedin
@@ -76,7 +79,9 @@ fun CopyrightStrip(siteInfo: SiteInfo?) =
                             .margin(bottom = 4.px)
                             .toAttrs(),
                     ) {
-                        Text("${siteInfo?.brokerageName ?: "First Team Real Estate"} | ${siteInfo?.brokerageLicense ?: "[First Team's DRE #]"}")
+                        Text(
+                            "${siteInfo?.brokerageName ?: "First Team Real Estate"} | ${siteInfo?.brokerageLicense ?: "[First Team's DRE #]"}",
+                        )
                     }
                     P(
                         LabelSmStyle
@@ -90,19 +95,33 @@ fun CopyrightStrip(siteInfo: SiteInfo?) =
                     }
                 }
 
-                // Legal Disclaimer (Fine Print)
-                P(
-                    Modifier
-                        .fillMaxWidth()
-                        .color(AppColors.InverseOnSurface)
-                        .opacity(0.7)
-                        .fontSize(0.75.em)
-                        .lineHeight(1.4)
-                        .textAlign(TextAlign.Center)
-                        .margin(top = AppSpacing.S2)
-                        .toAttrs(),
+                Row(
+                    Modifier.fillMaxWidth(),
+                    Arrangement.SpaceBetween,
+                    Alignment.CenterVertically,
                 ) {
-                    Text(siteInfo?.disclaimerText ?: "Equal Housing Opportunity. All information provided is deemed reliable but is not guaranteed and should be independently verified. This is not intended as legal, tax, or financial advice. If you are currently working with another real estate agent under a signed representation agreement, this is not a solicitation of that business relationship.")
+                    P(
+                        Modifier
+                            .color(AppColors.InverseOnSurface)
+                            .opacity(0.7)
+                            .fontSize(0.75.em)
+                            .lineHeight(1.4)
+                            .textAlign(TextAlign.Center)
+                            .margin(top = AppSpacing.S2)
+                            .toAttrs(),
+                    ) {
+                        Text(
+                            siteInfo?.disclaimerText
+                                ?: "All information provided is deemed reliable but is not guaranteed and should be independently verified. This is not intended as legal, tax, or financial advice. If you are currently working with another real estate agent under a signed representation agreement, this is not a solicitation of that business relationship.",
+                        )
+                    }
+                    siteInfo?.disclaimerLogo?.let {
+                        Image(
+                            it,
+                            "Equal Housing Opportunity",
+                            Modifier.width(84.px).aspectRatio(1),
+                        )
+                    }
                 }
             }
         }

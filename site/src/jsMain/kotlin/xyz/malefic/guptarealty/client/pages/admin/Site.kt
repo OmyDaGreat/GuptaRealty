@@ -37,6 +37,7 @@ import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.client.api.getSiteSettings
 import xyz.malefic.guptarealty.client.api.postSiteSettings
 import xyz.malefic.guptarealty.client.components.AdminField
+import xyz.malefic.guptarealty.client.components.AdminFieldNull
 import xyz.malefic.guptarealty.client.components.AdminTextArea
 import xyz.malefic.guptarealty.client.components.AssetLibrary
 import xyz.malefic.guptarealty.client.components.Loading
@@ -140,16 +141,22 @@ fun AdminLayoutScope.SiteSettingsPage() {
                             newList[index] = newVal
                             settings = settings?.copy(affiliationLogos = newList)
                         }
-                        Button(Modifier.onClick {
-                            val newList = affiliationLogos.toMutableList()
-                            newList.removeAt(index)
-                            settings = settings?.copy(affiliationLogos = newList)
-                        }.toAttrs()) { Text("Remove") }
+                        Button(
+                            Modifier
+                                .onClick {
+                                    val newList = affiliationLogos.toMutableList()
+                                    newList.removeAt(index)
+                                    settings = settings?.copy(affiliationLogos = newList)
+                                }.toAttrs(),
+                        ) { Text("Remove") }
                     }
                 }
-                Button(Modifier.onClick {
-                    settings = settings?.copy(affiliationLogos = affiliationLogos + "")
-                }.toAttrs()) { Text("Add Logo") }
+                Button(
+                    Modifier
+                        .onClick {
+                            settings = settings?.copy(affiliationLogos = affiliationLogos + "")
+                        }.toAttrs(),
+                ) { Text("Add Logo") }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
                     Text("Contact Information")
@@ -181,6 +188,9 @@ fun AdminLayoutScope.SiteSettingsPage() {
                 }
                 AdminTextArea("Legal Disclaimer", disclaimerText) {
                     settings = settings?.copy(disclaimerText = it)
+                }
+                AdminFieldNull("Disclaimer Logo URL", disclaimerLogo) {
+                    settings = settings?.copy(disclaimerLogo = it)
                 }
 
                 Button(

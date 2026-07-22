@@ -343,7 +343,7 @@ fun RegistrationSection(
                     .textAlign(TextAlign.Center)
                     .toAttrs(),
             ) {
-                Text("I consent to receive exclusive market updates from Ruchika Gupta, with or without the use of automation.")
+                Text("I consent to receive exclusive market updates from Ruchika Gupta.")
             }
         }
         P(

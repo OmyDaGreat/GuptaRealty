@@ -21,7 +21,7 @@ var homeInfo by file(
         stats =
             Triple(
                 "Backed by #1 Independent Brokerage in CA",
-                "106,000+ dlients served broker-wide",
+                "106,000+ clients served broker-wide",
                 "61+ office locations expanding across the US",
             ),
         statsNotice = "Brokerage stats provided by FTRE based on 2025 year-end data.",
