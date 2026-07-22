@@ -1,12 +1,13 @@
 package xyz.malefic.guptarealty.client.styles
 
+import com.varabyte.kobweb.compose.css.autoLength
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.marginInline
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
 import com.varabyte.kobweb.compose.ui.modifiers.padding
-import com.varabyte.kobweb.compose.ui.styleModifier
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 
@@ -17,7 +18,7 @@ import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 val SectionStyle =
     CssStyle {
         base {
-            Modifier.fillMaxWidth().padding(topBottom = AppSpacing.SectionGap)
+            Modifier.fillMaxWidth().padding(topBottom = AppSpacing.Gutter)
         }
     }
 
@@ -31,7 +32,7 @@ val ContainerStyle =
             Modifier
                 .maxWidth(AppSpacing.ContainerMax)
                 .fillMaxWidth()
-                .styleModifier { property("margin-inline", "auto") }
+                .marginInline(autoLength)
                 .padding(leftRight = AppSpacing.MarginMobile)
         }
         Breakpoint.LG {

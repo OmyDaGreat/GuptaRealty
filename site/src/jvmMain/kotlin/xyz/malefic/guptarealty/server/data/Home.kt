@@ -76,7 +76,7 @@ var homeInfo by file(
             Testimonial(
                 author = "Ruchika",
                 quote = "Wow wowow owowow this is a rly long review that says a lot of good things and taht i hope you change rly quickly pls",
-                imageSrc = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F021%2F433%2F017%2Foriginal%2Fsample-rubber-stamp-free-png.png&f=1&nofb=1&ipt=29aa18bb79ae95986cc75dd7afd3cebeb193b1de12a193ce9c15b05878313919",
+                imageSrc = "/Logo.jpg",
             ),
     ),
 )

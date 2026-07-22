@@ -15,7 +15,6 @@ import com.varabyte.kobweb.compose.css.ObjectFit
 import com.varabyte.kobweb.compose.css.Overflow
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.TextDecorationLine
-import com.varabyte.kobweb.compose.css.TextTransform
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.css.autoLength
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -28,6 +27,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.alignItems
 import com.varabyte.kobweb.compose.ui.modifiers.alignSelf
 import com.varabyte.kobweb.compose.ui.modifiers.aspectRatio
 import com.varabyte.kobweb.compose.ui.modifiers.backgroundColor
+import com.varabyte.kobweb.compose.ui.modifiers.border
 import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.bottom
 import com.varabyte.kobweb.compose.ui.modifiers.color
@@ -43,7 +43,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.gridColumn
 import com.varabyte.kobweb.compose.ui.modifiers.height
 import com.varabyte.kobweb.compose.ui.modifiers.justifyContent
 import com.varabyte.kobweb.compose.ui.modifiers.left
-import com.varabyte.kobweb.compose.ui.modifiers.letterSpacing
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.marginInline
 import com.varabyte.kobweb.compose.ui.modifiers.maxWidth
@@ -56,7 +55,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.position
 import com.varabyte.kobweb.compose.ui.modifiers.right
 import com.varabyte.kobweb.compose.ui.modifiers.textAlign
 import com.varabyte.kobweb.compose.ui.modifiers.textDecorationLine
-import com.varabyte.kobweb.compose.ui.modifiers.textTransform
 import com.varabyte.kobweb.compose.ui.modifiers.top
 import com.varabyte.kobweb.compose.ui.modifiers.whiteSpace
 import com.varabyte.kobweb.compose.ui.modifiers.zIndex
@@ -68,6 +66,7 @@ import com.varabyte.kobweb.silk.components.layout.numColumns
 import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.style.toModifier
 import org.jetbrains.compose.web.css.FlexWrap
+import org.jetbrains.compose.web.css.LineStyle
 import org.jetbrains.compose.web.css.Position
 import org.jetbrains.compose.web.css.em
 import org.jetbrains.compose.web.css.percent
@@ -93,7 +92,6 @@ import xyz.malefic.guptarealty.client.styles.ContainerStyle
 import xyz.malefic.guptarealty.client.styles.DisplayLgStyle
 import xyz.malefic.guptarealty.client.styles.HeadlineMdStyle
 import xyz.malefic.guptarealty.client.styles.HeadlineSmStyle
-import xyz.malefic.guptarealty.client.styles.LabelMdStyle
 import xyz.malefic.guptarealty.client.styles.LabelSmStyle
 import xyz.malefic.guptarealty.client.styles.PrimaryButtonStyle
 import xyz.malefic.guptarealty.client.styles.SectionStyle
@@ -243,7 +241,7 @@ fun AboutSection(info: HomeInfo?) =
     Box(
         Modifier
             .backgroundColor(AppColors.SurfaceContainer)
-            .margin(topBottom = AppSpacing s 8)
+            .margin(top = AppSpacing s 8)
             .alignSelf(AlignSelf.Stretch),
         Alignment.Center,
     ) {
@@ -296,7 +294,7 @@ fun AboutSection(info: HomeInfo?) =
 
 @Composable
 fun HelpSection(info: HomeInfo?) =
-    Box(SectionStyle.toModifier()) {
+    Box(SectionStyle.toModifier().padding(topBottom = AppSpacing.MarginDesktop)) {
         Box(ContainerStyle.toModifier()) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                 Loading(info?.help) {
@@ -342,7 +340,8 @@ fun HelpBox(info: HelpBoxHomeInfo) =
             .backgroundColor(AppColors.SurfaceLow)
             .borderRadius(AppRadius.Lg)
             .overflow(Overflow.Hidden)
-            .then(AppModifiers.SoftShadow),
+            .border(1.px, LineStyle.Solid, AppColors.Outline)
+            .then(AppModifiers.ElevatedShadow),
     ) {
         Image(info.image, "${info.title} Help Image", Modifier.fillMaxWidth().height(240.px).objectFit(ObjectFit.Cover))
         Column(Modifier.padding(AppSpacing.S4)) {
@@ -378,7 +377,8 @@ fun InstagramSection(info: HomeInfo?) =
     Box(
         Modifier
             .backgroundColor(AppColors.Secondary)
-            .padding(top = AppSpacing s 8, leftRight = AppSpacing s 8, bottom = AppSpacing s 12),
+            .padding(top = AppSpacing s 8, leftRight = AppSpacing s 8, bottom = AppSpacing s 12)
+            .fillMaxWidth(),
     ) {
         Box(ContainerStyle.toModifier()) {
             Loading(info?.insta) {
@@ -407,7 +407,7 @@ fun InstagramSection(info: HomeInfo?) =
                         ) {
                             Text(description)
                         }
-                        Link(followLink, ShowOnMdStyle.toModifier().color(Colors.White)) {
+                        Link(followLink, ShowOnMdStyle.toModifier().color(Colors.White).textDecorationLine(TextDecorationLine.Underline)) {
                             Text("Follow on Instagram")
                         }
                     }
@@ -459,7 +459,7 @@ fun YoutubeSection(info: HomeInfo?) =
                         ) {
                             Text(description)
                         }
-                        Link(followLink, ShowOnMdStyle.toModifier()) {
+                        Link(followLink, ShowOnMdStyle.toModifier().textDecorationLine(TextDecorationLine.Underline)) {
                             Text("Follow on YouTube")
                         }
                     }
@@ -474,49 +474,33 @@ fun YoutubeSection(info: HomeInfo?) =
 
 @Composable
 fun BlogPreviewSection(posts: List<BlogPostResponse>?) =
-    Box(SectionStyle.toModifier(), Alignment.Center) {
-        Box(ContainerStyle.toModifier()) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .justifyContent(JustifyContent.SpaceBetween)
-                    .alignItems(AlignItems.End)
-                    .margin(bottom = 48.px),
-            ) {
-                Column {
-                    Span(
-                        LabelMdStyle
-                            .toModifier()
-                            .color(AppColors.Secondary)
-                            .letterSpacing(0.2.em)
-                            .textTransform(TextTransform.Uppercase)
-                            .margin(bottom = 16.px)
-                            .toAttrs(),
-                    ) {
-                        Text("Insights")
-                    }
-                    H2(DisplayLgStyle.toModifier().fontSize(32.px).toAttrs()) {
-                        Text("The Realty Blog")
-                    }
-                }
-                Link(
-                    "/blog/",
-                    ShowOnMdStyle
-                        .toModifier()
-                        .color(AppColors.Primary)
-                        .fontWeight(FontWeight.Bold)
-                        .textDecorationLine(TextDecorationLine.None),
-                ) {
-                    Text("View All Stories")
-                }
+    Box(SectionStyle.toModifier().padding(topBottom = AppSpacing.MarginDesktop), Alignment.Center) {
+        Column(
+            ContainerStyle
+                .toModifier()
+                .justifyContent(JustifyContent.SpaceBetween)
+                .margin(bottom = 48.px),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            H2(DisplayLgStyle.toModifier().fontSize(32.px).toAttrs()) {
+                Text("The Realty Blog")
             }
-
             Loading(posts) {
-                SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter)) {
+                SimpleGrid(numColumns(1, md = 3), Modifier.gap(AppSpacing.Gutter).padding(AppSpacing.Gutter)) {
                     this.forEach { post ->
                         BlogCard(post)
                     }
                 }
+            }
+            Link(
+                "/blog/",
+                ShowOnMdStyle
+                    .toModifier()
+                    .color(AppColors.Primary)
+                    .fontWeight(FontWeight.Bold)
+                    .textDecorationLine(TextDecorationLine.None),
+            ) {
+                Text("View All Stories")
             }
         }
     }
