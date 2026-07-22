@@ -1,82 +1,37 @@
-= Dynamic Site Template
+= Gupta Realty
 
-A unified Kotlin Multiplatform (KMP) project combining a Kobweb frontend with an http4k backend server.
+The website for First Team's Gupta Realty, built through Kotlin Multiplatform with a Kobweb frontend and an http4k backend.
+
+As a template configurable through the application itself or through code, feel free to use this project as a basis for your own site. The template for this own project, including the unique tech stack, can be found at https://github.com/OmyDaGreat/DynamicSiteTemplate[DynamicSiteTemplate]. Feel free to contribute!
+
+image:https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white[Kotlin] image:https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white[Docker]
 
 == Architecture
 
-This is a *single-module KMP project* with two targets:
+This is a *single-module project* with two targets:
 
-=== jsMain - Kobweb Frontend
+=== JavaScript - Kobweb Frontend
 
 * *Location*: `site/src/jsMain`
-* Compose-based web UI built with Kobweb
-* Compiles to JavaScript/WebAssembly
-* Built artifacts: `site/build/dist/js/productionExecutable/public/`
+* Compiles to JavaScript and fed to the backend
+* Includes an "admin" section for managing content from the backend
 
-=== jvmMain - http4k Backend
+=== JVM - http4k Backend
 
 * *Location*: `site/src/jvmMain`
-* HTTP server built with http4k framework
-* Runs on Undertow server backend (port 8080)
-* Serves API endpoints and static frontend files
+* Chosen over Kobweb's built-in Ktor server for more control + better syntax
+* Serves the frontend files while providing the API endpoints
 
-== Building
+== Project Setup
 
-Build all targets:
+=== Docker
+* Use the provided `docker-compose.yml` as a base through GitHub or use
+the https://hub.docker.com/repository/docker/maleficmarauder/guptarealty[maleficmarauder/guptarealty] image from Docker Hub.
+* Much simpler setup, though with a lot less options for configuration
 
-[source,bash]
-----
-./gradlew build
-----
+=== Git
+* Clone the repo and open in IntelliJ IDEA or Android Studio
+* Provides more control than the Docker setup, such as the ability to edit Kobweb site settings
 
-== Running
-
-=== Start the Server
-
-Runs the jvmMain entry point:
-
-[source,bash]
-----
-./gradlew jvmRun
-----
-
-The server will start on `http://localhost:8080`
-
-== API Endpoints
-
-* *`GET /api/ping`* - Returns "pong"
-* *`GET /api/health`* - Returns "healthy"
-* *`GET /`* or *`GET /index.html`* - Serves the frontend (after it's built)
-
-== CORS
-
-All endpoints support CORS with the following headers:
-- `Access-Control-Allow-Origin: *`
-- `Access-Control-Allow-Headers: Content-Type`
-- `Access-Control-Allow-Methods: GET, POST, PUT, DELETE`
-
-== Project Structure
-
-----
-site/
-├── src/
-│   ├── jsMain/          # Kobweb frontend (compiles to JS)
-│   │   └── kotlin/
-│   └── jvmMain/         # http4k server (compiles to JVM bytecode)
-│       └── kotlin/xyz/malefic/dynamicsite/server/
-│           ├── Main.kt  # Entry point
-│           └── Http.kt  # Routes & handlers
-├── build.gradle.kts     # KMP configuration
-└── build/
-    └── dist/js/productionExecutable/public/  # Built frontend files
-----
-
-== Development
-
-The advantages of this unified KMP structure:
-
-. *Single build system* - One Gradle configuration for both targets
-. *Shared dependencies* - Common code can be placed in commonMain (if needed)
-. *Type-safe APIs* - Frontend and backend can share Kotlin data classes
-. *Simplified deployment* - Single module to version control and distribute
-. *Clean separation* - Platform-specific code stays in jsMain/jvmMain respectively
+== License
+* This project is licensed under the MIT License. See the link:LICENSE[] file for details.
