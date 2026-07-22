@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HomeInfo(
     val hero: HeroHomeInfo,
-    val stats: Triple<String, String, String>,
+    val stats: List<String>,
     val statsNotice: String?,
     val help: HelpHomeInfo,
     val about: AboutHomeInfo,
@@ -25,7 +25,7 @@ data class HeroHomeInfo(
 data class HelpHomeInfo(
     val title: String,
     val description: String,
-    val boxes: Pair<HelpBoxHomeInfo, HelpBoxHomeInfo>,
+    val boxes: List<HelpBoxHomeInfo>,
 )
 
 @Serializable
@@ -40,7 +40,7 @@ data class SocialHomeInfo(
     val title: String,
     val description: String,
     val followLink: String,
-    val posts: Pair<String, String>,
+    val posts: List<String>,
 )
 
 @Serializable

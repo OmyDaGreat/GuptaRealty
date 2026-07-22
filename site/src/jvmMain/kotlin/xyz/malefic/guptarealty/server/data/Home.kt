@@ -19,7 +19,7 @@ var homeInfo by file(
                 image = "/Logo.jpg",
             ),
         stats =
-            Triple(
+            listOf(
                 "Backed by #1 Independent Brokerage in CA",
                 "106,000+ clients served broker-wide",
                 "61+ office locations expanding across the US",
@@ -30,7 +30,7 @@ var homeInfo by file(
                 title = "How Can I Help?",
                 description = "Whether you are a seller, buyer, or both, I'm here to guide you along every step of the process.",
                 boxes =
-                    Pair(
+                    listOf(
                         HelpBoxHomeInfo(
                             image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.lgo.org.uk%2Fassets%2Finline%2F5856%2FWEB-Man-with-clipboard-knocking-on-door.jpg&f=1&nofb=1&ipt=f942d90fdfabc624fa58d7b327915b35e9ba626fcfaeaa053b0ea3a2efa76ecd",
                             title = "Sellers",
@@ -61,7 +61,7 @@ var homeInfo by file(
                 title = "The Unfiltered Version",
                 description = "No perfectly staged content here — just home tours, market truths, and the real stories behind every OC deal. Come hang out on Instagram, where it's a lot more fun than a regular open house.",
                 followLink = "https://www.instagram.com/ruchika.realtor/",
-                posts = "https://www.instagram.com/p/DR49lRfAfe2/embed/" to "https://www.instagram.com/p/DaS1JrPv02w/embed/",
+                posts = listOf("https://www.instagram.com/p/DR49lRfAfe2/embed/", "https://www.instagram.com/p/DaS1JrPv02w/embed/"),
             ),
         youtube =
             SocialHomeInfo(
@@ -69,8 +69,10 @@ var homeInfo by file(
                 description = "Buying or selling a home comes with a lot of decisions — and a lot of ways to get it wrong. On my YouTube channel, I break down what actually matters: how to avoid costly pitfalls, what smart buyers and sellers do differently, and everything I wish more people knew before they signed on the dotted line.",
                 followLink = "https://www.youtube.com/channel/UCbPMvIhONGrwsFiFZmu_sgg",
                 posts =
-                    "https://youtube.com/embed/rgIC0NPFwyA?si=rapKvSrJKQEy0hDV?rel=0" to
+                    listOf(
+                        "https://youtube.com/embed/rgIC0NPFwyA?si=rapKvSrJKQEy0hDV?rel=0",
                         "https://youtube.com/embed/xeqV4rADEEM?si=xZ3v5wqfptIG8jy1?rel=0",
+                    ),
             ),
         testimonial =
             Testimonial(

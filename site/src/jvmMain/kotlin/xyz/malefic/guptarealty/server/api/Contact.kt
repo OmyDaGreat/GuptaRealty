@@ -42,6 +42,13 @@ val contact: Array<RoutingHttpHandler> =
                     return@request error("Invalid contact")
                 }
 
+            if (!contact.email.contains("@") || !contact.email.contains(".")) {
+                return@request error("Invalid email address")
+            }
+            if (contact.phone.filter { it.isDigit() }.length < 10) {
+                return@request error("Invalid phone number")
+            }
+
             val payload =
                 FollowUpBossEvent(
                     "guptarealty.com/contact",

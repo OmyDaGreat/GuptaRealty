@@ -25,34 +25,26 @@ import java.io.File
 import java.nio.file.Files
 
 private fun serveStaticFile(req: Request): Response {
-    val requestPath = req.uri.path.removePrefix("/")
+    val path = req.uri.path.removePrefix("/")
+    val ext = path.substringAfterLast('.', "")
 
-    if (requestPath.startsWith("assets/")) {
-        val fileName = requestPath.removePrefix("assets/")
-        val file = File(assetsPath, fileName)
-        if (file.exists() && file.isFile) {
-            val ext = fileName.substringAfterLast('.', "")
+    if (path.startsWith("assets/")) {
+        val file = File(assetsPath, path.removePrefix("assets/"))
+        return if (file.exists() && file.isFile) {
             val contentType = mimeTypes.getOrDefault(ext.lowercase(), "application/octet-stream")
-            val bytes = file.readBytes()
-            return Response(OK)
-                .header("Content-Type", contentType)
-                .body(bytes.inputStream(), bytes.size.toLong())
+            Response(OK).header("Content-Type", contentType).body(file.inputStream(), file.length())
+        } else {
+            Response(NOT_FOUND)
         }
-        return Response(NOT_FOUND)
     }
 
-    val ext = requestPath.substringAfterLast('.', "")
-    val target = if (requestPath.isBlank() || ext.isBlank()) "index.html" else requestPath
-    val contentType = mimeTypes.getOrDefault(ext.lowercase(), "text/html; charset=utf-8")
+    val target = if (path.isBlank() || ext.isBlank()) "index.html" else path
+    val contentType = mimeTypes.getOrDefault(target.substringAfterLast('.', "").lowercase(), "text/html; charset=utf-8")
 
     for (root in staticRoots) {
         val file = root.resolve(target).normalize()
-        if (!file.startsWith(root)) return Response(NOT_FOUND)
-        if (Files.isRegularFile(file)) {
-            val bytes = Files.readAllBytes(file)
-            return Response(OK)
-                .header("Content-Type", contentType)
-                .body(bytes.inputStream(), bytes.size.toLong())
+        if (file.startsWith(root) && Files.isRegularFile(file)) {
+            return Response(OK).header("Content-Type", contentType).body(Files.newInputStream(file), Files.size(file))
         }
     }
 

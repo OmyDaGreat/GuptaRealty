@@ -188,8 +188,6 @@ fun HeroSection(info: HomeInfo?) =
 @Composable
 fun StatsSection(info: HomeInfo?) =
     Loading(info) {
-        val statsList = listOf(stats.first, stats.second, stats.third)
-
         Box(
             Modifier
                 .fillMaxWidth()
@@ -200,10 +198,10 @@ fun StatsSection(info: HomeInfo?) =
         ) {
             Box(ContainerStyle.toModifier()) {
                 SimpleGrid(
-                    numColumns(1, md = 3),
+                    numColumns(1, sm = 2, md = stats.size.coerceAtMost(4)),
                     Modifier.fillMaxWidth().padding(AppSpacing s 2),
                 ) {
-                    statsList.forEach {
+                    stats.forEach {
                         Span(
                             HeadlineMdStyle
                                 .toModifier()
@@ -318,14 +316,13 @@ fun HelpSection(info: HomeInfo?) =
                     }
 
                     SimpleGrid(
-                        numColumns(1, md = 2),
+                        numColumns(1, sm = 2, md = boxes.size.coerceAtMost(3)),
                         Modifier
                             .gap(AppSpacing.Gutter)
                             .margin(top = 48.px)
                             .fillMaxWidth(),
                     ) {
-                        HelpBox(boxes.first)
-                        HelpBox(boxes.second)
+                        boxes.forEach { HelpBox(it) }
                     }
                 }
             }
@@ -383,7 +380,7 @@ fun InstagramSection(info: HomeInfo?) =
         Box(ContainerStyle.toModifier()) {
             Loading(info?.insta) {
                 SimpleGrid(
-                    numColumns(1, md = 3),
+                    numColumns(1, sm = 2, md = (posts.size + 1).coerceAtMost(4)),
                     Modifier.gap(AppSpacing.Gutter).alignItems(AlignItems.Center),
                 ) {
                     Column {
@@ -407,12 +404,14 @@ fun InstagramSection(info: HomeInfo?) =
                         ) {
                             Text(description)
                         }
-                        Link(followLink, ShowOnMdStyle.toModifier().color(Colors.White).textDecorationLine(TextDecorationLine.Underline)) {
+                        Link(
+                            followLink,
+                            ShowOnMdStyle.toModifier().color(Colors.White).textDecorationLine(TextDecorationLine.Underline),
+                        ) {
                             Text("Follow on Instagram")
                         }
                     }
-                    Iframe(posts.first, Modifier.fillMaxWidth().aspectRatio(9, 16).minHeight(450.px))
-                    Iframe(posts.second, Modifier.fillMaxWidth().aspectRatio(9, 16).minHeight(450.px))
+                    posts.forEach { Iframe(it, Modifier.fillMaxWidth().aspectRatio(9, 16).minHeight(450.px)) }
                 }
             }
         }
@@ -459,13 +458,15 @@ fun YoutubeSection(info: HomeInfo?) =
                         ) {
                             Text(description)
                         }
-                        Link(followLink, ShowOnMdStyle.toModifier().textDecorationLine(TextDecorationLine.Underline)) {
+                        Link(
+                            followLink,
+                            ShowOnMdStyle.toModifier().textDecorationLine(TextDecorationLine.Underline),
+                        ) {
                             Text("Follow on YouTube")
                         }
                     }
-                    SimpleGrid(numColumns(1, md = 2), Modifier.gap(AppSpacing.Gutter).fillMaxWidth()) {
-                        Iframe(posts.first, Modifier.fillMaxWidth().aspectRatio(16, 9))
-                        Iframe(posts.second, Modifier.fillMaxWidth().aspectRatio(16, 9))
+                    SimpleGrid(numColumns(1, sm = 2, md = posts.size.coerceAtMost(3)), Modifier.gap(AppSpacing.Gutter).fillMaxWidth()) {
+                        posts.forEach { Iframe(it, Modifier.fillMaxWidth().aspectRatio(16, 9)) }
                     }
                 }
             }

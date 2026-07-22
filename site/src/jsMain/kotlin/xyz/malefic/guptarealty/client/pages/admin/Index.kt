@@ -9,6 +9,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import co.touchlab.kermit.Logger
 import com.varabyte.kobweb.compose.css.Overflow
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
+import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Alignment
@@ -18,6 +20,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.borderRadius
 import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxSize
 import com.varabyte.kobweb.compose.ui.modifiers.fillMaxWidth
+import com.varabyte.kobweb.compose.ui.modifiers.flexGrow
 import com.varabyte.kobweb.compose.ui.modifiers.gap
 import com.varabyte.kobweb.compose.ui.modifiers.margin
 import com.varabyte.kobweb.compose.ui.modifiers.onClick
@@ -117,23 +120,30 @@ fun AdminLayoutScope.HomePage() {
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
-                    Text("Stats Section")
+                    Text("Stats Section (Recommended: 3)")
                 }
-                AdminField("Stat 1", stats.first) {
-                    settings = settings?.copy(stats = Triple(it, stats.second, stats.third))
+                stats.forEachIndexed { index, stat ->
+                    Row(Modifier.fillMaxWidth().gap(AppSpacing.S2), verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.flexGrow(1)) {
+                            AdminField("Stat ${index + 1}", stat) { newValue ->
+                                settings = settings?.copy(stats = stats.toMutableList().apply { this[index] = newValue })
+                            }
+                        }
+                        Button(Modifier.onClick {
+                            settings = settings?.copy(stats = stats.toMutableList().apply { removeAt(index) })
+                        }.toAttrs()) { Text("✕") }
+                    }
                 }
-                AdminField("Stat 2", stats.second) {
-                    settings = settings?.copy(stats = Triple(stats.first, it, stats.third))
-                }
-                AdminField("Stat 3", stats.third) {
-                    settings = settings?.copy(stats = Triple(stats.first, stats.second, it))
-                }
+                Button(Modifier.margin(top = AppSpacing.S2).onClick {
+                    settings = settings?.copy(stats = stats + "")
+                }.toAttrs()) { Text("+ Add Stat") }
+
                 AdminFieldNull("Stats Notice", statsNotice) {
                     settings = settings?.copy(statsNotice = it)
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
-                    Text("Help Section")
+                    Text("Help Section (Recommended: 2-3)")
                 }
                 AdminField("Help Title", help.title) {
                     settings = settings?.copy(help = help.copy(title = it))
@@ -142,57 +152,34 @@ fun AdminLayoutScope.HomePage() {
                     settings = settings?.copy(help = help.copy(description = it))
                 }
 
-                H3(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S2).toAttrs()) { Text("Help Box 1") }
-                AdminField("Box 1 Title", help.boxes.first.title) {
-                    settings =
-                        settings?.copy(
-                            help = help.copy(boxes = Pair(help.boxes.first.copy(title = it), help.boxes.second)),
-                        )
-                }
-                AdminField("Box 1 Description", help.boxes.first.description) {
-                    settings =
-                        settings?.copy(
-                            help = help.copy(boxes = Pair(help.boxes.first.copy(description = it), help.boxes.second)),
-                        )
-                }
-                Row(
-                    Modifier.gap(AppSpacing.S2),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    AdminField("Box 1 Image URL", help.boxes.first.image) {
-                        settings =
-                            settings?.copy(
-                                help = help.copy(boxes = Pair(help.boxes.first.copy(image = it), help.boxes.second)),
-                            )
+                help.boxes.forEachIndexed { index, box ->
+                    Column(Modifier.fillMaxWidth().margin(top = AppSpacing.S3).padding(AppSpacing.S2).borderRadius(AppRadius.Md).backgroundColor(AppColors.SurfaceContainer)) {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            H3(HeadlineSmStyle.toModifier().toAttrs()) { Text("Help Box ${index + 1}") }
+                            Button(Modifier.onClick {
+                                settings = settings?.copy(help = help.copy(boxes = help.boxes.toMutableList().apply { removeAt(index) }))
+                            }.toAttrs()) { Text("✕") }
+                        }
+                        AdminField("Title", box.title) { newValue ->
+                            settings = settings?.copy(help = help.copy(boxes = help.boxes.toMutableList().apply { this[index] = box.copy(title = newValue) }))
+                        }
+                        AdminField("Description", box.description) { newValue ->
+                            settings = settings?.copy(help = help.copy(boxes = help.boxes.toMutableList().apply { this[index] = box.copy(description = newValue) }))
+                        }
+                        Row(
+                            Modifier.gap(AppSpacing.S2),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            AdminField("Image URL", box.image) { newValue ->
+                                settings = settings?.copy(help = help.copy(boxes = help.boxes.toMutableList().apply { this[index] = box.copy(image = newValue) }))
+                            }
+                            Button(Modifier.onClick { selectingImageFor = "helpBox:$index" }.toAttrs()) { Text("Pick") }
+                        }
                     }
-                    Button(Modifier.onClick { selectingImageFor = "helpBox1Image" }.toAttrs()) { Text("Pick") }
                 }
-
-                H3(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S2).toAttrs()) { Text("Help Box 2") }
-                AdminField("Box 2 Title", help.boxes.second.title) {
-                    settings =
-                        settings?.copy(
-                            help = help.copy(boxes = Pair(help.boxes.first, help.boxes.second.copy(title = it))),
-                        )
-                }
-                AdminField("Box 2 Description", help.boxes.second.description) {
-                    settings =
-                        settings?.copy(
-                            help = help.copy(boxes = Pair(help.boxes.first, help.boxes.second.copy(description = it))),
-                        )
-                }
-                Row(
-                    Modifier.gap(AppSpacing.S2),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    AdminField("Box 2 Image URL", help.boxes.second.image) {
-                        settings =
-                            settings?.copy(
-                                help = help.copy(boxes = Pair(help.boxes.first, help.boxes.second.copy(image = it))),
-                            )
-                    }
-                    Button(Modifier.onClick { selectingImageFor = "helpBox2Image" }.toAttrs()) { Text("Pick") }
-                }
+                Button(Modifier.margin(top = AppSpacing.S3).onClick {
+                    settings = settings?.copy(help = help.copy(boxes = help.boxes + xyz.malefic.guptarealty.model.HelpBoxHomeInfo("", "", "")))
+                }.toAttrs()) { Text("+ Add Help Box") }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
                     Text("About Section")
@@ -214,7 +201,7 @@ fun AdminLayoutScope.HomePage() {
                 }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
-                    Text("Instagram Section")
+                    Text("Instagram Section (Recommended: 2)")
                 }
                 AdminField("Insta Title", insta.title) {
                     settings = settings?.copy(insta = insta.copy(title = it))
@@ -225,15 +212,24 @@ fun AdminLayoutScope.HomePage() {
                 AdminField("Insta Follow Link", insta.followLink) {
                     settings = settings?.copy(insta = insta.copy(followLink = it))
                 }
-                AdminField("Insta Post 1 ID", insta.posts.first) {
-                    settings = settings?.copy(insta = insta.copy(posts = Pair(it, insta.posts.second)))
+                insta.posts.forEachIndexed { index, post ->
+                    Row(Modifier.fillMaxWidth().gap(AppSpacing.S2), verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.flexGrow(1)) {
+                            AdminField("Insta Post ${index + 1} ID", post) { newValue ->
+                                settings = settings?.copy(insta = insta.copy(posts = insta.posts.toMutableList().apply { this[index] = newValue }))
+                            }
+                        }
+                        Button(Modifier.onClick {
+                            settings = settings?.copy(insta = insta.copy(posts = insta.posts.toMutableList().apply { removeAt(index) }))
+                        }.toAttrs()) { Text("✕") }
+                    }
                 }
-                AdminField("Insta Post 2 ID", insta.posts.second) {
-                    settings = settings?.copy(insta = insta.copy(posts = Pair(insta.posts.first, it)))
-                }
+                Button(Modifier.margin(top = AppSpacing.S2).onClick {
+                    settings = settings?.copy(insta = insta.copy(posts = insta.posts + ""))
+                }.toAttrs()) { Text("+ Add Insta Post") }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
-                    Text("YouTube Section")
+                    Text("YouTube Section (Recommended: 2)")
                 }
                 AdminField("YouTube Title", youtube.title) {
                     settings = settings?.copy(youtube = youtube.copy(title = it))
@@ -244,12 +240,21 @@ fun AdminLayoutScope.HomePage() {
                 AdminField("YouTube Follow Link", youtube.followLink) {
                     settings = settings?.copy(youtube = youtube.copy(followLink = it))
                 }
-                AdminField("YouTube Post 1 ID", youtube.posts.first) {
-                    settings = settings?.copy(youtube = youtube.copy(posts = Pair(it, youtube.posts.second)))
+                youtube.posts.forEachIndexed { index, post ->
+                    Row(Modifier.fillMaxWidth().gap(AppSpacing.S2), verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.flexGrow(1)) {
+                            AdminField("YouTube Post ${index + 1} ID", post) { newValue ->
+                                settings = settings?.copy(youtube = youtube.copy(posts = youtube.posts.toMutableList().apply { this[index] = newValue }))
+                            }
+                        }
+                        Button(Modifier.onClick {
+                            settings = settings?.copy(youtube = youtube.copy(posts = youtube.posts.toMutableList().apply { removeAt(index) }))
+                        }.toAttrs()) { Text("✕") }
+                    }
                 }
-                AdminField("YouTube Post 2 ID", youtube.posts.second) {
-                    settings = settings?.copy(youtube = youtube.copy(posts = Pair(youtube.posts.first, it)))
-                }
+                Button(Modifier.margin(top = AppSpacing.S2).onClick {
+                    settings = settings?.copy(youtube = youtube.copy(posts = youtube.posts + ""))
+                }.toAttrs()) { Text("+ Add YouTube Post") }
 
                 H2(HeadlineSmStyle.toModifier().margin(top = AppSpacing.S4, bottom = AppSpacing.S3).toAttrs()) {
                     Text("Featured Testimonial")
@@ -296,24 +301,21 @@ fun AdminLayoutScope.HomePage() {
 
         AssetLibrary(token) { url ->
             settings =
-                when (selectingImageFor) {
-                    "heroImage" -> settings?.copy(hero = settings!!.hero.copy(image = url))
-                    "aboutImage" -> settings?.copy(about = settings!!.about.copy(image = url))
-                    "helpBox1Image" ->
+                when {
+                    selectingImageFor == "heroImage" -> settings?.copy(hero = settings!!.hero.copy(image = url))
+                    selectingImageFor == "aboutImage" -> settings?.copy(about = settings!!.about.copy(image = url))
+                    selectingImageFor?.startsWith("helpBox:") == true -> {
+                        val index = selectingImageFor!!.split(":")[1].toInt()
                         settings?.copy(
                             help =
                                 settings!!.help.copy(
-                                    boxes = Pair(settings!!.help.boxes.first.copy(image = url), settings!!.help.boxes.second),
+                                    boxes = settings!!.help.boxes.toMutableList().apply {
+                                        this[index] = this[index].copy(image = url)
+                                    },
                                 ),
                         )
-                    "helpBox2Image" ->
-                        settings?.copy(
-                            help =
-                                settings!!.help.copy(
-                                    boxes = Pair(settings!!.help.boxes.first, settings!!.help.boxes.second.copy(image = url)),
-                                ),
-                        )
-                    "testimonialImage" -> settings?.copy(testimonial = settings!!.testimonial.copy(imageSrc = url))
+                    }
+                    selectingImageFor == "testimonialImage" -> settings?.copy(testimonial = settings!!.testimonial.copy(imageSrc = url))
                     else -> settings
                 }
             selectingImageFor = null

@@ -1,5 +1,6 @@
 package xyz.malefic.guptarealty.server.util
 
+import co.touchlab.kermit.Logger
 import org.http4k.core.Method
 import org.http4k.filter.AllowAllOriginPolicy
 import org.http4k.filter.CorsPolicy
@@ -45,13 +46,14 @@ val assetsPath: String = System.getProperty("ASSETS_PATH") ?: System.getenv("ASS
 
 val userId = Uuid.random()
 
-val bearerToken =
-    Base64.encode(
-        (
-            System.getProperty("BEARER_TOKEN")?.takeIf { it.isNotBlank() }
-                ?: System.getenv("BEARER_TOKEN")?.takeIf { it.isNotBlank() }
-                ?: "before-universe-bagel"
-        ).encodeToByteArray(),
-    )
+val bearerToken: String by lazy {
+    val rawToken =
+        System.getProperty("BEARER_TOKEN")?.takeIf { it.isNotBlank() }
+            ?: System.getenv("BEARER_TOKEN")?.takeIf { it.isNotBlank() }
+            ?: Uuid.random().toString().also {
+                Logger.w { "BEARER_TOKEN not found in environment. Generated random token for this session: $it" }
+            }
+    Base64.encode(rawToken.encodeToByteArray())
+}
 
 val fubApiKey: String? = System.getProperty("FUB_API_KEY") ?: System.getenv("FUB_API_KEY")
