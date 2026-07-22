@@ -16,6 +16,7 @@ data class Webinar(
     val header: String,
     val title: String,
     val description: String,
+    val consentText: String,
     val instant: Instant,
     val imageSrc: String,
 )

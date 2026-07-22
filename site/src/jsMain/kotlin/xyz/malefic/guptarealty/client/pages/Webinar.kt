@@ -189,7 +189,7 @@ fun WebinarHeroSection(coroutineScope: CoroutineScope) =
                             )
                         }
                     }
-                    RegistrationSection(coroutineScope, instant.toDisplayString())
+                    RegistrationSection(coroutineScope, instant.toDisplayString(), consentText)
                 }
             }
         }
@@ -206,6 +206,7 @@ enum class WebinarRegistrationStatus {
 fun RegistrationSection(
     coroutineScope: CoroutineScope,
     sessionDate: String,
+    consentText: String,
 ) = Box(Modifier.gridColumn("span 5").padding(left = AppSpacing.S5)) {
     Column(
         Modifier
@@ -343,7 +344,7 @@ fun RegistrationSection(
                     .textAlign(TextAlign.Center)
                     .toAttrs(),
             ) {
-                Text("I consent to receive exclusive market updates from Ruchika Gupta.")
+                Text(consentText)
             }
         }
         P(

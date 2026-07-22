@@ -37,7 +37,6 @@ import org.jetbrains.compose.web.dom.Text
 import xyz.malefic.guptarealty.client.api.getSiteSettings
 import xyz.malefic.guptarealty.client.api.postSiteSettings
 import xyz.malefic.guptarealty.client.components.AdminField
-import xyz.malefic.guptarealty.client.components.AdminFieldNull
 import xyz.malefic.guptarealty.client.components.AdminTextArea
 import xyz.malefic.guptarealty.client.components.AssetLibrary
 import xyz.malefic.guptarealty.client.components.Loading
@@ -189,8 +188,14 @@ fun AdminLayoutScope.SiteSettingsPage() {
                 AdminTextArea("Legal Disclaimer", disclaimerText) {
                     settings = settings?.copy(disclaimerText = it)
                 }
-                AdminFieldNull("Disclaimer Logo URL", disclaimerLogo) {
-                    settings = settings?.copy(disclaimerLogo = it)
+                Row(
+                    Modifier.gap(AppSpacing.S2),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    AdminField("Disclaimer Logo URL", logoUrl) {
+                        settings = settings?.copy(logoUrl = it)
+                    }
+                    Button(Modifier.onClick { selectingImageFor = "disclaimerLogo" }.toAttrs()) { Text("Pick") }
                 }
 
                 Button(
@@ -220,6 +225,9 @@ fun AdminLayoutScope.SiteSettingsPage() {
         AssetLibrary(token) { url ->
             if (selectingImageFor == "logoUrl") {
                 settings = settings?.copy(logoUrl = url)
+            }
+            if (selectingImageFor == "disclaimerLogo") {
+                settings = settings?.copy(disclaimerLogo = url)
             }
             selectingImageFor = null
         }

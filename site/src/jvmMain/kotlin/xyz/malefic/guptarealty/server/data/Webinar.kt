@@ -55,6 +55,7 @@ var currentWebinar by file(
         "FREE LIVE EDUCATIONAL SERIES",
         "Mastering the Market: A Guide for First-Time Buyers",
         "Join Ruchika Gupta for an exclusive deep dive into the 2026 real estate landscape. Learn how to navigate interest rates and find your dream home with confidence.",
+        "I consent to receive exclusive market updates from Ruchika Gupta.",
         LocalDateTime(2026, 6, 23, 4, 0).toInstant(TimeZone.currentSystemDefault()),
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F065%2F940%2F783%2Fnon_2x%2Fnew-apartment-keys-exchange-modern-residential-building-luxury-living-space-real-estate-investment-home-purchase-property-sale-free-photo.jpeg&f=1&nofb=1&ipt=ade2933d2fac61b9b5e7553389057e7bc2079893b38b72deb450dc71c3684a0f",
     ),
